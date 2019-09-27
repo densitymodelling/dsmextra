@@ -38,6 +38,29 @@
 #'
 #' Mesgaran MB, Cousens RD, Webber BL (2014). Here be dragons: a tool for quantifying novelty due to covariate range and correlation change when projecting species distribution models. Diversity & Distributions, 20: 1147-1159, DOI: \href{https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12209}{10.1111/ddi.12209}
 #' @export
+#'
+#' @examples
+#' library(dsmextra)
+#'
+#' # Load the Mid-Atlantic sperm whale data (see ?spermwhales)
+#' data(spermwhales)
+#'
+#' # Extract the data
+#' segs <- spermwhales$segs
+#' predgrid <- spermwhales$predgrid
+#'
+#' # Define relevant coordinate system
+#' my_crs <- sp::CRS("+proj=aea +lat_1=38 +lat_2=30 +lat_0=34 +lon_0=-73 +x_0=0
+#'  +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
+#'
+#' # Assess extrapolation in the multivariate space defined by five covariates
+#'spermw.extrapolation <- compute_extrapolation(segments = segs,
+#'       covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
+#'       prediction.grid = predgrid,
+#'       coordinate.system = my_crs,
+#'       print.summary = TRUE,
+#'       save.summary = TRUE,
+#'       print.precision = 2)
 compute_extrapolation <- function(segments,
                                   covariate.names,
                                   prediction.grid,
@@ -108,11 +131,9 @@ compute_extrapolation <- function(segments,
 
     # Create individual rasters for each covariate
 
-    fun_ras <- function(x, ...){mean(x, na.rm = TRUE)}
-
     ras.list <- purrr::map(.x = covariate.names,
                            .f = ~raster::rasterize(as.data.frame(check.grid), ras,
-                                                   prediction.grid[,.x], fun = fun_ras)) %>%
+                                                   prediction.grid[,.x], fun = mean_ras)) %>%
       purrr::set_names(., covariate.names)
 
     # Combine all rasters

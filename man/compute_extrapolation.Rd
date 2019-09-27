@@ -54,6 +54,53 @@ Each data.frame contains four columns:
 
 The `rasters` list consists of two elements, named `ExDet` and `mic`. Each contains individual rasters mapping ExDet values and MICs, respectively.
 }
+\examples{
+library(dsmextra)
+
+# Load the Mid-Atlantic sperm whale data (see ?spermwhales)
+data(spermwhales)
+
+# Extract the data
+segs <- spermwhales$segs
+predgrid <- spermwhales$predgrid
+
+# Define relevant coordinate system
+my_crs <- sp::CRS("+proj=aea +lat_1=38 +lat_2=30 +lat_0=34 +lon_0=-73 +x_0=0
+ +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
+
+# Assess extrapolation in the multivariate space defined by five covariates
+spermw.extrapolation <- compute_extrapolation(segments = segs,
+      covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
+      prediction.grid = predgrid,
+      coordinate.system = my_crs,
+      print.summary = TRUE,
+      save.summary = TRUE,
+      print.precision = 2)
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+}
 \references{
 Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions. CREEM Technical Report 2019-01, 59 p. \href{https://research-repository.st-andrews.ac.uk/handle/10023/18509}{https://research-repository.st-andrews.ac.uk/handle/10023/18509}
 

@@ -1,10 +1,10 @@
 Package: dsmextra
 Title: Extrapolation Assessments For Density Surface Models
 Version: 1.0.0
-Authors@R: c(person("Phil", "Bouchet", email = "pjbouchet@gmail.com", role = c("aut", "cre")), person("David", "Miller", email = "dlm22@st-andrews.ac.uk", role = c("aut")))
+Authors@R: c(person("Phil", "Bouchet", email = "pjbouchet@gmail.com", role = c("aut", "cre")), person("Laura", "Mannocci", email = "laura.mannocci@duke.edu", role = c("aut")), person("David", "Miller", email = "dlm22@st-andrews.ac.uk", role = c("aut")))
 Description: User-friendly toolkit for the detection and assessment of extrapolation in multivariate environmental space (Bouchet et al. 2019), with applications to density surface models of line transect data. Provides convenience functions for summarising and visualising extrapolation in prediction areas.
 Depends: R (>= 3.6.0)
-License: GPL-3
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
@@ -12,13 +12,20 @@ Imports:
     raster,
     leaflet,
     WhatIf,
+    magrittr,
     dichromat,
     pals,
     cowplot, 
     htmltools, 
     utils,
     tools, 
-    plyr
+    plyr,
+    purrr,
+    sp,
+    tidyr,
+    dplyr,
+    ggplot2,
+    stats
 Suggests:
     smoothr,
     maps,

@@ -3,7 +3,7 @@
 \docType{data}
 \name{spermwhales}
 \alias{spermwhales}
-\title{Mid-Atlantic sperm whales}
+\title{Mid-Atlantic sperm whale surveys}
 \format{A list of two
 \describe{
   \item{segs}{segment-level data, as used in the \code{\link[dsm]{dsm}} package}
@@ -13,7 +13,7 @@
 \url{http://seamap.env.duke.edu/dataset/396}.
 }
 \description{
-Data from a combination of several NOAA visual surveys conducted for cetaceans in the U.S. Mid-Atlantic. Survey tracklines were split into segments for analysis. Spatial coordinates (x, y) and values of both static and dynamic environmental covariates are availble for each segment mid-point and for the centroids of a 10 km grid overlaid on the area. Covariates include: depth, sea surface temperature (SST), net primary production (NPP), distance to nearest canyon or seamount (DistToCAS), and eddy kinetic energy (EKE).
+Dataf rom a combination of several NOAA visual surveys conducted for cetaceans in the U.S. Mid-Atlantic. Survey tracklines were split into segments for analysis in the \code{\link[dsm:`dsm-package`]{dsm}} R package. Spatial coordinates (x, y) and values of both static and dynamic environmental covariates are availble for each segment mid-point and for the centroids of a 10 km grid overlaid on the study area. Covariates include: depth, sea surface temperature (SST), net primary production (NPP), distance to nearest canyon or seamount (DistToCAS), and eddy kinetic energy (EKE).
 }
 \details{
 An example extrapolation assessment is provided at \url{https://densitymodelling.github.io/model-extrapolation/vignette/Extrapolation-vignette.html}.

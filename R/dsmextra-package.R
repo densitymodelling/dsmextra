@@ -1,15 +1,24 @@
-#' Extrapolation detection for density surface models
+#' Extrapolation detection in density surface models
 #'
-#' The dsmextra package provides functions for detecting, diagnosing and visualising extrapolation in multivariate environmental space, with applications to density surface models (DSMs) created in the \link{dsm-package} package.
+#' The \code{dsmextra} package provides functions for detecting, diagnosing and visualising extrapolation in multivariate environmental space, with applications to density surface models (DSMs) created in the \code{\link[dsm:`dsm-package`]{dsm}} package.
 #'
+#' Further information on distance sampling methods and example code is available at \href{http://distancesampling.org/R/}{http://distancesampling.org/R/}.
+#'
+#' For help with distance sampling, there is a Google Group \href{https://groups.google.com/forum/#!forum/distance-sampling}{https://groups.google.com/forum/#!forum/distance-sampling}.
+#'
+#' @author Phil J. Bouchet, Laura Mannocci, David Miller
 #' @docType package
 #' @name dsmextra
+#' @importFrom dplyr %>%
+#' @importFrom purrr %||%
 NULL
 
+# Quiets concerns of R CMD check re: the .'s that appear in pipelines
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("."))
 
-#' Mid-Atlantic sperm whales
+#' Mid-Atlantic sperm whale surveys
 #'
-#' Data from a combination of several NOAA visual surveys conducted for cetaceans in the U.S. Mid-Atlantic. Survey tracklines were split into segments for analysis. Spatial coordinates (x, y) and values of both static and dynamic environmental covariates are availble for each segment mid-point and for the centroids of a 10 km grid overlaid on the area. Covariates include: depth, sea surface temperature (SST), net primary production (NPP), distance to nearest canyon or seamount (DistToCAS), and eddy kinetic energy (EKE).
+#' Dataf rom a combination of several NOAA visual surveys conducted for cetaceans in the U.S. Mid-Atlantic. Survey tracklines were split into segments for analysis in the \code{\link[dsm:`dsm-package`]{dsm}} R package. Spatial coordinates (x, y) and values of both static and dynamic environmental covariates are availble for each segment mid-point and for the centroids of a 10 km grid overlaid on the study area. Covariates include: depth, sea surface temperature (SST), net primary production (NPP), distance to nearest canyon or seamount (DistToCAS), and eddy kinetic energy (EKE).
 #'
 #' An example extrapolation assessment is provided at \url{https://densitymodelling.github.io/model-extrapolation/vignette/Extrapolation-vignette.html}.
 #'

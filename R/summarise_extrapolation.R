@@ -1,18 +1,50 @@
 #' Summary of extrapolation
 #'
-#' Displays a tabular summary of the geographic extent of extrapolation. This is calculated as the percentage of prediction locations (i.e. grid cells) subject to extrapolation.
+#' Displays a tabular summary of the geographic extent of extrapolation. This is calculated as the number (and proportion) of prediction locations (i.e. grid cells) subject to extrapolation.
 #'
-#' @param extrapolation.object Output object from a run of \link{compute_extrapolation}.
-#' @param covariate.names Character string. Names of the covariates of interest.
-#' @param extrapolation Logical. Whether to return a summary of univariate/combinatorial extrapolation. Defaults to TRUE.
-#' @param mic Logical. Whether to return a summary of the most influential covariates (MIC) - see \link{compute_extrapolation}. Defaults to TRUE.
-#' @param print.precision Integer. Number of significant figures to be used when printing the summary. Default value of 2.
-#' @return Prints a summary table in the R console. In addition, if assigned to an object, returns a list with the table values (.n = number of locations, .p = corresponding percentage).
-#' @author Phil J. Bouchet
-#' @references Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions. CREEM Technical Report 2019-01, 59 p. \href{https://research-repository.st-andrews.ac.uk/handle/10023/18509}{https://research-repository.st-andrews.ac.uk/handle/10023/18509}
+#'  @param extrapolation.object Output object from a run of \link{compute_extrapolation}.
+#'  @param covariate.names Character string. Names of the covariates of interest.
+#'  @param extrapolation Logical. Whether to return a summary of univariate/combinatorial extrapolation. Defaults to TRUE.
+#'  @param mic Logical. Whether to return a summary of the most influential covariates (MIC) - see \link{compute_extrapolation}. Defaults to TRUE.
+#'  @param print.precision Integer. Number of significant figures to be used when printing the extrapolation summary. Default value of 2.
+#'  @return Prints a summary table in the R console. In addition, if assigned to an object, returns a list with the table values (.n = number of locations, .p = corresponding percentage).
+#'  @author Phil J. Bouchet
+#'  @seealso \code{\link{compute_extrapolation}}
+#'  @references Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions. CREEM Technical Report 2019-01, 59 p. \href{https://research-repository.st-andrews.ac.uk/handle/10023/18509}{https://research-repository.st-andrews.ac.uk/handle/10023/18509}
 #'
 #' Mesgaran MB, Cousens RD, Webber BL (2014). Here be dragons: a tool for quantifying novelty due to covariate range and correlation change when projecting species distribution models. Diversity & Distributions, 20: 1147-1159, DOI: \href{https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12209}{10.1111/ddi.12209}
-#' @export
+#'  @examples
+#' library(dsmextra)
+#'
+#' # Load the Mid-Atlantic sperm whale data (see ?spermwhales)
+#' data(spermwhales)
+#'
+#' # Extract the data
+#' segs <- spermwhales$segs
+#' predgrid <- spermwhales$predgrid
+#'
+#' # Define relevant coordinate system
+#' my_crs <- sp::CRS("+proj=aea +lat_1=38 +lat_2=30 +lat_0=34 +lon_0=-73 +x_0=0
+#'  +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
+#'
+#' # Assess extrapolation in the multivariate space defined by five covariates
+#' spermw.extrapolation <- compute_extrapolation(segments = segs,
+#'       covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
+#'       prediction.grid = predgrid,
+#'       coordinate.system = my_crs,
+#'       print.summary = FALSE,
+#'       save.summary = TRUE,
+#'       print.precision = 2)
+#'
+#' # Summarise extrapolation
+#' spermw.summary <- summarise_extrapolation(extrapolation.object = spermw.extrapolation,
+#'      covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
+#'      extrapolation = TRUE,
+#'      mic = TRUE,
+#'      print.precision = 2)
+#'
+#' print(spermw.summary)
+#'  @export
 summarise_extrapolation <- function(extrapolation.object,
                                     covariate.names = NULL,
                                     extrapolation = TRUE,
@@ -23,13 +55,13 @@ summarise_extrapolation <- function(extrapolation.object,
   # Extract extrapolation values
   #'---------------------------------------------
 
-  data <- extrapolation.object$data$all$ExDet
+  ex.data <- extrapolation.object$data$all$ExDet
 
   #'---------------------------------------------
   # Extract output values
   #'---------------------------------------------
 
-  res <- n_and_p(data)
+  res <- n_and_p(ex.data)
 
   #'---------------------------------------------
   # Format as nice-looking table

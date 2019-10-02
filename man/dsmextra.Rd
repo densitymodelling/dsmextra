@@ -4,7 +4,15 @@
 \name{dsmextra}
 \alias{dsmextra}
 \alias{dsmextra-package}
-\title{Extrapolation detection for density surface models}
+\title{Extrapolation detection in density surface models}
 \description{
-The dsmextra package provides functions for detecting, diagnosing and visualising extrapolation in multivariate environmental space, with applications to density surface models (DSMs) created in the \link{dsm-package} package.
+The \code{dsmextra} package provides functions for detecting, diagnosing and visualising extrapolation in multivariate environmental space, with applications to density surface models (DSMs) created in the \code{\link[dsm:`dsm-package`]{dsm}} package.
+}
+\details{
+Further information on distance sampling methods and example code is available at \href{http://distancesampling.org/R/}{http://distancesampling.org/R/}.
+
+For help with distance sampling, there is a Google Group \href{https://groups.google.com/forum/#!forum/distance-sampling}{https://groups.google.com/forum/#!forum/distance-sampling}.
+}
+\author{
+Phil J. Bouchet, Laura Mannocci, David Miller
 }

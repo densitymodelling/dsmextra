@@ -1,14 +1,18 @@
 #' EXtrapolation DETection tool
 #'
-#' Assesses univariate (Type I) and combinatorial (Type II) extrapolation between a reference system (ref) and a projection system (p). See Mesgaran et al. (2014). This function is an updated version of some original code from the \code{\href{https://cran.r-project.org/web/packages/ecospat/index.html}{ecospat}} package.
+#' Assesses univariate (Type I) and combinatorial (Type II) extrapolation between a reference system (ref) and a projection system (p). See Mesgaran et al. (2014) for an explanation. This function is an updated version of some original code from the \code{\link[ecospat]{ecospat}} package (Broennimann et al. 2016).
 #'
 #' @param ref Reference data. A data.frame with the values of the variables (i.e. columns) for each sample point (segments).
 #' @param tg Target data. A data.frame with the values of the variables (i.e. columns) for each point of the prediction extent.
 #' @param xp Character string. Names of the covariates of interest.
-#' @return Returns a tibble with four columns. 1) ExDet: Value of the ExDet metric (negative for univariate extrapolation, >1 for combinatorial extrapolation, within the range 0-1 for analogue conditions). 2) mic_univariate: Integer indicating the covariate with the largest contribution to univariate extrapolation (most influential covariate, MIC).  3) mic_combinatorial: Integer indicating the covariate with the largest contribution to combinatorial extrapolation. 4) mic: most influential covariate.
+#' @return Returns a tibble with four columns. (1) \code{ExDet}: Value of the ExDet metric (negative for univariate extrapolation, >1 for combinatorial extrapolation, within the range 0-1 for analogue conditions). (2) \code{mic_univariate}: Integer indicating the covariate with the largest contribution to univariate extrapolation (most influential covariate, MIC).  (3) \code{mic_combinatorial}: Integer indicating the covariate with the largest contribution to combinatorial extrapolation. (4) \code{mic}: most influential covariate.
+#'
 #' @author Phil J. Bouchet
+#'
 #' @references Mesgaran, M.B., Cousens, R.D. & Webber, B.L. (2014) \href{https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12209}{Here be dragons: a tool for quantifying novelty due to covariate range and correlation change when projecting species distribution models}. Diversity & Distributions, 20: 1147-1159, DOI: 10.1111/ddi.12209
-#' @export
+#'
+#' Broennimann O, Di Cola V, Guisan A (2016). ecospat: Spatial Ecology Miscellaneous Methods. R package version 2.1.1. \href{https://CRAN.R-project.org/package=ecospat}{https://CRAN.R-project.org/package=ecospat}.
+#'
 ExDet <- function(ref, tg, xp){
 
   #'---------------------------------------------
@@ -75,7 +79,7 @@ ExDet <- function(ref, tg, xp){
   tg.univ <- matrix(tg[univ.rge, ], ncol = ncol(tg))
 
   aa <- apply(ref, 2, mean) # col means
-  bb <- var(ref) # covariance matrix
+  bb <- stats::var(ref) # covariance matrix
 
   #'---------------------------------------------
   # Mahalanobis distance from centre of environmental space in reference system
@@ -152,7 +156,7 @@ ExDet <- function(ref, tg, xp){
 
   # if(length(xp) == 1){
 
-  mah_nt2 <- mah_nt2 %>% set_names(., xp)
+  mah_nt2 <- mah_nt2 %>% purrr::set_names(., xp)
 
   # }else{mah_nt2 <- mah_nt2 %>%
   #   purrr::set_names(.,cov.combs %>%
@@ -174,7 +178,7 @@ ExDet <- function(ref, tg, xp){
   # Combine results
   #'---------------------------------------------
 
-  results <- tibble(ExDet = nt1, mic_univariate = mic_nt1, mic_combinatorial = NA)
+  results <- tibble::tibble(ExDet = nt1, mic_univariate = mic_nt1, mic_combinatorial = NA)
   results[univ.rge,]$mic_combinatorial <- mic_nt2
 
   # Analog conditions have no MIC

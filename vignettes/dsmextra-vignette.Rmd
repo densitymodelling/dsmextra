@@ -116,7 +116,7 @@ knitr::kable(head(segs), format = "pandoc")
 knitr::kable(head(predgrid), format = "pandoc")
 ```
 
-Further, we also have a record of individual sperm whale sightings, as well as a spatial representation of survey track lines (**Figure 2**). These are stored in the `data.frame` object `obs`and the `SpatialLinesDataFrame` object `transects`, respectively, and will be useful for plotting.
+Further, we also have a record of individual sperm whale sightings, as well as a spatial representation of survey track lines (**Figure 2**).
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 knitr::kable(head(obs), format = "pandoc")

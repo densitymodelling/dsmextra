@@ -95,7 +95,7 @@ extrapolation_analysis <- function(segments,
   # Assess extrapolation
   #---------------------------------------------
 
-  message("=== Assessing extrapolation ===")
+  message("=== Assessing extrapolation ===\n")
 
   if(summarise.extrapolation){
 
@@ -125,7 +125,7 @@ extrapolation_analysis <- function(segments,
   # Compare covariate combinations
   #---------------------------------------------
 
-  message("=== Testing covariate combinations ===")
+  message("\n=== Testing covariate combinations ===\n")
 
   if(compare.covariates){
 
@@ -144,7 +144,7 @@ extrapolation_analysis <- function(segments,
   # Neighbourhood metrics
   #---------------------------------------------
 
-  message("=== Calculating neighbourhood metrics ===")
+  message("\n=== Calculating neighbourhood metrics ===\n")
 
   if(nearby.compute){
 
@@ -164,7 +164,7 @@ extrapolation_analysis <- function(segments,
   # Generate maps
   #---------------------------------------------
 
-  message("=== Generating maps ===")
+  message("\n=== Generating maps ===\n")
 
   if(map.generate){
 
@@ -176,9 +176,7 @@ extrapolation_analysis <- function(segments,
                             sightings = map.sightings,
                             tracks = map.tracks)
 
-    message("Map 1")
-
-    # print(m1)
+    print(m1)
 
     m2 <- map_extrapolation(map.type = "mic",
                             extrapolation.values = ex1,
@@ -188,9 +186,7 @@ extrapolation_analysis <- function(segments,
                             sightings = map.sightings,
                             tracks = map.tracks)
 
-    message("Map 2")
-
-    # print(m2)
+    print(m2)
 
     resl$maps <- list(extrapolation = m1, mic = m2)
 
@@ -205,11 +201,12 @@ extrapolation_analysis <- function(segments,
                               tracks = map.tracks)}
 
     resl$maps <- list(extrapolation = m1, mic = m2, nearby = m3) # Store results
+
     print(m3)
 
   }
 
-  message("=== Analysis complete! ===")
+  message("\n=== Analysis complete! ===\n")
   return(resl)
 
 }

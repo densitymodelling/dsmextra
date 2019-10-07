@@ -1,6 +1,6 @@
-#'---------------------------------------------
+#---------------------------------------------
 # Function to tally the number/% of cells subject to extrapolation
-#'---------------------------------------------
+#---------------------------------------------
 
 n_and_p <- function(x){
 
@@ -13,15 +13,15 @@ n_and_p <- function(x){
   return(exl)
 }
 
-#'---------------------------------------------
+#---------------------------------------------
 # Take mean of raster values - used in rasterize
-#'---------------------------------------------
+#---------------------------------------------
 
 mean_ras <- function(x, ...){mean(x, na.rm = TRUE)}
 
-#'---------------------------------------------
+#---------------------------------------------
 # Function to concatenate variables names where needed
-#'---------------------------------------------
+#---------------------------------------------
 
 collapse.vars <- function(l){
 
@@ -45,12 +45,12 @@ collapse.vars <- function(l){
   return(l)
 }
 
-#'---------------------------------------------
+#---------------------------------------------
 # Function to flip legend in leaflet
-#'---------------------------------------------
+#---------------------------------------------
 # Taken from: https://github.com/rstudio/leaflet/issues/256
 
-addLegend_decreasing <- function (map, position = c("topright", "bottomright", "bottomleft", "topleft"), pal, values, na.label = "NA", bins = 7, colors, opacity = 0.5, labels = NULL, labFormat = labelFormat(), title = NULL, className = "info legend", layerId = NULL, group = NULL, data = getMapData(map), decreasing = FALSE) {
+addLegend_decreasing <- function (map, position = c("topright", "bottomright", "bottomleft", "topleft"), pal, r.values, na.label = "NA", bins = 7, colors, opacity = 0.5, labels = NULL, labFormat = labelFormat(), title = NULL, className = "info legend", layerId = NULL, group = NULL, data = getMapData(map), decreasing = FALSE) {
 
   position <- match.arg(position)
   type <- "unknown"
@@ -59,13 +59,13 @@ addLegend_decreasing <- function (map, position = c("topright", "bottomright", "
   if (!missing(pal)) {
     if (!missing(colors))
       stop("You must provide either 'pal' or 'colors' (not both)")
-    if (missing(title) && inherits(values, "formula"))
-      title <- deparse(values[[2]])
-    values <- evalFormula(values, data)
+    if (missing(title) && inherits(r.values, "formula"))
+      title <- deparse(r.values[[2]])
+    r.values <- leaflet::evalFormula(r.values, data)
     type <- attr(pal, "colorType", exact = TRUE)
     args <- attr(pal, "colorArgs", exact = TRUE)
     na.color <- args$na.color
-    if (!is.null(na.color) && col2rgb(na.color, alpha = TRUE)[[4]] ==
+    if (!is.null(na.color) && grDevices::col2rgb(na.color, alpha = TRUE)[[4]] ==
         0) {
       na.color <- NULL
     }
@@ -73,7 +73,7 @@ addLegend_decreasing <- function (map, position = c("topright", "bottomright", "
       warning("'bins' is ignored because the palette type is not numeric")
     if (type == "numeric") {
       cuts <- if (length(bins) == 1)
-        pretty(values, bins)
+        pretty(r.values, bins)
       else bins
 
       if (length(bins) > 2)
@@ -81,7 +81,7 @@ addLegend_decreasing <- function (map, position = c("topright", "bottomright", "
                  sqrt(.Machine$double.eps)))
           stop("The vector of breaks 'bins' must be equally spaced")
       n <- length(cuts)
-      r <- range(values, na.rm = TRUE)
+      r <- range(r.values, na.rm = TRUE)
       cuts <- cuts[cuts >= r[1] & cuts <= r[2]]
       n <- length(cuts)
       p <- (cuts - r[1])/(r[2] - r[1])
@@ -113,9 +113,8 @@ addLegend_decreasing <- function (map, position = c("topright", "bottomright", "
     else if (type == "quantile") {
       p <- args$probs
       n <- length(p)
-      cuts <- quantile(values, probs = p, na.rm = TRUE)
-      mids <- quantile(values, probs = (p[-1] + p[-n])/2,
-                       na.rm = TRUE)
+      cuts <- stats::quantile(r.values, probs = p, na.rm = TRUE)
+      mids <- stats::quantile(r.values, probs = (p[-1] + p[-n])/2, na.rm = TRUE)
       if (decreasing == TRUE){
         colors <- pal(rev(mids))
         labels <- rev(labFormat(type = "quantile", cuts, p))
@@ -125,7 +124,7 @@ addLegend_decreasing <- function (map, position = c("topright", "bottomright", "
       }
     }
     else if (type == "factor") {
-      v <- sort(unique(na.omit(values)))
+      v <- sort(unique(stats::na.omit(r.values)))
       colors <- pal(v)
       labels <- labFormat(type = "factor", v)
       if (decreasing == TRUE){
@@ -137,7 +136,7 @@ addLegend_decreasing <- function (map, position = c("topright", "bottomright", "
       }
     }
     else stop("Palette function not supported")
-    if (!any(is.na(values)))
+    if (!any(is.na(r.values)))
       na.color <- NULL
   }
   else {
@@ -151,9 +150,9 @@ addLegend_decreasing <- function (map, position = c("topright", "bottomright", "
   invokeMethod(map, data, "addLegend", legend)
 }
 
-#'---------------------------------------------
+#---------------------------------------------
 # Safe version of the rasterFromXYZ
-#'---------------------------------------------
+#---------------------------------------------
 
 # Returns a list with two elements: result and error (if one occurred)
 
@@ -162,14 +161,14 @@ safe_raster <- purrr::safely(function(x) suppressWarnings(raster::rasterFromXYZ(
 safe_pts <- purrr::safely(function(x) suppressWarnings(SpatialPointsDataFrame(coords = x[,1:2], data = data.frame(x[,3]))))
 
 
-#'---------------------------------------------
+#---------------------------------------------
 # Functions used in Gower's distance calculations
-#'---------------------------------------------
+#---------------------------------------------
 # From Mannocci et al. 2018
 
 # Function to standardise covariate values
 
-rescale_cov <- function (ynew, y) { return ((ynew - mean (y, na.rm = TRUE)) / (sd (y, na.rm = TRUE))) }
+rescale_cov <- function (ynew, y) { return ((ynew - mean(y, na.rm = TRUE)) / (stats::sd(y, na.rm = TRUE))) }
 
 # Standardising prediction data simplifies computation A LOT!
 
@@ -182,11 +181,13 @@ make_X <- function (calibration_data,
   names (X) <- var_name
   return (X)}
 
-#'---------------------------------------------
+#---------------------------------------------
 # Function to project rasters to lat/lon for plotting
-#'---------------------------------------------
+#---------------------------------------------
 
-proj_rasters <- function(ll){
+proj_rasters <- function(ll, coordinate.system){
+
+  crs.webmerc <- sp::CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs")
 
   llr <- ll # Copy list
 
@@ -196,7 +197,7 @@ proj_rasters <- function(ll){
   # By recording the indices of UE cells, we can perform a simplistic
   # correction to make sure they show up on the map.
 
-  analogue.xy <- as.data.frame(llr$analogue, xy = TRUE) %>% na.omit(.)
+  analogue.xy <- raster::as.data.frame(llr$analogue, xy = TRUE) %>% stats::na.omit(.)
   analogue.xy <- sp::SpatialPointsDataFrame(coords = analogue.xy[, c("x", "y")],
                                             data = analogue.xy,
                                             proj4string = coordinate.system)
@@ -205,7 +206,7 @@ proj_rasters <- function(ll){
   univariate.ind <- raster::Which(llr$univariate < 0, cells = TRUE)
   univariate.values <- llr$univariate[univariate.ind]
 
-  univariate.xy <- as.data.frame(llr$univariate, xy = TRUE) %>% na.omit(.)
+  univariate.xy <- raster::as.data.frame(llr$univariate, xy = TRUE) %>% stats::na.omit(.)
   univariate.xy <- sp::SpatialPointsDataFrame(coords = univariate.xy[, c("x", "y")],
                                               data = univariate.xy,
                                               proj4string = coordinate.system)
@@ -224,13 +225,13 @@ proj_rasters <- function(ll){
                                            method = 'ngb'))
 
   llr.univariate.ind <- raster::cellFromXY(object = llr$univariate,
-                                           xy = coordinates(univariate.xy))
+                                           xy = sp::coordinates(univariate.xy))
 
   llr$univariate[llr.univariate.ind[which(is.na(llr$univariate[llr.univariate.ind]))]] <-    univariate.values[which(is.na(llr$univariate[llr.univariate.ind]))]
 
   duplicate.cells <- rbind(raster::as.data.frame(llr$univariate, xy = TRUE),
                            raster::as.data.frame(llr$analogue, xy = TRUE)) %>%
-    na.omit(.) %>%
+    stats::na.omit(.) %>%
     dplyr::select(., x, y) %>%
     .[duplicated(.),]
 
@@ -243,9 +244,9 @@ proj_rasters <- function(ll){
 
   return(llr)}
 
-#'---------------------------------------------
+#---------------------------------------------
 # Function to check correct CRS input
-#'---------------------------------------------
+#---------------------------------------------
 
 check_crs <- function(coordinate.system){
 

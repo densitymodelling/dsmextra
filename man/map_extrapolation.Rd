@@ -82,7 +82,6 @@ map_extrapolation(map.type = "nearby",
                 covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
                 prediction.grid = predgrid,
                 coordinate.system = my_crs)
-
 }
 \references{
 Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions. CREEM Technical Report 2019-01, 59 p. \href{https://research-repository.st-andrews.ac.uk/handle/10023/18509}{https://research-repository.st-andrews.ac.uk/handle/10023/18509}

@@ -3,7 +3,7 @@
 #' Summarises the extent of  univariate (Type I) and combinatorial (Type II) extrapolation associated with different combinations of input covariates.
 #'
 #' The extent and magnitude of extrapolation naturally vary with the type and number of covariates considered. It may be useful, therefore, to test different combinations of covariates to inform their selection \emph{a priori}, i.e. before model fitting, thereby supporting model parsimony.
-#'
+#' @import ggplot2
 #' @param extrapolation.type Character string. Type of extrapolation to be assessed. Can be one of \code{univariate}, \code{combinatorial}, or \code{both} (default).
 #' @param segments Segment data.frame (i.e. surveyed transects divided into segments for analysis). This is the reference dataset used for model building and calibration. This must contain one column for each of the covariates in \code{covariate.names}.
 #' @param covariate.names Character string. Names of the covariates of interest.
@@ -17,8 +17,7 @@
 #'
 #' @seealso \code{\link{compute_extrapolation}}, \code{\link{summarise_extrapolation}}
 #'
-#' @author Phil J. Bouchet
-#'
+#' @export
 #' @references Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions. CREEM Technical Report 2019-01, 59 p. \href{https://research-repository.st-andrews.ac.uk/handle/10023/18509}{https://research-repository.st-andrews.ac.uk/handle/10023/18509}
 #'
 #' Mesgaran MB, Cousens RD, Webber BL (2014). Here be dragons: a tool for quantifying novelty due to covariate range and correlation change when projecting species distribution models. Diversity & Distributions, 20: 1147-1159, DOI: \href{https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12209}{10.1111/ddi.12209}
@@ -50,7 +49,7 @@
 #'                   coordinate.system = my_crs,
 #'                   create.plots = TRUE,
 #'                   display.percent = TRUE)
-#' @export
+#' @author Phil J. Bouchet
 compare_covariates <- function(extrapolation.type = "both",
                                segments,
                                covariate.names,
@@ -60,21 +59,15 @@ compare_covariates <- function(extrapolation.type = "both",
                                create.plots = TRUE,
                                display.percent = TRUE){
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Total number of prediction grid cells
-  #'---------------------------------------------
+  #---------------------------------------------
 
   ntot <- nrow(prediction.grid)
 
-  #'---------------------------------------------
-  # Activate progress bar for compute_extrapolation
-  #'---------------------------------------------
-
-  assign(x = 'call.compare', value = TRUE, envir = .GlobalEnv) # Activate progress bar
-
-  #'---------------------------------------------
+  #---------------------------------------------
   # Perform function checks
-  #'---------------------------------------------
+  #---------------------------------------------
 
   if(!extrapolation.type%in%c("both", "univariate", "multivariate"))
     stop("Unknown extrapolation type requested")
@@ -85,9 +78,9 @@ compare_covariates <- function(extrapolation.type = "both",
 
   coordinate.system <- check_crs(coordinate.system = coordinate.system)
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Determine all possible combinations of covariates
-  #'---------------------------------------------
+  #---------------------------------------------
 
   # message("Identifying covariate combinations ... ")
   Sys.sleep(time = 0.5)
@@ -113,25 +106,27 @@ compare_covariates <- function(extrapolation.type = "both",
       purrr::flatten(.)
   }
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Carry out extrapolation analysis for each combination of covariates
-  #'---------------------------------------------
+  #---------------------------------------------
 
   message("Computing ...")
 
-  assign(x = 'pb', value = dplyr::progress_estimated(length(combs)), envir = .GlobalEnv)
+  pb <- dplyr::progress_estimated(length(combs))
 
   extrap <- suppressMessages(purrr::map(.x = combs,
-                                        .f = ~compute_extrapolation(segments = segments,
+                                        .f = ~{
+                                          pb$tick()$print()
+                                          compute_extrapolation(segments = segments,
                                                                     covariate.names = .x,
                                                                     prediction.grid = prediction.grid,
                                                                     coordinate.system = coordinate.system,
-                                                                    print.summary = FALSE),
+                                                                    print.summary = FALSE)},
                                         .pb = pb))
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Summarise extrapolation results for each combination
-  #'---------------------------------------------
+  #---------------------------------------------
 
   exsum <- purrr::map(.x = extrap,
                       .f = ~summarise_extrapolation(extrapolation.object = .x,
@@ -144,9 +139,9 @@ compare_covariates <- function(extrapolation.type = "both",
                    "univariate" = "univariate",
                    "combinatorial" = "combinatorial")
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Add zeroes if no extrapolation occurred
-  #'---------------------------------------------
+  #---------------------------------------------
 
   for(k in 1:length(exsum)){
 
@@ -161,17 +156,17 @@ compare_covariates <- function(extrapolation.type = "both",
     exsum[[k]] <- temp
   }
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Retrieve numbers of cells
-  #'---------------------------------------------
+  #---------------------------------------------
 
   vars <- exsum %>%
     purrr::map(.x = ., .f = ~.x[names(.x)%in%paste0(extype, ".n")]) %>%
     unlist(.)
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Build text string of variables
-  #'---------------------------------------------
+  #---------------------------------------------
 
   message("\n")
   message("Creating summaries ...")
@@ -182,9 +177,9 @@ compare_covariates <- function(extrapolation.type = "both",
     vars.combinatorial <- vars[seq(2, length(vars), by = 2)]
     vars.both <- vars.univariate + vars.combinatorial
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Variables minimising/maxisming univariate extrapolation
-    #'---------------------------------------------
+    #---------------------------------------------
 
     min.univariate <- vars.univariate[which(vars.univariate==min(vars.univariate))]
     max.univariate <- vars.univariate[which(vars.univariate==max(vars.univariate))]
@@ -195,9 +190,9 @@ compare_covariates <- function(extrapolation.type = "both",
     varmax.univariate <- combs[which(vars.univariate==max(vars.univariate))] %>%
       collapse.vars(.)
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Variables minimising/maxisming combinatorial extrapolation
-    #'---------------------------------------------
+    #---------------------------------------------
 
     min.combinatorial <- vars.combinatorial[which(vars.combinatorial==min(vars.combinatorial))]
     max.combinatorial <- vars.combinatorial[which(vars.combinatorial==max(vars.combinatorial))]
@@ -208,9 +203,9 @@ compare_covariates <- function(extrapolation.type = "both",
     varmax.combinatorial <- combs[which(vars.combinatorial==max(vars.combinatorial))] %>%
       collapse.vars(.)
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Variables minimising/maxisming both types of extrapolation
-    #'---------------------------------------------
+    #---------------------------------------------
 
     min.both <- vars.both[which(vars.both==min(vars.both))]
     max.both <- vars.both[which(vars.both==max(vars.both))]
@@ -223,9 +218,9 @@ compare_covariates <- function(extrapolation.type = "both",
 
   }else{
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Variables minimising/maxisming extrapolation
-    #'---------------------------------------------
+    #---------------------------------------------
 
     min.ex <- vars[which(vars==min(vars))]
     max.ex <- vars[which(vars==max(vars))]
@@ -238,9 +233,9 @@ compare_covariates <- function(extrapolation.type = "both",
 
   }
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Manipulate text strings to avoid repetition
-  #'---------------------------------------------
+  #---------------------------------------------
 
   if(extrapolation.type=="both"){
 
@@ -286,9 +281,9 @@ compare_covariates <- function(extrapolation.type = "both",
       }
     }
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Summarise all results in a table
-    #'---------------------------------------------
+    #---------------------------------------------
 
     restxt <- data.frame(Extrapolation = c("Univariate",
                                            rep("", max(length(varmin.univariate), length(varmax.univariate))-1),
@@ -317,9 +312,9 @@ compare_covariates <- function(extrapolation.type = "both",
       }
     }
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Summarise all results in a table
-    #'---------------------------------------------
+    #---------------------------------------------
 
     restxt <- data.frame(Extrapolation = switch(extrapolation.type,
                                                 "univariate" = c("Univariate",
@@ -336,15 +331,15 @@ compare_covariates <- function(extrapolation.type = "both",
     restxt$n_max = max.ex
   }
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Visualise results as boxplots
-  #'---------------------------------------------
+  #---------------------------------------------
 
   if(create.plots){
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Number of covariate permutations
-    #'---------------------------------------------
+    #---------------------------------------------
 
     Ax <- purrr::map_dbl(.x = combs,
                          .f = ~length(.x)) %>%
@@ -354,9 +349,9 @@ compare_covariates <- function(extrapolation.type = "both",
     names(Ax) <- c("samp", "Freq")
     Ax$samp <- as.numeric(as.character(Ax$samp))
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Summary by number of variables
-    #'---------------------------------------------
+    #---------------------------------------------
 
     if(extrapolation.type=="both"){
 
@@ -374,9 +369,9 @@ compare_covariates <- function(extrapolation.type = "both",
 
     res <- dplyr::left_join(res, Ax, by = c("nvars" = "samp"))
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Compute the number of permutations for each covariate
-    #'---------------------------------------------
+    #---------------------------------------------
 
     var.ind <- purrr::map(.x = as.list(covariate.names),
                           .f = ~.x %>%
@@ -389,9 +384,9 @@ compare_covariates <- function(extrapolation.type = "both",
     Bx <- purrr::map_df(var.ind, ~sum(.)) %>%
       tidyr::gather()
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Summary by variable name
-    #'---------------------------------------------
+    #---------------------------------------------
 
     if(extrapolation.type=="both"){
 
@@ -426,9 +421,9 @@ compare_covariates <- function(extrapolation.type = "both",
 
     }
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Plot settings
-    #'---------------------------------------------
+    #---------------------------------------------
 
     if(extrapolation.type=="both"){
 
@@ -442,9 +437,9 @@ compare_covariates <- function(extrapolation.type = "both",
 
     }
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Plot labels
-    #'---------------------------------------------
+    #---------------------------------------------
 
     labelres <- res %>%
       dplyr::mutate(label = paste0("Nc = ",Freq)) %>%
@@ -458,9 +453,9 @@ compare_covariates <- function(extrapolation.type = "both",
       dplyr::summarize(ypos = max(varplot$extrap)+0.15*max(varplot$extrap),
                        label = unique(label))
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Plots
-    #'---------------------------------------------
+    #---------------------------------------------
 
     p1 <- ggplot2::ggplot(data = res, ggplot2::aes(x = factor(nvars), y = extrap))+
 
@@ -502,5 +497,5 @@ compare_covariates <- function(extrapolation.type = "both",
   message("Done!")
 
   print(knitr::kable(restxt, format = "pandoc"))
-  rm(call.compare, pb, envir = .GlobalEnv )
+
 }

@@ -2,6 +2,9 @@
 #'
 #' Produces interactive html maps of extrapolation values in the prediction area. The function relies on the \code{\link[leaflet]{leaflet}} package (Cheng et al. 2018), and thus requires an internet connection (i.e. will not work offline).
 #'
+#' @importFrom raster as.data.frame as.factor
+#' @import leaflet
+#'
 #' @param map.type Character string. Type of map to be returned. Either \code{extrapolation} for an extrapolation map, \code{mic} for a map of the most influential covariates, or \code{nearby} for a map of the percentage of data nearby.
 #' @param base.layer Base layer used for mapping. The default is \code{ocean}, which uses the ESRI.OceanBasemap. Use \code{world} for ESRI.WorldImagery and \code{gray} for ESRI.WorldGrayCanvas. Available map tiles can be viewed at \href{https://leaflet-extras.github.io/leaflet-providers/preview/}{https://leaflet-extras.github.io/leaflet-providers/preview/}.
 #' @param extrapolation.values List object as returned by \link{compute_extrapolation}. Only valid when \code{map.type = extrapolation} or \code{map.type = mic}.
@@ -20,6 +23,7 @@
 #'
 #' Cheng J, Karambelkar B, Xie Y (2018). leaflet: Create Interactive Web Maps with the JavaScript 'Leaflet' Library. R package version 2.0.2. \href{https://CRAN.R-project.org/package=leaflet}{https://CRAN.R-project.org/package=leaflet}
 #'
+#' @export
 #' @examples
 #' library(dsmextra)
 #'
@@ -68,8 +72,7 @@
 #'                 covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
 #'                 prediction.grid = predgrid,
 #'                 coordinate.system = my_crs)
-#'
-#' @export
+
 map_extrapolation <- function(map.type = NULL,
                               base.layer = "ocean",
                               extrapolation.values = NULL,
@@ -80,9 +83,9 @@ map_extrapolation <- function(map.type = NULL,
                               sightings = NULL,
                               tracks = NULL){
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Perform function checks
-  #'---------------------------------------------
+  #---------------------------------------------
 
   baselyr <- switch(base.layer,
                     "ocean" = "Esri.OceanBasemap",
@@ -110,7 +113,7 @@ map_extrapolation <- function(map.type = NULL,
 
       if(!is.null(sightings)) latlon.sightings <- sum(all(range(sightings$x)>=-180 & range(sightings$x)<=180))
 
-    }else{coords.sightings <- coordinates(sightings)
+    }else{coords.sightings <- sp::coordinates(sightings)
     latlon.sightings <- sum(all(as.vector(apply(coords.sightings,2, range))>=-180 & as.vector(apply(coords.sightings,2, range))<=180))
     }
   }
@@ -130,7 +133,7 @@ map_extrapolation <- function(map.type = NULL,
 
     }else{
 
-      coords.tracks <- coordinates(tracks)
+      coords.tracks <- sp::coordinates(tracks)
 
       if(is.list(coords.tracks)){
         coords.tracks <- purrr::flatten(coords.tracks)
@@ -142,9 +145,9 @@ map_extrapolation <- function(map.type = NULL,
 
   coordinate.system <- check_crs(coordinate.system = coordinate.system)
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Define coordinate systems
-  #'---------------------------------------------
+  #---------------------------------------------
 
   crs.ll <- sp::CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
 
@@ -152,29 +155,29 @@ map_extrapolation <- function(map.type = NULL,
 
   crs.webmerc <- sp::CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs")
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Check which type of extrapolation occurred
-  #'---------------------------------------------
+  #---------------------------------------------
 
   types <- purrr::map_dbl(.x = extrapolation.values$data[2:4],
                           .f = ~nrow(.))
   types <- c("Univariate", "Combinatorial", "Analogue")[types>0]
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Defines survey extent (in lat/lon coords)
-  #'---------------------------------------------
+  #---------------------------------------------
 
-  survey_extent <- as(extent(range(prediction.grid$x),
-                             range(prediction.grid$y)),
+  survey_extent <- methods::as(raster::extent(range(prediction.grid$x),
+                              range(prediction.grid$y)),
                       "SpatialPolygons")
 
   sp::proj4string(survey_extent) <- coordinate.system
   survey_extent <- sp::spTransform(survey_extent, CRSobj = crs.ll)
-  survey_extent <- extent(survey_extent)
+  survey_extent <- raster::extent(survey_extent)
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Converts segments to SpatialLines
-  #'---------------------------------------------
+  #---------------------------------------------
 
   if(!is.null(tracks)){
 
@@ -191,8 +194,8 @@ map_extrapolation <- function(map.type = NULL,
                        as.matrix(.) %>%
                        raster::spLines(., crs = crstracks)) %>%
           do.call("rbind", .) %>%
-          SpatialLinesDataFrame(., data = tracks) %>%
-          spTransform(., CRSobj = crs.ll)
+          sp::SpatialLinesDataFrame(., data = tracks) %>%
+          sp::spTransform(., CRSobj = crs.ll)
 
       }else{
 
@@ -202,18 +205,18 @@ map_extrapolation <- function(map.type = NULL,
           dplyr::select(x, y) %>%
           as.matrix(.) %>%
           raster::spLines(., crs = crstracks) %>%
-          SpatialLinesDataFrame(., data = tracks) %>%
-          spTransform(., CRSobj = crs.ll)
+          sp::SpatialLinesDataFrame(., data = tracks) %>%
+          sp::spTransform(., CRSobj = crs.ll)
 
       }
 
 
-    }else{tracks <- spTransform(tracks, CRSobj = crs.ll)}
+    }else{tracks <- sp::spTransform(tracks, CRSobj = crs.ll)}
   }
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Sightings
-  #'---------------------------------------------
+  #---------------------------------------------
 
   if(!is.null(sightings)){
 
@@ -222,15 +225,15 @@ map_extrapolation <- function(map.type = NULL,
 
     if(is.data.frame(sightings) | is.matrix(sightings)){
 
-      coordinates(sightings) <- ~ x + y
-      proj4string(sightings) <- crssightings
+      sp::coordinates(sightings) <- ~ x + y
+      sp::proj4string(sightings) <- crssightings
 
     }else{sightings <- sp::spTransform(x = sightings, CRSobj = crs.ll)}
   }
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Basemap
-  #'---------------------------------------------
+  #---------------------------------------------
 
   exleaf <- leaflet::leaflet(sightings) %>%
     leaflet::setView(lng = mean(c(survey_extent[1], survey_extent[2])),
@@ -241,20 +244,21 @@ map_extrapolation <- function(map.type = NULL,
                        survey_extent[2],
                        survey_extent[4]) %>%
 
-    leaflet::addProviderTiles(provider = providers[which(names(providers)==baselyr)][[1]])
+    leaflet::addProviderTiles(provider = baselyr)
+    # leaflet::addProviderTiles(provider = providers[which(names(providers)==baselyr)][[1]])
 
 
   if(map.type == "extrapolation"){
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Project rasters to lat/lon for plotting
-    #'---------------------------------------------
+    #---------------------------------------------
 
-    projr <- proj_rasters(ll = extrapolation.values$rasters$ExDet)
+    projr <- proj_rasters(ll = extrapolation.values$rasters$ExDet, coordinate.system = coordinate.system)
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Adds rasters and colour palettes
-    #'---------------------------------------------
+    #---------------------------------------------
 
     if("univariate"%in%names(projr)){
 
@@ -269,14 +273,14 @@ map_extrapolation <- function(map.type = NULL,
                                 project = FALSE,
                                 opacity = 1) %>%
 
-        #'---------------------------------------------
+        #---------------------------------------------
         # legend
-        #'---------------------------------------------
+        #---------------------------------------------
 
         addLegend_decreasing(map = .,
                              pal = pal.univariate,
                              opacity = 1,
-                             values = raster::getValues(projr$univariate),
+                             r.values = raster::getValues(projr$univariate),
                              decreasing = TRUE,
                              group = "Univariate",
                              title = "Univariate")}
@@ -295,20 +299,20 @@ map_extrapolation <- function(map.type = NULL,
         leaflet::addRasterImage(map = .,
                                 x = projr$combinatorial,
                                 colors = pal.combinatorial,
-                                group="Combinatorial",
-                                project=FALSE,
+                                group = "Combinatorial",
+                                project = FALSE,
                                 opacity = 1) %>%
 
-        #'---------------------------------------------
+        #---------------------------------------------
         # legend
-        #'---------------------------------------------
+        #---------------------------------------------
 
         addLegend_decreasing(map = .,
                              pal = pal.combinatorial,
                              opacity = 1,
                              decreasing = TRUE,
                              group="Combinatorial",
-                             values = raster::getValues(projr$combinatorial),
+                             r.values = raster::getValues(projr$combinatorial),
                              title = "Combinatorial")}
 
     if("analogue"%in%names(projr)){
@@ -321,48 +325,48 @@ map_extrapolation <- function(map.type = NULL,
         leaflet::addRasterImage(map = .,
                                 x = projr$analogue,
                                 colors = pal.analogue,
-                                group="Analogue",
-                                project=FALSE,
+                                group ="Analogue",
+                                project = FALSE,
                                 opacity = 1) %>%
 
-        #'---------------------------------------------
+        #---------------------------------------------
         # legend
-        #'---------------------------------------------
+        #---------------------------------------------
 
         addLegend_decreasing(map = .,
                              pal = pal.analogue,
                              opacity = 1,
                              decreasing = TRUE,
                              group="Analogue",
-                             values = raster::getValues(projr$analogue),
+                             r.values = raster::getValues(projr$analogue),
                              title = "Analogue")}
 
   }else if(map.type == "mic"){
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Adds rasters and colour palettes
-    #'---------------------------------------------
+    #---------------------------------------------
 
-    pal <- colorFactor(palette = c("#B2FF8C", dichromat::colorschemes$Categorical.12[c(1:4, 7:12)]),
+    pal <- leaflet::colorFactor(palette = c("#B2FF8C", dichromat::colorschemes$Categorical.12[c(1:4, 7:12)]),
                        domain = extrapolation.values$data$all$mic,
                        na.color = "transparent")
 
     micvars <- extrapolation.values$data$all %>%
       dplyr::count(mic)
 
-    allvars <- tibble::tibble(vars = c("None", covariate.names), ID = seq(0,length(covariate.names)))
+    allvars <- tibble::tibble(vars = c("None", covariate.names), ID = seq(0, length(covariate.names)))
 
     mapvars <- dplyr::left_join(x = micvars, y = allvars, by = c("mic" = "ID"))
 
     exleaf <- exleaf %>% leaflet::addRasterImage(map = .,
-                                                 x = as.factor(extrapolation.values$rasters$mic$all),
+                                                 x = raster::as.factor(extrapolation.values$rasters$mic$all),
                                                  colors = pal,
-                                                 group="MIC",
+                                                 group = "MIC",
                                                  opacity = 1) %>%
 
-      #'---------------------------------------------
+      #---------------------------------------------
       # legend
-      #'---------------------------------------------
+      #---------------------------------------------
 
       addLegend_decreasing(map = .,
                            pal = pal,
@@ -371,16 +375,16 @@ map_extrapolation <- function(map.type = NULL,
                              suffix = paste0(" - ", mapvars$vars)),
                            opacity = 1,
                            decreasing = TRUE,
-                           group="MIC",
-                           values = raster::getValues(extrapolation.values$rasters$mic$all),
+                           group = "MIC",
+                           r.values = raster::getValues(extrapolation.values$rasters$mic$all),
                            title = "MIC")
 
 
   }else if(map.type == "nearby"){
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Adds rasters and colour palettes
-    #'---------------------------------------------
+    #---------------------------------------------
 
     pal.near <- leaflet::colorNumeric(pals::parula(100),
                                       raster::getValues(gower.values),
@@ -393,25 +397,25 @@ map_extrapolation <- function(map.type = NULL,
                               group="% nearby",
                               opacity = 1) %>%
 
-      #'---------------------------------------------
+      #---------------------------------------------
       # legend
-      #'---------------------------------------------
+      #---------------------------------------------
 
       addLegend_decreasing(map = .,
                            pal = pal.near,
                            opacity = 1,
                            decreasing = TRUE,
-                           group="% nearby",
-                           values = raster::getValues(gower.values),
+                           group ="% nearby",
+                           r.values = raster::getValues(gower.values),
                            title = "% nearby")
 
 
   }
 
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Adds survey tracks and sightings
-  #'---------------------------------------------
+  #---------------------------------------------
 
   if(is.null(tracks)==FALSE)  exleaf <- exleaf %>%
     leaflet::addPolylines(data = tracks,
@@ -433,8 +437,8 @@ map_extrapolation <- function(map.type = NULL,
       sizelist <- purrr::set_names(sizelist, NULL)
 
       exleaf <- exleaf %>%
-        leaflet::addCircleMarkers(lng = coordinates(sightings)[,1],
-                                  lat = coordinates(sightings)[,2],
+        leaflet::addCircleMarkers(lng = sp::coordinates(sightings)[,1],
+                                  lat = sp::coordinates(sightings)[,2],
                                   radius=~(log(sightings$size)+1)*3,
                                   label = sizelist,
                                   labelOptions = lapply(1:nrow(sightings),
@@ -449,8 +453,8 @@ map_extrapolation <- function(map.type = NULL,
       message("No 'size' column detected: Group size not shown")
 
       exleaf <- exleaf %>%
-        leaflet::addCircleMarkers(lng = coordinates(sightings)[,1],
-                                  lat = coordinates(sightings)[,2],
+        leaflet::addCircleMarkers(lng = sp::coordinates(sightings)[,1],
+                                  lat = sp::coordinates(sightings)[,2],
                                   stroke = FALSE,
                                   radius = 4,
                                   color="black",
@@ -460,9 +464,9 @@ map_extrapolation <- function(map.type = NULL,
     }
   }
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Layer controls
-  #'---------------------------------------------
+  #---------------------------------------------
 
   toggles <- paste0(switch(map.type,
                            "extrapolation" = "1",

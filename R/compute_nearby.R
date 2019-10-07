@@ -41,6 +41,8 @@
 #'
 #' Virgili A, Racine M, Authier M, Monestiez P, Ridoux V (2017). Comparison of habitat models for scarcely detected species. Ecological Modelling 346, 88–98. DOI: \href{https://www.sciencedirect.com/science/article/pii/S0304380016308146}{10.1016/j.ecolmodel.2016.12.013}.
 #'
+#' @export
+#'
 #' @examples
 #' library(dsmextra)
 #'
@@ -61,7 +63,6 @@
 #'                                coordinate.system = my_crs,
 #'                                covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
 #'                                nearby = 1)
-#' @export
 compute_nearby <- function (segments,
                             covariate.names,
                             prediction.grid,
@@ -71,15 +72,15 @@ compute_nearby <- function (segments,
                             no.partitions = 10,
                             resolution = NULL) {
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Perform function checks
-  #'---------------------------------------------
+  #---------------------------------------------
 
   coordinate.system <- check_crs(coordinate.system = coordinate.system)
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Check if prediction grid is regular
-  #'---------------------------------------------
+  #---------------------------------------------
 
   check.grid <- prediction.grid %>%
     dplyr::select(x, y) %>%
@@ -87,9 +88,9 @@ compute_nearby <- function (segments,
 
   grid.regular <- try(raster::rasterFromXYZ(check.grid), silent = TRUE)
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # If grid is irregular, rasterise prediction.grid based on specified resolution
-  #'---------------------------------------------
+  #---------------------------------------------
 
   if(class(grid.regular)=="try-error"){
 
@@ -98,12 +99,12 @@ compute_nearby <- function (segments,
     warning('Prediction grid cells are not regularly spaced.\nData will be rasterised and covariate values averaged.')
 
     check.grid$z <- NULL
-    coordinates(check.grid) <- ~x+y
+    sp::coordinates(check.grid) <- ~x+y
     sp::proj4string(check.grid) <- coordinate.system
 
     # Create empty raster with desired resolution
 
-    ras <- raster::raster(extent(check.grid), res = resolution)
+    ras <- raster::raster(raster::extent(check.grid), res = resolution)
     raster::crs(ras) <- coordinate.system
 
     # Create individual rasters for each covariate
@@ -121,21 +122,21 @@ compute_nearby <- function (segments,
 
     prediction.grid <- raster::as.data.frame(ras.list, xy = TRUE, na.rm = TRUE)
 
-    warning('New prediction grid (pred.grid) saved to global environment.')
-    assign(x = 'pred.grid', prediction.grid, envir = .GlobalEnv)
+    # warning('New prediction grid (pred.grid) saved to global environment.')
+    # assign(x = 'pred.grid', prediction.grid, envir = .GlobalEnv)
 
 
   } # End if class(grid.regular)
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Check size of input datasets
-  #'---------------------------------------------
+  #---------------------------------------------
 
   big.data <- ifelse(prod(nrow(segments), nrow(prediction.grid)) > max.size, TRUE, FALSE)
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Compute counterfactuals
-  #'---------------------------------------------
+  #---------------------------------------------
 
   if(big.data){
 
@@ -162,9 +163,9 @@ compute_nearby <- function (segments,
                                   choice = "distance")
   }
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Convert to raster
-  #'---------------------------------------------
+  #---------------------------------------------
 
   rgow <- cbind(prediction.grid[, c("x", "y")],
                 100*counterfact$sum.stat) # in percent

@@ -16,6 +16,8 @@
 #' @param miss Optional string indicating the strategy for dealing with missing data.
 #' @param no.partitions Integer. Number of desired partitions of the data (default of 10).
 #'
+#' @importFrom stats model.frame model.matrix na.fail na.omit terms quantile update.formula
+#'
 #' @return A list object containing extrapolation values in both data.frame and raster format.
 #'
 #' @author Phil J. Bouchet
@@ -37,12 +39,12 @@ whatif.opt <- function (formula = NULL,
 
   message("Preprocessing data ...")
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Perform function checks
-  #'---------------------------------------------
+  #---------------------------------------------
 
   if (grepl("Zelig*", class(data)) & missing(cfact))
-    cfact <- zelig_setx_to_df(data)
+    cfact <- Zelig::zelig_setx_to_df(data)
 
   if (grepl("Zelig*", class(data)) & !missing(cfact)) {
     formula <- formula(stats::delete.response(stats::terms(data$formula)))
@@ -191,9 +193,9 @@ whatif.opt <- function (formula = NULL,
 
   n = nrow(data)
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Define functions
-  #'---------------------------------------------
+  #---------------------------------------------
 
   # Original functions
 
@@ -231,7 +233,7 @@ whatif.opt <- function (formula = NULL,
   }
 
 
-  calcgd <- function(dat, cf, range, split.factor = chunk.size) {
+  calcgd <- function(dat, cf, range, split.factor = no.partitions) {
 
     # Split matrices into smaller chunks
 
@@ -267,7 +269,8 @@ whatif.opt <- function (formula = NULL,
     n <- nrow(dat)
     dat <- t(dat)
 
-    assign(x = 'pbb', value = dplyr::progress_estimated(ncol(dat)), envir = .GlobalEnv)
+    pbb <- dplyr::progress_estimated(ncol(dat))
+    # assign(x = 'pbb', value = dplyr::progress_estimated(ncol(dat)), envir = .GlobalEnv)
 
     fff <- function(x, dat, rang){
       pbb$tick()$print()
@@ -275,8 +278,9 @@ whatif.opt <- function (formula = NULL,
     }
 
     temp <- purrr::map(1:ncol(dat),
-                       ~fff(x = .x, dat = dat, rang = rang) %>%
-                         sum(.),
+                       ~{pbb$tick()$print()
+                         fff(x = .x, dat = dat, rang = rang) %>%
+                         sum(.)},
                        .pb = pbb)
 
     temp <- Reduce('+', temp)
@@ -289,9 +293,9 @@ whatif.opt <- function (formula = NULL,
     n <- nrow(data)
   }
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Perform calculations
-  #'---------------------------------------------
+  #---------------------------------------------
 
   message("Calculating distances ....")
 
@@ -318,9 +322,9 @@ whatif.opt <- function (formula = NULL,
 
   summary <- colSums(dist <= nearby * gv.x) * (1/n)
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Wrap up
-  #'---------------------------------------------
+  #---------------------------------------------
 
   message("\n")
   message("Finishing up ...")

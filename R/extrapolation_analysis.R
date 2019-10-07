@@ -30,6 +30,7 @@
 #' @param map.sightings Species observations (optional). Can be supplied as a \code{matrix} of coordinates, a \code{data.frame}, a \code{\link[sp]{SpatialPoints}} object or a \code{\link[sp]{SpatialPointsDataFrame}} object. Circle markers will be proportional to group size if the data contain a column labelled \code{size}.
 #' @param map.tracks Survey tracks (optional). Can be supplied as a \code{matrix} of coordinates, a \code{data.frame}, a \code{\link[sp]{SpatialLines}} object or a \code{\link[sp]{SpatialLinesDataFrame}} object. A \code{TransectID} field is required for matrix or data.frame inputs.
 #'
+#' @export
 #' @author Phil J. Bouchet
 #' @references Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions. CREEM Technical Report 2019-01, 59 p. \href{https://research-repository.st-andrews.ac.uk/handle/10023/18509}{https://research-repository.st-andrews.ac.uk/handle/10023/18509}
 #'
@@ -68,7 +69,6 @@
 #'                                          nearby.max.size = 1e7,
 #'                                          nearby.no.partitions = 10,
 #'                                          map.generate = TRUE)
-#' @export
 extrapolation_analysis <- function(segments,
                                   covariate.names,
                                   prediction.grid,
@@ -88,15 +88,15 @@ extrapolation_analysis <- function(segments,
                                   map.sightings = NULL,
                                   map.tracks = NULL){
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Initiate list (in which results will be stored)
-  #'---------------------------------------------
+  #---------------------------------------------
 
   resl <- list()
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Assess extrapolation
-  #'---------------------------------------------
+  #---------------------------------------------
 
   message("=== Assessing extrapolation ===")
 
@@ -124,9 +124,9 @@ extrapolation_analysis <- function(segments,
 
   resl$extrapolation <- ex1 # Store results
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Compare covariate combinations
-  #'---------------------------------------------
+  #---------------------------------------------
 
   message("=== Testing covariate combinations ===")
 
@@ -143,9 +143,9 @@ extrapolation_analysis <- function(segments,
 
   }
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Neighbourhood metrics
-  #'---------------------------------------------
+  #---------------------------------------------
 
   message("=== Calculating neighbourhood metrics ===")
 
@@ -163,9 +163,9 @@ extrapolation_analysis <- function(segments,
 
   }
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Generate maps
-  #'---------------------------------------------
+  #---------------------------------------------
 
   message("=== Generating maps ===")
 
@@ -179,7 +179,9 @@ extrapolation_analysis <- function(segments,
                             sightings = map.sightings,
                             tracks = map.tracks)
 
-    print(m1)
+    message("Map 1")
+
+    # print(m1)
 
     m2 <- map_extrapolation(map.type = "mic",
                             extrapolation.values = ex1,
@@ -189,11 +191,14 @@ extrapolation_analysis <- function(segments,
                             sightings = map.sightings,
                             tracks = map.tracks)
 
-    print(m2)
+    message("Map 2")
+
+    # print(m2)
 
     resl$maps <- list(extrapolation = m1, mic = m2)
 
     if(nearby.compute){
+
       m3 <- map_extrapolation(map.type = "nearby",
                               gower.values = ex2,
                               covariate.names = covariate.names,

@@ -25,9 +25,12 @@ Imports:
     tidyr,
     dplyr,
     ggplot2,
-    stats
+    rgdal,
+    Zelig
 Suggests:
     smoothr,
     maps,
-    knitr
+    knitr,
+    methods,
+    tibble
 RoxygenNote: 6.1.1

@@ -24,6 +24,8 @@
 #'
 #' The \code{rasters} list comprises two elements, named \code{ExDet} and \code{mic}. Each contains individual rasters mapping ExDet and MIC values, respectively.
 #'
+#' @import purrr
+#'
 #' @param segments Segment data.frame (i.e. surveyed transects divided into segments for analysis). This is the reference dataset used for model building and calibration. This must contain one column for each of the covariates in \code{covariate.names}.
 #' @param covariate.names Character string. Names of the covariates of interest.
 #' @param prediction.grid Prediction data.frame. This contains both geographic coordinates (\code{x}, \code{y}) and covariate values associated with the target locations for which predictions are desired. Typically, these locations are taken as the centroids of the grid cells in a spatial prediction grid/raster. See \code{\link[dsm]{predict.dsm}}.
@@ -44,7 +46,7 @@
 #' Mesgaran MB, Cousens RD, Webber BL (2014). Here be dragons: a tool for quantifying novelty due to covariate range and correlation change when projecting species distribution models. Diversity & Distributions, 20: 1147-1159, DOI: \href{https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12209}{10.1111/ddi.12209}
 #'
 #' Miller DL, Rexstad E, Burt L, Bravington MV, Hedley S (2015). dsm: Density Surface Modelling of Distance Sampling Data. R package version 2.2.9. \href{https://CRAN.R-project.org/package=dsm}{https://CRAN.R-project.org/package=dsm}
-#'
+#' @export
 #' @examples
 #' library(dsmextra)
 #'
@@ -67,7 +69,7 @@
 #'       print.summary = TRUE,
 #'       save.summary = TRUE,
 #'       print.precision = 2)
-#' @export
+
 compute_extrapolation <- function(segments,
                                   covariate.names,
                                   prediction.grid,
@@ -77,18 +79,9 @@ compute_extrapolation <- function(segments,
                                   save.summary = FALSE,
                                   resolution = NULL){
 
-  #'---------------------------------------------
-  # Prints out progress bar if the function is
-  # called within a call to compare_covariates
-  #'---------------------------------------------
-
-  if(exists("call.compare")){
-    if(exists("pb")){pb$tick()$print()}
-  }
-
-  #'---------------------------------------------
+  #---------------------------------------------
   # Perform function checks
-  #'---------------------------------------------
+  #---------------------------------------------
 
   if(!class(prediction.grid)=="data.frame") stop("pred.grid must be of class data.frame")
 
@@ -99,9 +92,9 @@ compute_extrapolation <- function(segments,
 
   coordinate.system <- check_crs(coordinate.system = coordinate.system)
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Check if prediction grid is regular
-  #'---------------------------------------------
+  #---------------------------------------------
 
   check.grid <- prediction.grid %>%
     dplyr::select(x, y) %>%
@@ -109,9 +102,9 @@ compute_extrapolation <- function(segments,
 
   grid.regular <- try(raster::rasterFromXYZ(check.grid), silent = TRUE)
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # If grid is irregular, rasterise prediction.grid based on specified resolution
-  #'---------------------------------------------
+  #---------------------------------------------
 
   if(class(grid.regular)=="try-error"){
 
@@ -120,12 +113,12 @@ compute_extrapolation <- function(segments,
     warning('Prediction grid cells are not regularly spaced.\nData will be rasterised and covariate values averaged.')
 
     check.grid$z <- NULL
-    coordinates(check.grid) <- ~x+y
+    sp::coordinates(check.grid) <- ~x+y
     sp::proj4string(check.grid) <- coordinate.system
 
     # Create empty raster with desired resolution
 
-    ras <- raster::raster(extent(check.grid), res = resolution)
+    ras <- raster::raster(raster::extent(check.grid), res = resolution)
     raster::crs(ras) <- coordinate.system
 
     # Create individual rasters for each covariate
@@ -143,40 +136,40 @@ compute_extrapolation <- function(segments,
 
     prediction.grid <- raster::as.data.frame(ras.list, xy = TRUE, na.rm = TRUE)
 
-    warning('New prediction grid (pred.grid) saved to global environment.')
-    assign(x = 'pred.grid', prediction.grid, envir = .GlobalEnv)
+    # warning('New prediction grid (pred.grid) saved to global environment.')
+    # assign(x = 'pred.grid', prediction.grid, envir = .GlobalEnv)
 
 
   } # End if class(grid.regular)
 
   message("Computing ...")
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Define reference and target systems
-  #'---------------------------------------------
+  #---------------------------------------------
 
   reference <- segments[, covariate.names]
   target <- prediction.grid[, covariate.names]
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Run the exdet tool from Mesgaran et al. (2014)
-  #'---------------------------------------------
+  #---------------------------------------------
 
   mesgaran <- ExDet(ref = reference,
                     tg = target,
                     xp = covariate.names)
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Add coordinates
-  #'---------------------------------------------
+  #---------------------------------------------
 
   mesgaran <- prediction.grid %>%
     dplyr::select(x,y) %>%
     cbind(., mesgaran)
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Return a list with univariate, combinatorial, and analog conditions as separate elements
-  #'---------------------------------------------
+  #---------------------------------------------
 
   reslist <- list(data=NULL, rasters=NULL)
 
@@ -191,23 +184,23 @@ compute_extrapolation <- function(segments,
   reslist$data$analogue <- mesgaran %>%
     dplyr::filter(., ExDet >= 0 & ExDet <= 1)
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Create rasters from extrapolation/MIC values
-  #'---------------------------------------------
+  #---------------------------------------------
 
   reslist$rasters$ExDet <- reslist$data %>%
-    purrr:::map(., ~ dplyr::select(., x, y, ExDet) %>%
+    purrr::map(., ~ dplyr::select(., x, y, ExDet) %>%
                   safe_raster(.))%>%
     purrr::map(., "result")
 
   reslist$rasters$mic <- reslist$data %>%
-    purrr:::map(., ~ dplyr::select(., x, y, mic) %>%
+    purrr::map(., ~ dplyr::select(., x, y, mic) %>%
                   safe_raster(.)) %>%
     purrr::map(., "result")
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Check that rasters have been produced for each extrapolation type
-  #'---------------------------------------------
+  #---------------------------------------------
 
   null.check <- purrr::map_lgl(.x = reslist$rasters$ExDet, .f = ~is.null(.x))
 
@@ -253,9 +246,9 @@ compute_extrapolation <- function(segments,
 
     } # End for loop length(ms)
   } # End if(length(ms)>0)
-  #'---------------------------------------------
+  #---------------------------------------------
   # Project rasters
-  #'---------------------------------------------
+  #---------------------------------------------
 
   for(r in 1:length(reslist$rasters$ExDet)){
     if(!is.null(reslist$rasters$ExDet[[r]]))raster::projection(reslist$rasters$ExDet[[r]]) <- coordinate.system}
@@ -265,9 +258,9 @@ compute_extrapolation <- function(segments,
 
   message("Done!")
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Print/save summary
-  #'---------------------------------------------
+  #---------------------------------------------
 
   if(print.summary){
 

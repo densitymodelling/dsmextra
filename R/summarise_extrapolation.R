@@ -2,18 +2,21 @@
 #'
 #' Displays a tabular summary of the geographic extent of extrapolation. This is calculated as the number (and proportion) of prediction locations (i.e. grid cells) subject to extrapolation.
 #'
-#'  @param extrapolation.object Output object from a run of \link{compute_extrapolation}.
-#'  @param covariate.names Character string. Names of the covariates of interest.
-#'  @param extrapolation Logical. Whether to return a summary of univariate/combinatorial extrapolation. Defaults to TRUE.
-#'  @param mic Logical. Whether to return a summary of the most influential covariates (MIC) - see \link{compute_extrapolation}. Defaults to TRUE.
-#'  @param print.precision Integer. Number of significant figures to be used when printing the extrapolation summary. Default value of 2.
-#'  @return Prints a summary table in the R console. In addition, if assigned to an object, returns a list with the table values (.n = number of locations, .p = corresponding percentage).
-#'  @author Phil J. Bouchet
-#'  @seealso \code{\link{compute_extrapolation}}
-#'  @references Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions. CREEM Technical Report 2019-01, 59 p. \href{https://research-repository.st-andrews.ac.uk/handle/10023/18509}{https://research-repository.st-andrews.ac.uk/handle/10023/18509}
+#' @param extrapolation.object Output object from a run of \link{compute_extrapolation}.
+#' @param covariate.names Character string. Names of the covariates of interest.
+#' @param extrapolation Logical. Whether to return a summary of univariate/combinatorial extrapolation. Defaults to TRUE.
+#' @param mic Logical. Whether to return a summary of the most influential covariates (MIC) - see \link{compute_extrapolation}. Defaults to TRUE.
+#' @param print.precision Integer. Number of significant figures to be used when printing the extrapolation summary. Default value of 2.
+#' @return Prints a summary table in the R console. In addition, if assigned to an object, returns a list with the table values (.n = number of locations, .p = corresponding percentage).
+#' @author Phil J. Bouchet
+#' @seealso \code{\link{compute_extrapolation}}
+#' @references Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions. CREEM Technical Report 2019-01, 59 p. \href{https://research-repository.st-andrews.ac.uk/handle/10023/18509}{https://research-repository.st-andrews.ac.uk/handle/10023/18509}
 #'
 #' Mesgaran MB, Cousens RD, Webber BL (2014). Here be dragons: a tool for quantifying novelty due to covariate range and correlation change when projecting species distribution models. Diversity & Distributions, 20: 1147-1159, DOI: \href{https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12209}{10.1111/ddi.12209}
-#'  @examples
+#'
+#' @export
+#'
+#' @examples
 #' library(dsmextra)
 #'
 #' # Load the Mid-Atlantic sperm whale data (see ?spermwhales)
@@ -44,28 +47,28 @@
 #'      print.precision = 2)
 #'
 #' print(spermw.summary)
-#'  @export
+
 summarise_extrapolation <- function(extrapolation.object,
                                     covariate.names = NULL,
                                     extrapolation = TRUE,
                                     mic = TRUE,
                                     print.precision = 2){
 
-  #'---------------------------------------------
+  #.............................................
   # Extract extrapolation values
-  #'---------------------------------------------
+  #---------------------------------------------
 
   ex.data <- extrapolation.object$data$all$ExDet
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Extract output values
-  #'---------------------------------------------
+  #---------------------------------------------
 
   res <- n_and_p(ex.data)
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Format as nice-looking table
-  #'---------------------------------------------
+  #---------------------------------------------
 
   # Which type(s) extrapolation did not occur?
 
@@ -77,24 +80,24 @@ summarise_extrapolation <- function(extrapolation.object,
     unique(.) %>%
     tools::toTitleCase(.)
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Filter accordingly
-  #'---------------------------------------------
+  #---------------------------------------------
 
   res <- res[zeroes.names]
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Begin formatting
-  #'---------------------------------------------
+  #---------------------------------------------
 
   resdf <- purrr::map2(.x = res[grepl(pattern = ".n", x = names(res), fixed = TRUE)],
                        .y = res[grepl(pattern = ".p", x = names(res), fixed = TRUE)],
                        .f = ~c(paste0("n = ", format(round(as.numeric(.x), 0),
                                                      nsmall=0, big.mark=",")), paste0(round(.y, print.precision), " %")))
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Convert to matrix form
-  #'---------------------------------------------
+  #---------------------------------------------
 
   resdf <- purrr::set_names(resdf, tb.names) %>%
     data.frame(.) %>%
@@ -102,9 +105,9 @@ summarise_extrapolation <- function(extrapolation.object,
 
   resdf <- cbind(resdf, row.names(resdf))
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Calculate totals
-  #'---------------------------------------------
+  #---------------------------------------------
 
   Total.n <- res[grepl(pattern = ".n", x = names(res), fixed = TRUE)] %>%
     unlist(.) %>%
@@ -122,9 +125,9 @@ summarise_extrapolation <- function(extrapolation.object,
   names(resdf) <- c("Count", "Percentage", "Type")
   row.names(resdf) <- NULL
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Rearrange rows and reorder columns
-  #'---------------------------------------------
+  #---------------------------------------------
 
   resdf <- resdf %>%
     dplyr::mutate(., Type = factor(Type,
@@ -133,17 +136,17 @@ summarise_extrapolation <- function(extrapolation.object,
     dplyr::select(., Type, Count, Percentage)
 
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Add separator beneath "Analogue" if present
-  #'---------------------------------------------
+  #---------------------------------------------
 
   if("Analogue"%in%as.character(resdf$Type)) add.sep <- TRUE
 
   resdf <- apply(resdf, 2, function(x) as.character(x))
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Add sub-totals, if necessary
-  #'---------------------------------------------
+  #---------------------------------------------
 
   if("Univariate"%in%resdf[,1] & "Combinatorial"%in%resdf[,1]){
 
@@ -166,9 +169,9 @@ summarise_extrapolation <- function(extrapolation.object,
 
   }
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Add totals to matrix
-  #'---------------------------------------------
+  #---------------------------------------------
 
   resdf <- rbind(resdf, rep("-----------",3))
   resdf <- rbind(resdf, c("Total", Total.n, Total.p))
@@ -177,24 +180,24 @@ summarise_extrapolation <- function(extrapolation.object,
 
   colnames(resdf) <- NULL
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Most influential covariates - by extrapolation type
-  #'---------------------------------------------
+  #---------------------------------------------
 
   if(mic){
 
     mic_data_univariate <- covariate.names[extrapolation.object$data$all$mic_univariate]
     mic_data_combinatorial <- covariate.names[extrapolation.object$data$all$mic_combinatorial]
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Tabulate the results
-    #'---------------------------------------------
+    #---------------------------------------------
 
     mic_data <- list()
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Univariate extrapolation
-    #'---------------------------------------------
+    #---------------------------------------------
 
     if(all(is.na(mic_data_univariate))){
 
@@ -210,9 +213,9 @@ summarise_extrapolation <- function(extrapolation.object,
 
     }
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Combinatorial extrapolation
-    #'---------------------------------------------
+    #---------------------------------------------
 
     if(all(is.na(mic_data_combinatorial))){
 
@@ -227,25 +230,25 @@ summarise_extrapolation <- function(extrapolation.object,
         dplyr::mutate(perc = 100*Freq/length(extrapolation.object$data$all$ExDet))
     }
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Combine into single list
-    #'---------------------------------------------
+    #---------------------------------------------
 
     if(!purrr::is_empty(mic_data_univariate)) mic_data <- append(mic_data, list(mic_data_univariate))
     if(!purrr::is_empty(mic_data_combinatorial)) mic_data <- append(mic_data, list(mic_data_combinatorial))
 
-    #'---------------------------------------------
+    #---------------------------------------------
     # Rename columns
-    #'---------------------------------------------
+    #---------------------------------------------
 
     if(!purrr::is_empty(mic_data)){
 
       mic_data <- purrr::map(.x = mic_data,
                              .f = ~purrr::set_names(.x, c("covariate", "freq", "Type", "perc")))
 
-      #'---------------------------------------------
+      #---------------------------------------------
       # Format list data
-      #'---------------------------------------------
+      #---------------------------------------------
 
       mic_res <- purrr::map(.x = mic_data,
                             .f = ~strsplit(paste(.x$freq, .x$perc), " ")) %>%
@@ -254,9 +257,9 @@ summarise_extrapolation <- function(extrapolation.object,
         purrr::map(.x = ., .f = ~purrr::map(.x = ., .f = ~list(.n = .x[1], .p = .x[2]))) %>%
         purrr::flatten()
 
-      #'---------------------------------------------
+      #---------------------------------------------
       # Format for output in console
-      #'---------------------------------------------
+      #---------------------------------------------
 
       mic_resdf <- purrr::map(.x = mic_data,
                               .f = ~dplyr::arrange(.x, desc(perc), covariate) %>%
@@ -267,24 +270,24 @@ summarise_extrapolation <- function(extrapolation.object,
       mic_data <- purrr::set_names(mic_data, tb.names[which(!tb.names=="Analogue")])
       mic_resdf <- purrr::set_names(mic_resdf, tb.names[which(!tb.names=="Analogue")])
 
-      #'---------------------------------------------
+      #---------------------------------------------
       # Compact into one tibble
-      #'---------------------------------------------
+      #---------------------------------------------
 
       mic_resdf <- do.call(rbind, mic_resdf)
 
-      #'---------------------------------------------
+      #---------------------------------------------
       # Re-order columns
-      #'---------------------------------------------
+      #---------------------------------------------
 
       mic_resdf <- mic_resdf %>%
         dplyr::select(., Type, covariate, freq, perc)
 
       row.names(mic_resdf) <- NULL
 
-      #'---------------------------------------------
+      #---------------------------------------------
       # Calculate totals
-      #'---------------------------------------------
+      #---------------------------------------------
 
       mic_data_total <- do.call(rbind, mic_data)
       mic_subtotals <- mic_data_total %>%
@@ -352,9 +355,9 @@ summarise_extrapolation <- function(extrapolation.object,
   } # End mic
 
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Print in console
-  #'---------------------------------------------
+  #---------------------------------------------
 
   if(extrapolation){
     print(knitr::kable(resdf,
@@ -367,9 +370,9 @@ summarise_extrapolation <- function(extrapolation.object,
                        caption = "Most influential covariates (MIC)"))
   }
 
-  #'---------------------------------------------
+  #---------------------------------------------
   # Return output
-  #'---------------------------------------------
+  #---------------------------------------------
 
   if(mic){
 

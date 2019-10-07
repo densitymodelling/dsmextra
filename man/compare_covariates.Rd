@@ -17,7 +17,7 @@ compare_covariates(extrapolation.type = "both", segments,
 
 \item{n.covariates}{Maximum number of covariates. The function will compare all combinations of 1 to \code{n.covariates} covariates.}
 
-\item{prediction.grid}{Prediction data.frame. This contains both geographic coordinates (\code{x}, \code{y}) and covariate values associated with the target locations for which predictions are desired. Typically, these locations are taken as the centroids of the grid cells in a spatial prediction grid/raster.}
+\item{prediction.grid}{Prediction data.frame. This contains both geographic coordinates (\code{x}, \code{y}) and covariate values associated with the target locations for which predictions are desired. Typically, these locations are taken as the centroids of the grid cells in a spatial prediction grid/raster. See \code{\link[dsm]{predict.dsm}}.}
 
 \item{coordinate.system}{Projected coordinate system relevant to the study location. Can be either a character string or an object of class \code{\link[sp]{CRS}}.}
 

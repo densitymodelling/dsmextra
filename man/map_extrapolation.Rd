@@ -18,9 +18,9 @@ map_extrapolation(map.type = NULL, base.layer = "ocean",
 
 \item{gower.values}{Raster layer object as returned by \link{compute_nearby}. Only valid when \code{map.type = nearby}.}
 
-\item{covariate.names}{Character string (only required when \code{map.type = extrapolation}). Names of the covariates of interest.}
+\item{covariate.names}{Character string. Names of the covariates of interest.}
 
-\item{prediction.grid}{Prediction data.frame. This contains both geographic coordinates (\code{x}, \code{y}) and covariate values associated with the target locations for which predictions are desired.}
+\item{prediction.grid}{Prediction data.frame. This contains both geographic coordinates (\code{x}, \code{y}) and covariate values associated with the target locations for which predictions are desired. Typically, these locations are taken as the centroids of the grid cells in a spatial prediction grid/raster. See \code{\link[dsm]{predict.dsm}}.}
 
 \item{coordinate.system}{Projected coordinate system relevant to the study location. Can be either a character string or an object of class \code{\link[sp]{CRS}}.}
 

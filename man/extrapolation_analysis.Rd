@@ -18,7 +18,7 @@ extrapolation_analysis(segments, covariate.names, prediction.grid,
 
 \item{covariate.names}{Character string. Names of the covariates of interest.}
 
-\item{prediction.grid}{Prediction data.frame. This contains both the geographic coordinates (\code{x}, \code{y}) and the covariate values associated with the target locations for which predictions are desired. Typically, these locations are taken as the centroids of the grid cells in a spatial prediction grid/raster.}
+\item{prediction.grid}{Prediction data.frame. This contains both geographic coordinates (\code{x}, \code{y}) and covariate values associated with the target locations for which predictions are desired. Typically, these locations are taken as the centroids of the grid cells in a spatial prediction grid/raster. See \code{\link[dsm]{predict.dsm}}.}
 
 \item{coordinate.system}{Projected coordinate system relevant to the study location. Can be either a character string or an object of class \code{\link[sp]{CRS}}.}
 

@@ -5,13 +5,12 @@
 #' @importFrom raster as.data.frame as.factor
 #' @import leaflet
 #'
+#' @inheritParams compute_extrapolation
+#'
 #' @param map.type Character string. Type of map to be returned. Either \code{extrapolation} for an extrapolation map, \code{mic} for a map of the most influential covariates, or \code{nearby} for a map of the percentage of data nearby.
 #' @param base.layer Base layer used for mapping. The default is \code{ocean}, which uses the ESRI.OceanBasemap. Use \code{world} for ESRI.WorldImagery and \code{gray} for ESRI.WorldGrayCanvas. Available map tiles can be viewed at \href{https://leaflet-extras.github.io/leaflet-providers/preview/}{https://leaflet-extras.github.io/leaflet-providers/preview/}.
 #' @param extrapolation.values List object as returned by \link{compute_extrapolation}. Only valid when \code{map.type = extrapolation} or \code{map.type = mic}.
 #' @param gower.values Raster layer object as returned by \link{compute_nearby}. Only valid when \code{map.type = nearby}.
-#' @param covariate.names Character string (only required when \code{map.type = extrapolation}). Names of the covariates of interest.
-#' @param prediction.grid Prediction data.frame. This contains both geographic coordinates (\code{x}, \code{y}) and covariate values associated with the target locations for which predictions are desired.
-#' @param coordinate.system Projected coordinate system relevant to the study location. Can be either a character string or an object of class \code{\link[sp]{CRS}}.
 #' @param sightings Species observations (optional). Can be supplied as a \code{matrix} of coordinates, a \code{data.frame}, a \code{\link[sp]{SpatialPoints}} object or a \code{\link[sp]{SpatialPointsDataFrame}} object. Circle markers will be proportional to group size if the data contain a column labelled \code{size}.
 #' @param tracks Survey tracks (optional). Can be supplied as a \code{matrix} of coordinates, a \code{data.frame}, a \code{\link[sp]{SpatialLines}} object or a \code{\link[sp]{SpatialLinesDataFrame}} object. A \code{TransectID} field is required for matrix or data.frame inputs.
 #'

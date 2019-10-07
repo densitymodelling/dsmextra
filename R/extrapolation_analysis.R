@@ -8,10 +8,7 @@
 #'   \code{map.arguments} \tab Arguments from \code{\link{map_extrapolation}} \cr
 #'  }
 #'
-#' @param segments Segment data.frame (i.e. surveyed transects divided into segments for analysis). This is the reference dataset used for model building and calibration. This must contain one column for each of the covariates in \code{covariate.names}.
-#' @param covariate.names Character string. Names of the covariates of interest.
-#' @param prediction.grid Prediction data.frame. This contains both the geographic coordinates (\code{x}, \code{y}) and the covariate values associated with the target locations for which predictions are desired. Typically, these locations are taken as the centroids of the grid cells in a spatial prediction grid/raster.
-#' @param coordinate.system Projected coordinate system relevant to the study location. Can be either a character string or an object of class \code{\link[sp]{CRS}}.
+#' @inheritParams compute_extrapolation
 #' @param summarise.extrapolation Logical. If TRUE, run \code{\link{summarise_extrapolation}}.
 #' @param summary.print.precision Integer. Number of significant figures to be used when printing the extrapolation summary. Default value of 2.
 #'

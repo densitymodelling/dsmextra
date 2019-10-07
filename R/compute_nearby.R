@@ -19,10 +19,7 @@
 #'  }
 #' In practice, a run of \code{compute_nearby} begins with a quick assessment of the dimensions of the input data, i.e. the reference and target data.frames. If the product of their dimensions (i.e. number of segments multiplied by number of prediction grid cells) exceeds the value set for \code{max.size}, then \code{no.partitions} subsets of the data will be created and the computations run on each using \code{\link[purrr]{map}} functions from the \href{https://cran.r-project.org/web/packages/purrr/index.html}{purrr} package (Henry and Wickham 2019). This means that a smaller \code{max.size} will trigger partitioning on correspondingly smaller datasets. By default, \code{max.size} is set to \code{1e7}. This value was chosen arbitrarily, and should be sufficiently large as to obviate the need for partitioning on most datasets.
 #'
-#' @param segments Segment data.frame (i.e. surveyed transects divided into segments for analysis). This is the reference dataset used for model building and calibration. This must contain one column for each of the covariates in \code{covariate.names}.
-#' @param covariate.names Character string. Names of the covariates of interest.
-#' @param prediction.grid Prediction data.frame. This contains both the geographic coordinates (\code{x}, \code{y}) and the covariate values associated with the target locations for which predictions are desired. Typically, these locations are taken as the centroids of the grid cells in a spatial prediction grid/raster.
-#' @param coordinate.system Projected coordinate system relevant to the study location. Can be either a character string or an object of class \code{\link[sp]{CRS}}.
+#' @inheritParams compute_extrapolation
 #' @param nearby Scalar indicating which reference data points are considered to be 'nearby' (i.e. within ‘nearby’ mean geometric Gower's distances of) prediction points. Defaults to 1, as per Mannocci et al. (2018) and Virgili et al. (2017).
 #' @param max.size Minimum size threshold for partitioning computations. Calculated as \code{\link[base]{prod}(\link[base]{nrow}(segments),\link[base]{nrow}(prediction.grid))}. Has a default value of \code{1e7}. See the 'Details' section.
 #' @param no.partitions Integer. Number of desired partitions of the data (default of 10). See the 'Details' section.

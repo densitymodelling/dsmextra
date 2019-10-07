@@ -16,7 +16,7 @@ summarise_extrapolation(extrapolation.object, covariate.names = NULL,
 
 \item{mic}{Logical. Whether to return a summary of the most influential covariates (MIC) - see \link{compute_extrapolation}. Defaults to TRUE.}
 
-\item{print.precision}{Integer. Number of significant figures to be used when printing the extrapolation summary. Default value of 2.}
+\item{print.precision}{Integer. Number of significant figures to be used when printing the summary. Default value of 2.}
 }
 \value{
 Prints a summary table in the R console. In addition, if assigned to an object, returns a list with the table values (.n = number of locations, .p = corresponding percentage).

@@ -5,13 +5,11 @@
 #' The extent and magnitude of extrapolation naturally vary with the type and number of covariates considered. It may be useful, therefore, to test different combinations of covariates to inform their selection \emph{a priori}, i.e. before model fitting, thereby supporting model parsimony.
 #' @import ggplot2
 #' @param extrapolation.type Character string. Type of extrapolation to be assessed. Can be one of \code{univariate}, \code{combinatorial}, or \code{both} (default).
-#' @param segments Segment data.frame (i.e. surveyed transects divided into segments for analysis). This is the reference dataset used for model building and calibration. This must contain one column for each of the covariates in \code{covariate.names}.
-#' @param covariate.names Character string. Names of the covariates of interest.
 #' @param n.covariates Maximum number of covariates. The function will compare all combinations of 1 to \code{n.covariates} covariates.
-#' @param prediction.grid Prediction data.frame. This contains both geographic coordinates (\code{x}, \code{y}) and covariate values associated with the target locations for which predictions are desired. Typically, these locations are taken as the centroids of the grid cells in a spatial prediction grid/raster.
-#' @param coordinate.system Projected coordinate system relevant to the study location. Can be either a character string or an object of class \code{\link[sp]{CRS}}.
 #' @param create.plots Logical, defaults to \code{TRUE}. Whether to produce summary plots.
 #' @param display.percent Logical. If \code{TRUE} (default), scales the y-axis of the summary plots as a percentage of the total number of grid cells in \code{prediction.grid}.
+#'
+#' @inheritParams compute_extrapolation
 #'
 #' @return Prints a summary table in the R console. Also generates summary boxplots if \code{create.plots} is set to \code{TRUE}.
 #'

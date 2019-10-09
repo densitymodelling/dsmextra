@@ -2,7 +2,7 @@
 #'
 #' Performs a complete evaluation of both univariate (Type I) and combinatorial (Type II) extrapolation in density surface models of line transect data, by calling relevant functions from \code{dsmextra}. As such, arguments \code{extrapolation_analysis} mirror those of the individual functions from which they are taken:
 #'  \tabular{ll}{
-#'   \code{summarise.arguments} \tab Arguments from \code{\link{summarise_extrapolation}} \cr
+#'   \code{summarise/summary.arguments} \tab Arguments from \code{\link{summarise_extrapolation}} \cr
 #'   \code{compare.arguments} \tab Arguments from \code{\link{compare_covariates}} \cr
 #'   \code{nearby.arguments} \tab Arguments from \code{\link{compute_nearby}} \cr
 #'   \code{map.arguments} \tab Arguments from \code{\link{map_extrapolation}} \cr

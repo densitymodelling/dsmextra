@@ -28,11 +28,6 @@ body {font-size: 15px;}
 a, a:hover {color: #106194;
     text-decoration: none;}
 
-code{
-  /*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;*/
-  font-size: 14px;
-}
-
 .table {width: auto;
     font-size: 13px;}
 
@@ -88,7 +83,7 @@ p{text-align: justify;}
 h2{
     background-color: #e9f5f9;
     color: #106194;
-    font-size: 20px;
+    font-size: 18px;
     padding: 0.3em 0em 0.3em 0.5em;
 }
 

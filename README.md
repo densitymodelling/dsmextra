@@ -32,7 +32,7 @@ If you are just getting started with `dsmextra`, we recommend reading the tutori
 
 This R package was developed for the [DenMod project](https://synergy.st-andrews.ac.uk/denmod/) (Working group for the advancement of marine species density surface modelling), with support from the [United States Office of Naval Research](https://www.onr.navy.mil/) (ONR) under the [Living Marine Resources](https://www.navfac.navy.mil/navfac_worldwide/specialty_centers/exwc/products_and_services/ev/lmr.html) (LMR) programme.
 
-## Installation
+### Installation
 
 Install the latest development version from Github (requires the [remotes](https://github.com/r-lib/remotes) package):
 
@@ -43,6 +43,6 @@ if (!require("remotes")) {
 remotes::install_github("densitymodelling/dsmextra")
 ```
 
-# Quick start
+### Quick start
 
 A brief introduction to the package can be found [here](https://densitymodelling.github.io/dsmextra/vignette/).

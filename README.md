@@ -5,9 +5,9 @@
 <!--![GitHub last commit](https://img.shields.io/github/last-commit/DistanceDevelopment/dsm?style=flat-square) -->
 <!-- badges: end -->
 
-`dsmextra` provides a toolkit for quantifying and visualising extrapolation in density surface models (as implemented in package [dsm](https://cran.r-project.org/web/packages/dsm/index.html)) projected into novel environmental space. Currently, `dsmextra` defines extrapolation on the basis of two metrics: (1) **ExDet** (Mesgaran et al. 2014), and **%N** (percentage of data nearby, Mannocci et al. 2018). `dsmextra` offers a variety of numerical and graphical outputs, including summary plots and interactive maps created as [ggplot](https://ggplot2.tidyverse.org/) and [html](https://rstudio.github.io/leaflet/) objects, respectively.
+`dsmextra` provides a toolkit for quantifying and visualising extrapolation in density surface models (as implemented in package [dsm](https://cran.r-project.org/web/packages/dsm/index.html)) projected into novel environmental space. Currently, `dsmextra` defines extrapolation on the basis of two metrics: (1) **ExDet** (Mesgaran et al. 2014), and **%N** (percentage of data nearby, Mannocci et al. 2018). 
 
-Additional functionality (e.g. assessment methods for dynamic covariates) will be added in future releases.
+`dsmextra` offers a variety of numerical and graphical outputs, including summary plots and interactive maps created as [ggplot](https://ggplot2.tidyverse.org/) and [html](https://rstudio.github.io/leaflet/) objects, respectively. Additional functionality (e.g. assessment methods for dynamic covariates) will be added in future releases.
 
 The idea behind `dsmextra` is to aid ecologists, practitioners, and model end-users in identifying conditions (e.g. areas) under which predicted density surfaces may be prone to errors. In so doing, `dsmextra` may support:
 

@@ -1,15 +1,15 @@
-# `dsmextra` - Extrapolation tools for density surface models <img src="https://github.com/densitymodelling/dsmextra/blob/master/hex/dsmextra-hex.png?raw=true" align="right" height=140/>
+# Extrapolation tools for density surface models <img src="https://github.com/densitymodelling/dsmextra/blob/master/hex/dsmextra-hex.png?raw=true" align="right" height=200/>
 
 <!-- badges: start -->
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg?style=flat-square)](https://www.tidyverse.org/lifecycle/#maturing)
 <!--![GitHub last commit](https://img.shields.io/github/last-commit/DistanceDevelopment/dsm?style=flat-square) -->
 <!-- badges: end -->
 
-**dsmextra** provides a toolkit for quantifying and visualising extrapolation in density surface models (as implemented in package [dsm](https://cran.r-project.org/web/packages/dsm/index.html)) projected into novel environmental space. Currently, **dsmextra** defines extrapolation on the basis of two metrics: (1) ExDet (Mesgaran et al. 2014), and %N (percentage of data nearby, Mannocci et al. 2018). **dsmextra** offers a variety of numerical and graphical outputs, including summary plots and interactive maps created as [ggplot](https://ggplot2.tidyverse.org/) and [html](https://rstudio.github.io/leaflet/) objects, respectively.
+`dsmextra` provides a toolkit for quantifying and visualising extrapolation in density surface models (as implemented in package [dsm](https://cran.r-project.org/web/packages/dsm/index.html)) projected into novel environmental space. Currently, `dsmextra` defines extrapolation on the basis of two metrics: (1) **ExDet** (Mesgaran et al. 2014), and **%N** (percentage of data nearby, Mannocci et al. 2018). `dsmextra` offers a variety of numerical and graphical outputs, including summary plots and interactive maps created as [ggplot](https://ggplot2.tidyverse.org/) and [html](https://rstudio.github.io/leaflet/) objects, respectively.
 
 Additional functionality (e.g. assessment methods for dynamic covariates) will be added in future releases.
 
-The idea behind **dsmextra** is to aid ecologists, practitioners, and model end-users in identifying conditions (e.g. areas) under which predicted density surfaces may be prone to errors. In so doing, **dsmextra** may support:
+The idea behind `dsmextra` is to aid ecologists, practitioners, and model end-users in identifying conditions (e.g. areas) under which predicted density surfaces may be prone to errors. In so doing, `dsmextra` may support:
 
 + Better-informed interpretations of density surface model outputs and their associated uncertainties.
 + Improvements to model development and selection protocols.
@@ -17,7 +17,7 @@ The idea behind **dsmextra** is to aid ecologists, practitioners, and model end-
 
 ### Getting started 
 
-If you are just getting started with **dsmextra**, we recommend reading the tutorial [vignette](https://densitymodelling.github.io/model-extrapolation/vignette/Extrapolation-vignette.html), as well as the technical report below:
+If you are just getting started with `dsmextra`, we recommend reading the tutorial [vignette](https://densitymodelling.github.io/model-extrapolation/vignette/Extrapolation-vignette.html), as well as the technical report below:
 
 * Bouchet et al. (2019). [From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions](https://research-repository.st-andrews.ac.uk/bitstream/handle/10023/18509/Denmod_ExtrapolationReport_final_Aug2019.pdf?sequence=1&isAllowed=y). CREEM technical report 2019-01, Centre for Research into Ecological & Environmental Modelling (CREEM), University of St Andrews, 59 p.
 

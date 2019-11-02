@@ -61,9 +61,12 @@
 #' my_crs <- sp::CRS("+proj=aea +lat_1=38 +lat_2=30 +lat_0=34 +lon_0=-73 +x_0=0
 #'  +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
 #'
+#'  # Define covariates of interest
+#'  my_cov <- c("Depth", "DistToCAS", "SST", "EKE", "NPP")
+#'
 #' # Assess extrapolation in the multivariate space defined by five covariates
 #' spermw.extrapolation <- compute_extrapolation(segments = segs,
-#'       covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
+#'       covariate.names = my_cov,
 #'       prediction.grid = predgrid,
 #'       coordinate.system = my_crs,
 #'       print.summary = TRUE,
@@ -83,12 +86,13 @@ compute_extrapolation <- function(segments,
   # Perform function checks
   #---------------------------------------------
 
-  if(!class(prediction.grid)=="data.frame") stop("pred.grid must be of class data.frame")
+  if(!"data.frame"%in%class(prediction.grid)) stop("pred.grid must be of class data.frame")
+  if(!"data.frame"%in%class(segs)) stop("segments must be of class data.frame")
 
   if(!"x"%in%names(prediction.grid) | !"y"%in%names(prediction.grid)) stop("pred.grid must contain x and y coordinates")
 
-  if(!all(covariate.names%in%names(segments))) stop("Missing covariates in the segment data")
-  if(!all(covariate.names%in%names(prediction.grid))) stop("Missing covariates in the prediction grid")
+  if(!all(covariate.names%in%names(segments))) stop("Missing/unrecognised covariates in the segment data")
+  if(!all(covariate.names%in%names(prediction.grid))) stop("Missing/unrecognised covariates in the prediction grid")
 
   coordinate.system <- check_crs(coordinate.system = coordinate.system)
 

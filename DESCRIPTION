@@ -34,6 +34,7 @@ Suggests:
     maps,
     knitr,
     methods,
-    rmarkdown
+    rmarkdown,
+    testthat
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr

@@ -68,9 +68,12 @@ predgrid <- spermwhales$predgrid
 my_crs <- sp::CRS("+proj=aea +lat_1=38 +lat_2=30 +lat_0=34 +lon_0=-73 +x_0=0
  +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
 
+ # Define covariates of interest
+ my_cov <- c("Depth", "DistToCAS", "SST", "EKE", "NPP")
+
 # Assess extrapolation in the multivariate space defined by five covariates
 spermw.extrapolation <- compute_extrapolation(segments = segs,
-      covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
+      covariate.names = my_cov,
       prediction.grid = predgrid,
       coordinate.system = my_crs,
       print.summary = TRUE,

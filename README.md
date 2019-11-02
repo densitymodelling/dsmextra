@@ -46,3 +46,7 @@ remotes::install_github("densitymodelling/dsmextra")
 ### Quick start
 
 A brief introduction to the package can be found [here](https://densitymodelling.github.io/dsmextra/vignette/).
+
+### Found a bug? Have a feature request?  
+
+Please submit an [issue](https://help.github.com/en/github/managing-your-work-on-github/creating-an-issue) on Github or create a pull request.

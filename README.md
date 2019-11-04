@@ -5,6 +5,10 @@
 <!--![GitHub last commit](https://img.shields.io/github/last-commit/DistanceDevelopment/dsm?style=flat-square) -->
 <!-- badges: end -->
 
+```html
+<img src="https://github.com/densitymodelling/dsmextra/blob/master/hex/dsmextra-hex.png" height=200 align="right" alt="dsmextra"/>
+```
+
 `dsmextra` provides a toolkit for quantifying and visualising extrapolation in density surface models (as implemented in package [dsm](https://cran.r-project.org/web/packages/dsm/index.html)) projected into novel environmental space. Currently, `dsmextra` defines extrapolation on the basis of two metrics: **(1) ExDet** (Mesgaran et al. 2014), and **(2) %N** (percentage of data nearby, Mannocci et al. 2018). 
 
 `dsmextra` offers a variety of numerical and graphical outputs, including summary plots and interactive maps created as [ggplot](https://ggplot2.tidyverse.org/) and [html](https://rstudio.github.io/leaflet/) objects, respectively. Additional functionality (e.g. assessment methods for dynamic covariates) will be added in future releases.

@@ -2,6 +2,7 @@ library(testthat)
 library(raster)
 library(dsmextra)
 
+
 par.tol <- 1e-5
 
 # Context of the set of tests
@@ -11,7 +12,6 @@ testthat::context("Mid-Atlantic sperm whales")
 # load the Gulf of Mexico dolphin data
 data(spermwhales)
 
-# Extract the data
 segs <- spermwhales$segs[1:50,]
 predgrid <- spermwhales$predgrid[1:500,]
 
@@ -21,24 +21,23 @@ my_crs <- sp::CRS("+proj=aea +lat_1=38 +lat_2=30 +lat_0=34 +lon_0=-73 +x_0=0 +y_
 # Define covariates of interest
 my_cov <- c("Depth", "DistToCAS", "SST", "EKE", "NPP")
 
+
 testthat::test_that("Do we get the same results?",{
 
-  # Missing covariates
-
-  spermw.extra <- compute_extrapolation(segments = segs,
+  suppressWarnings(spermw.extra <- compute_extrapolation(segments = segs,
                         covariate.names = my_cov,
                         prediction.grid = predgrid,
                         coordinate.system = my_crs,
                         print.summary = FALSE,
-                        save.summary = TRUE)
+                        save.summary = TRUE))
 
   testthat::expect_equal(spermw.extra$summary$extrapolation$univariate.n, 105, tolerance = par.tol)
 
-  spermw.near <- compute_nearby(segments = segs,
+  suppressWarnings(spermw.near <- compute_nearby(segments = segs,
                                 covariate.names = my_cov,
                                 prediction.grid = predgrid,
                                 coordinate.system = my_crs,
-                                nearby = 1)
+                                nearby = 1))
 
   testthat::expect_equal(range(na.omit(raster::getValues(spermw.near))), c(0,54))
 

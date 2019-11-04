@@ -3,7 +3,7 @@
 \docType{data}
 \name{spermwhales}
 \alias{spermwhales}
-\title{Mid-Atlantic sperm whale surveys}
+\title{Sperm whale sightings in the Mid-Atlantic}
 \format{A list of two
 \describe{
   \item{segs}{segment-level data, as used in the \code{\link[dsm]{dsm}} package}

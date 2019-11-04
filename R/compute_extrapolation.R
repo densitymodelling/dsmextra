@@ -87,7 +87,7 @@ compute_extrapolation <- function(segments,
   #---------------------------------------------
 
   if(!"data.frame"%in%class(prediction.grid)) stop("pred.grid must be of class data.frame")
-  if(!"data.frame"%in%class(segs)) stop("segments must be of class data.frame")
+  if(!"data.frame"%in%class(segments)) stop("segments must be of class data.frame")
 
   if(!"x"%in%names(prediction.grid) | !"y"%in%names(prediction.grid)) stop("pred.grid must contain x and y coordinates")
 

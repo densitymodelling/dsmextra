@@ -1,4 +1,4 @@
-# Extrapolation tools for density surface models <img src="https://github.com/densitymodelling/dsmextra/blob/master/hex/dsmextra-hex.png" height=200 align="right" alt="dsmextra"/>
+# Extrapolation detection in density surface models <img src="https://github.com/densitymodelling/dsmextra/blob/master/hex/dsmextra-hex.png" height=200 align="right" alt="dsmextra"/>
 
 <!-- badges: start -->
 <!--  -->

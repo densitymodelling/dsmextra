@@ -68,11 +68,11 @@ compare_covariates <- function(extrapolation.type = "both",
   #---------------------------------------------
 
   if(!extrapolation.type%in%c("both", "univariate", "multivariate"))
-    stop("Unknown extrapolation type requested")
+    stop("Unknown extrapolation type")
 
   if(!is.null(n.covariates)){
     if(max(n.covariates) > length(covariate.names))
-      stop("The number of combinations exceeds the number of covariates available!")}
+      stop("n.covariates exceeds the number of covariates available")}
 
   coordinate.system <- check_crs(coordinate.system = coordinate.system)
 

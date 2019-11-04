@@ -73,6 +73,12 @@ compute_nearby <- function (segments,
   # Perform function checks
   #---------------------------------------------
 
+  if(nearby<=0) stop("nearby must be strictly positive")
+  if(!is.numeric(nearby)) stop("Non-numeric input to argument: nearby")
+  if(max.size<=0) stop("max.size must be strictly positive")
+  if(!is.numeric(max.size)) stop("Non-numeric input to argument: max.size")
+  if(no.partitions>nrow(predgrid)) stop("Number of partitions too large")
+
   coordinate.system <- check_crs(coordinate.system = coordinate.system)
 
   #---------------------------------------------

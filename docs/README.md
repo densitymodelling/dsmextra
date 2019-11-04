@@ -1,4 +1,4 @@
-# Extrapolation tools for density surface models 
+# Extrapolation detection in density surface models
 <!-- badges: start -->
 <!--  -->
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg?style=flat-square)](https://www.tidyverse.org/lifecycle/#maturing)

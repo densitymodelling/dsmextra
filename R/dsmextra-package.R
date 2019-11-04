@@ -16,7 +16,7 @@ NULL
 # Quiets concerns of R CMD check re: the .'s that appear in pipelines
 if(getRversion() >= "2.15.1")  utils::globalVariables(c("."))
 
-#' Mid-Atlantic sperm whale surveys
+#' Sperm whale sightings in the Mid-Atlantic
 #'
 #' Data from a combination of several NOAA visual surveys conducted for cetaceans in the U.S. Mid-Atlantic. Survey tracklines were split into segments for analysis in the \code{\link[dsm]{dsm}} R package. Spatial coordinates (\code{x}, \code{y}) and values of both static and dynamic environmental covariates are availble for each segment mid-point and for the centroids of a 10 km grid overlaid on the study area. Covariates include: depth, sea surface temperature (\code{SST}), net primary production (\code{NPP}), distance to nearest canyon or seamount (\code{DistToCAS}), and eddy kinetic energy (\code{EKE}).
 #'

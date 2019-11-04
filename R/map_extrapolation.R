@@ -37,6 +37,9 @@
 #' my_crs <- sp::CRS("+proj=aea +lat_1=38 +lat_2=30 +lat_0=34 +lon_0=-73 +x_0=0
 #'  +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
 #'
+#'  # Define covariates of interest
+#'  my_cov <- c("Depth", "DistToCAS", "SST", "EKE", "NPP")
+#'
 #' # Assess extrapolation in the multivariate space defined by five covariates
 #' spermw.extrapolation <- compute_extrapolation(segments = segs,
 #'       covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
@@ -50,25 +53,25 @@
 #' spermw.nearby <- compute_nearby(segments = segs,
 #'                                prediction.grid = predgrid,
 #'                                coordinate.system = my_crs,
-#'                                covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
+#'                                covariate.names = my_cov,
 #'                                nearby = 1)
 #'
 #' # Generate maps
 #' map_extrapolation(map.type = "extrapolation",
 #'                   extrapolation.values = spermw.extrapolation,
-#'                 covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
+#'                 covariate.names = my_cov,
 #'                 prediction.grid = predgrid,
 #'                 coordinate.system = my_crs)
 #'
 #' map_extrapolation(map.type = "mic",
 #'                 extrapolation.values = spermw.extrapolation,
-#'                 covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
+#'                 covariate.names = my_cov,
 #'                 prediction.grid = predgrid,
 #'                 coordinate.system = my_crs)
 #'
 #' map_extrapolation(map.type = "nearby",
 #'                 gower.values = spermw.nearby,
-#'                 covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
+#'                 covariate.names = my_cov,
 #'                 prediction.grid = predgrid,
 #'                 coordinate.system = my_crs)
 
@@ -92,6 +95,8 @@ map_extrapolation <- function(map.type = NULL,
                     "gray" = "Esri.WorldGrayCanvas")
 
   if(is.null(map.type)) stop("Argument 'maptype' must be specified")
+
+  if(!map.type%in%c("extrapolation", "nearby", "mic")) stop("Unknown map type")
 
   if(is.null(gower.values) & map.type == "nearby") stop("Argument 'gower.values' cannot be NULL when maptype is set to 'nearby'")
 

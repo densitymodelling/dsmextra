@@ -1,4 +1,4 @@
-.onLoad <- function(libname, pkgname) {
+.onAttach <- function(libname, pkgname) {
   packageStartupMessage("-----------------------------------------------\n",
                         "dsmextra: version 1.0.0:\n",
                         "-----------------------------------------------\n",

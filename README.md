@@ -17,7 +17,7 @@ The idea behind `dsmextra` is to aid ecologists, practitioners, and model end-us
 
 ### Getting started 
 
-If you are just getting started with `dsmextra`, we recommend reading the tutorial [vignette](https://densitymodelling.github.io/model-extrapolation/vignette/Extrapolation-vignette.html), as well as the technical report below:
+If you are just getting started with `dsmextra`, we recommend reading the tutorial [vignette](https://densitymodelling.github.io/model-extrapolation/vignette/Extrapolation-vignette.html), which provides a quick introduction to the package. You may also find the below technical report useful:
 
 * Bouchet et al. (2019). [From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions](https://research-repository.st-andrews.ac.uk/bitstream/handle/10023/18509/Denmod_ExtrapolationReport_final_Aug2019.pdf?sequence=1&isAllowed=y). CREEM technical report 2019-01, Centre for Research into Ecological & Environmental Modelling (CREEM), University of St Andrews, 59 p.
 
@@ -42,10 +42,6 @@ if (!require("remotes")) {
 }
 remotes::install_github("densitymodelling/dsmextra")
 ```
-
-### Quick start
-
-A brief introduction to the package can be found [here](https://densitymodelling.github.io/dsmextra/vignette/).
 
 ### Found a bug? Have a feature request?  
 

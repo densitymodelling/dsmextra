@@ -1,4 +1,4 @@
-# Extrapolation tools for density surface models [<img src="https://github.com/densitymodelling/dsmextra/blob/master/hex/dsmextra-hex.png" height=200 alt="dsmextra"/>](https://mc-stan.org)
+# Extrapolation tools for density surface models <img src="https://github.com/densitymodelling/dsmextra/blob/master/hex/dsmextra-hex.png" height=200 align="right" alt="dsmextra"/>
 
 <!-- badges: start -->
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg?style=flat-square)](https://www.tidyverse.org/lifecycle/#maturing)

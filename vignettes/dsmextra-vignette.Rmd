@@ -1,21 +1,21 @@
 ---
 title: "A short introduction to `dsmextra`"
 author:
-  affiliation: Centre for Research into Ecological & Environmental Modelling, University of St Andrews
-  name: Phil J. Bouchet, David L. Miller, Jason Roberts, Laura Mannocci, Catriona M Harris, Len Thomas
+  affiliation: Centre for Research into Ecological & Environmental Modelling, University
+    of St Andrews
+  name: Phil J. Bouchet, David L. Miller, Jason Roberts, Laura Mannocci, Catriona
+    M Harris, Len Thomas
 date: "`r Sys.Date()`"
-rmarkdown::html_vignette:
-  toc: true
-  toc_depth: 4
-  fig_caption: yes
-csl: dsmextra.csl
-bibliography: dsmextra.bib
 css: dsmextra.css
+csl: dsmextra.csl
 link-citations: yes
-vignette: >
-  %\VignetteIndexEntry{Vignette Title}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+rmarkdown::html_vignette:
+  fig_caption: yes
+  toc: yes
+  toc_depth: 4
+bibliography: dsmextra.bib
+vignette: |
+  %\VignetteIndexEntry{Vignette Title} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
 ---
 
 ## Preamble
@@ -38,7 +38,6 @@ install.packages("dsmextra")
 
 ```{r eval=TRUE, message=FALSE, warning=FALSE, include=TRUE}
 library(dsmextra)
-
 library(raster)
 library(magrittr)
 ```

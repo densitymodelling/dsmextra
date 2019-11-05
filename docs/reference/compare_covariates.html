@@ -75,7 +75,7 @@
         <li>
   <a href="../index.html">
     <span class="fas fa fas fa-home fa-lg"></span>
-     
+
   </a>
 </li>
 <li>
@@ -84,7 +84,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -94,16 +94,16 @@
   </ul>
 </li>
       </ul>
-      
+
       <ul class="nav navbar-nav navbar-right">
-        
+
       </ul>
-      
+
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header>
 
@@ -111,20 +111,20 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Compare different combinations of covariates</h1>
-    
+
     <div class="hidden name"><code>compare_covariates.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    
+
     <p>Summarises the extent of  univariate (Type I) and combinatorial (Type II) extrapolation associated with different combinations of input covariates.</p>
-    
+
     </div>
 
     <pre class="usage"><span class='fu'>compare_covariates</span>(<span class='kw'>extrapolation.type</span> <span class='kw'>=</span> <span class='st'>"both"</span>, <span class='no'>segments</span>,
   <span class='no'>covariate.names</span>, <span class='kw'>n.covariates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>prediction.grid</span>,
   <span class='no'>coordinate.system</span>, <span class='kw'>create.plots</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>display.percent</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -161,24 +161,24 @@
       <td><p>Logical. If <code>TRUE</code> (default), scales the y-axis of the summary plots as a percentage of the total number of grid cells in <code>prediction.grid</code>.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Prints a summary table in the R console. Also generates summary boxplots if <code>create.plots</code> is set to <code>TRUE</code>.</p>
-    
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The extent and magnitude of extrapolation naturally vary with the type and number of covariates considered. It may be useful, therefore, to test different combinations of covariates to inform their selection <em>a priori</em>, i.e. before model fitting, thereby supporting model parsimony.</p>
-    
+
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions. CREEM Technical Report 2019-01, 59 p. <a href='https://research-repository.st-andrews.ac.uk/handle/10023/18509'>https://research-repository.st-andrews.ac.uk/handle/10023/18509</a></p>
 <p>Mesgaran MB, Cousens RD, Webber BL (2014). Here be dragons: a tool for quantifying novelty due to covariate range and correlation change when projecting species distribution models. Diversity &amp; Distributions, 20: 1147-1159, DOI: <a href='https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12209'>10.1111/ddi.12209</a></p>
-    
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='compute_extrapolation.html'>compute_extrapolation</a></code>, <code><a href='summarise_extrapolation.html'>summarise_extrapolation</a></code></p></div>
-    
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dsmextra</span>)
@@ -206,29 +206,29 @@
                   <span class='kw'>prediction.grid</span> <span class='kw'>=</span> <span class='no'>predgrid</span>,
                   <span class='kw'>coordinate.system</span> <span class='kw'>=</span> <span class='no'>my_crs</span>,
                   <span class='kw'>create.plots</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-                  <span class='kw'>display.percent</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Computing ...</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>Creating summaries ...</span></div><div class='output co'>#&gt; <span class='message'>Done!</span></div><div class='img'><img src='compare_covariates-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; 
-#&gt; 
-#&gt; Extrapolation   Minimum             n_min  Maximum                           n_max 
+                  <span class='kw'>display.percent</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Computing ...</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>Creating summaries ...</span></div><div class='output co'>#&gt; <span class='message'>Done!</span></div><div class='img'><img src='compare_covariates-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;
+#&gt;
+#&gt; Extrapolation   Minimum             n_min  Maximum                           n_max
 #&gt; --------------  -----------------  ------  --------------------------------  ------
-#&gt; Univariate      DistToCAS               2  Depth, SST, NPP, DistToCAS, EKE   65    
-#&gt; Combinatorial   Depth                   0  Depth, SST, NPP                   213   
-#&gt;                 SST                     0  -                                 -     
-#&gt;                 NPP                     0  -                                 -     
-#&gt;                 DistToCAS               0  -                                 -     
-#&gt;                 EKE                     0  -                                 -     
-#&gt;                 Depth, DistToCAS        0  -                                 -     
-#&gt;                 Depth, EKE              0  -                                 -     
-#&gt;                 NPP, DistToCAS          0  -                                 -     
-#&gt;                 NPP, EKE                0  -                                 -     
-#&gt;                 Depth, SST, EKE         0  -                                 -     
-#&gt;                 Depth, NPP, EKE         0  -                                 -     
+#&gt; Univariate      DistToCAS               2  Depth, SST, NPP, DistToCAS, EKE   65
+#&gt; Combinatorial   Depth                   0  Depth, SST, NPP                   213
+#&gt;                 SST                     0  -                                 -
+#&gt;                 NPP                     0  -                                 -
+#&gt;                 DistToCAS               0  -                                 -
+#&gt;                 EKE                     0  -                                 -
+#&gt;                 Depth, DistToCAS        0  -                                 -
+#&gt;                 Depth, EKE              0  -                                 -
+#&gt;                 NPP, DistToCAS          0  -                                 -
+#&gt;                 NPP, EKE                0  -                                 -
+#&gt;                 Depth, SST, EKE         0  -                                 -
+#&gt;                 Depth, NPP, EKE         0  -                                 -
 #&gt; Both            DistToCAS               2  Depth, SST, NPP                   252   </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
+
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
@@ -236,19 +236,19 @@
       <li><a href="#references">References</a></li>
 
       <li><a href="#see-also">See also</a></li>
-      
+
       <li><a href="#examples">Examples</a></li>
     </ul>
-
-    <h2>Author</h2>
-    <p>Phil J. Bouchet</p>
+    <h5>Author(s)</h5>
+    <p>Phil J Bouchet<br>
+    David L Miller</p>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Phil Bouchet, David Miller, Laura Mannocci.</p>
+  <p>Developed by Phil J Bouchet, David L Miller, and Laura Mannocci.</p>
 </div>
 
 <div class="pkgdown">
@@ -258,7 +258,7 @@
       </footer>
    </div>
 
-  
+
 
 
   </body>

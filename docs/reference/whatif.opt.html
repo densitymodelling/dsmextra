@@ -75,7 +75,7 @@
         <li>
   <a href="../index.html">
     <span class="fas fa fas fa-home fa-lg"></span>
-     
+
   </a>
 </li>
 <li>
@@ -84,7 +84,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -94,16 +94,16 @@
   </ul>
 </li>
       </ul>
-      
+
       <ul class="nav navbar-nav navbar-right">
-        
+
       </ul>
-      
+
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header>
 
@@ -111,19 +111,19 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Counterfactual evaluation, optimised for dsmextra</h1>
-    
+
     <div class="hidden name"><code>whatif.opt.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    
+
     <p>Implements the methods described in King and Zeng (2007) for evaluating counterfactuals.</p>
-    
+
     </div>
 
     <pre class="usage"><span class='fu'>whatif.opt</span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>data</span>, <span class='no'>cfact</span>, <span class='kw'>nearby</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>miss</span> <span class='kw'>=</span> <span class='st'>"list"</span>,
   <span class='no'>no.partitions</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -152,11 +152,11 @@
       <td><p>Integer. Number of desired partitions of the data (default of 10).</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list object containing extrapolation values in both data.frame and raster format.</p>
-    
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The <code><a href='https://rdrr.io/pkg/WhatIf/man/whatif.html'>whatif</a></code> function from the <a href='https://CRAN.R-project.org/package=WhatIf'>Whatif</a> package (Gandrud et al. 2017) may not run on very large datasets. To circumvent this problem, <code>whatif.opt</code> sets the calculations performed by <code><a href='https://rdrr.io/pkg/WhatIf/man/whatif.html'>whatif</a></code> to run on partitions of the data instead, for greater efficiency. <code>whatif.opt</code> can be called internally within compute_nearby by using two additional arguments, namely:</p><table class='table'>
@@ -164,24 +164,24 @@
 <tr><td><code>no.partitions</code></td><td>Number of required partitions</td></tr>
 </table>
 <p>In practice, a run of <code><a href='compute_nearby.html'>compute_nearby</a></code> begins with a quick assessment of the dimensions of the input data, i.e. the reference and target data.frames. If the product of their dimensions (i.e. number of segments multiplied by number of prediction grid cells) exceeds the value set for <code>max.size</code>, then <code>no.partitions</code> subsets of the data will be created and the computations run on each using map functions from the <code>purrr</code> package (Henry and Wickham 2019). This means that a smaller <code>max.size</code> will trigger partitioning on correspondingly smaller datasets. By default, <code>max.size</code> is set to <code>1e7</code>. This value was chosen arbitrarily, and should be sufficiently large as to obviate the need for partitioning on most datasets.</p>
-    
+
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Gandrud C, King G, Stoll H, Zeng L (2017). WhatIf: Evaluate Counterfactuals. R package version 1.5-9. <a href='https://CRAN.R-project.org/package=WhatIf'>https://CRAN.R-project.org/package=WhatIf</a>.</p>
 <p>King G, Zeng L (2007). When can history be our guide? The pitfalls of counterfactual inference. International Studies Quarterly 51, 183–210. DOI: <a href='https://www.jstor.org/stable/pdf/4621707.pdf?seq=1#page_scan_tab_contents'>10.1111/j.1468-2478.2007.00445.x</a></p>
 <p>Henry L, Wickham H (2019). purrr: Functional Programming Tools. R package version 0.3.2. <a href='https://CRAN.R-project.org/package=purrr'>https://CRAN.R-project.org/package=purrr</a>.</p>
-    
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='compute_nearby.html'>compute_nearby</a></code>, <code><a href='https://rdrr.io/pkg/WhatIf/man/whatif.html'>whatif</a></code></p></div>
-    
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
+
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
@@ -191,15 +191,16 @@
       <li><a href="#see-also">See also</a></li>
           </ul>
 
-    <h2>Author</h2>
-    <p>Phil J. Bouchet</p>
+    <h5>Author(s)</h5>
+    <p>Phil J Bouchet<br>
+    David L Miller</p>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Phil Bouchet, David Miller, Laura Mannocci.</p>
+  <p>Developed by Phil J Bouchet, David L Miller, and Laura Mannocci.</p>
 </div>
 
 <div class="pkgdown">
@@ -209,7 +210,7 @@
       </footer>
    </div>
 
-  
+
 
 
   </body>

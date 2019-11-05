@@ -198,6 +198,10 @@ table {
   overflow: auto;
 }
 
+.table>tbody>tr>td {
+    border-top: 0px solid #ddd;
+}
+
 /* Syntax highlighting ---------------------------------------------------- */
 
 pre {
@@ -240,6 +244,8 @@ a.sourceLine:hover {
 .ch,.st  {color: #036a07;} /* string */
 .kw      {color: #264D66;} /* keyword */
 .co      {color: #888888;} /* comment */
+.co {color: #bb8b00;}
+div.output{color:#616161;}
 
 .message { color: black;   font-weight: bolder;}
 .message {
@@ -248,6 +254,7 @@ a.sourceLine:hover {
 }
 .error   { color: orange;  font-weight: bolder;}
 .warning { color: #6A0366; font-weight: bolder;}
+.warning{color:#bb8b00;font-weight:500;}
 
 /* Clipboard --------------------------*/
 

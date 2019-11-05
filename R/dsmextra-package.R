@@ -34,6 +34,6 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("."))
 #'
 #' @name spermwhales
 #' @docType data
-#' @source \url{http://seamap.env.duke.edu/dataset/396}.
+#' @source The data are held and described on OBIS-SEAMAP at: \url{http://seamap.env.duke.edu/dataset/396}.
 #' @keywords datasets
 NULL

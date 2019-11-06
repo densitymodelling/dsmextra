@@ -7,7 +7,7 @@
 
 `dsmextra` provides a toolkit for quantifying and visualising extrapolation in density surface models (as implemented in package [dsm](https://cran.r-project.org/web/packages/dsm/index.html)) projected into novel environmental space. Currently, `dsmextra` defines extrapolation on the basis of two metrics: **(1) ExDet** (Mesgaran et al. 2014), and **(2) %N** (percentage of data nearby, Mannocci et al. 2018). 
 
-`dsmextra` offers a variety of numerical and graphical outputs, including summary plots and interactive maps created as [ggplot](https://ggplot2.tidyverse.org/) and [html](https://rstudio.github.io/leaflet/) objects, respectively. Additional functionality (e.g. assessment methods for dynamic covariates) will be added in future releases.
+`dsmextra` offers a variety of numerical and graphical outputs, including summary plots and interactive maps created as [ggplot2](https://ggplot2.tidyverse.org/) and [html](https://rstudio.github.io/leaflet/) objects, respectively. Additional functionality (e.g. assessment methods for dynamic covariates) will be added in future releases.
 
 The idea behind `dsmextra` is to aid ecologists, practitioners, and model end-users in identifying conditions (e.g. areas) under which predicted density surfaces may be prone to errors. In so doing, `dsmextra` may support:
 
@@ -30,7 +30,7 @@ If you are just getting started with `dsmextra`, we recommend reading the tutori
 
 ### Acknowledgements
 
-This R package was developed for the [DenMod project](https://synergy.st-andrews.ac.uk/denmod/) (Working group for the advancement of marine species density surface modelling), with support from the [United States Office of Naval Research](https://www.onr.navy.mil/) (ONR) under the [Living Marine Resources](https://www.navfac.navy.mil/navfac_worldwide/specialty_centers/exwc/products_and_services/ev/lmr.html) (LMR) programme.
+This R package was developed for the [DenMod project](https://synergy.st-andrews.ac.uk/denmod/) (Working group for the advancement of marine species density surface modelling), and was funded by OPNAV N45 and the SURTASS LFA Settlement Agreement, being managed by the U.S. Navy’s Living Marine Resources program under Contract No. N39430-17-C-1982.
 
 ### Installation
 

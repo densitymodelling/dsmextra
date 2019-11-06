@@ -45,4 +45,4 @@ remotes::install_github("densitymodelling/dsmextra")
 
 ### Found a bug? Have a feature request?  
 
-Please submit an [issue](https://help.github.com/en/github/managing-your-work-on-github/creating-an-issue) on Github or create a pull request.
+Please submit an issue or send a pull request to the [Github repository](https://github.com/densitymodelling/dsmextra/).

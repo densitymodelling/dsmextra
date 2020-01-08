@@ -141,7 +141,7 @@ summarise_extrapolation <- function(extrapolation.object,
 
   if("Analogue"%in%as.character(resdf$Type)) add.sep <- TRUE
 
-  resdf <- apply(resdf, 2, function(x) as.character(x))
+  resdf <- purrr::map_dfr(resdf, as.character)
 
   #---------------------------------------------
   # Add sub-totals, if necessary
@@ -324,7 +324,7 @@ summarise_extrapolation <- function(extrapolation.object,
 
       }
 
-      mic_resdf <- apply(mic_resdf, 2, function(x) as.character(x))
+      mic_resdf <- purrr::map_dfr(mic_resdf, as.character)
 
       mic_resdf <- rbind(mic_resdf, rep("-----------", ncol(mic_resdf)))
       mic_resdf <- rbind(mic_resdf, c("Total",

@@ -242,12 +242,12 @@ compare_covariates <- function(extrapolation.type = "both",
       if(length(varmin.univariate)<length(varmax.univariate)){
 
         varmin.univariate <- c(varmin.univariate, rep("-", times = length(varmax.univariate)-length(varmin.univariate)))
-        min.univariate <- c(min.univariate, rep("-", times = length(max.univariates)-length(min.univariate)))
+        min.univariate <- c(min.univariate, rep("-", times = length(max.univariate)-length(min.univariate)))
 
       }else{
 
         varmax.univariate <- c(varmax.univariate, rep("-", times = length(varmin.univariate)-length(varmax.univariate)))
-        max.univariates <- c(max.univariates, rep("-", times = length(min.univariate)-length(max.univariates)))
+        max.univariate <- c(max.univariate, rep("-", times = length(min.univariate)-length(max.univariate)))
       }
     }
 

@@ -55,7 +55,8 @@ compare_covariates <- function(extrapolation.type = "both",
                                prediction.grid,
                                coordinate.system,
                                create.plots = TRUE,
-                               display.percent = TRUE){
+                               display.percent = TRUE,
+                               resolution = NULL){
 
   #---------------------------------------------
   # Total number of prediction grid cells
@@ -75,6 +76,9 @@ compare_covariates <- function(extrapolation.type = "both",
       stop("n.covariates exceeds the number of covariates available")}
 
   coordinate.system <- check_crs(coordinate.system = coordinate.system)
+
+  segments <- na.omit(segments)
+  prediction.grid <- na.omit(prediction.grid)
 
   #---------------------------------------------
   # Determine all possible combinations of covariates
@@ -104,6 +108,58 @@ compare_covariates <- function(extrapolation.type = "both",
       purrr::flatten(.)
   }
 
+  message("Preparing the data ...")
+
+  #---------------------------------------------
+  # Check if prediction grid is regular
+  #---------------------------------------------
+
+  check.grid <- prediction.grid %>%
+    dplyr::select(x, y) %>%
+    dplyr::mutate(z = 1)
+
+  grid.regular <- try(raster::rasterFromXYZ(check.grid), silent = TRUE)
+
+  #---------------------------------------------
+  # If grid is irregular, rasterise prediction.grid based on specified resolution
+  #---------------------------------------------
+
+  if(class(grid.regular)=="try-error"){
+
+    if(is.null(resolution)) stop('Prediction grid cells are not regularly spaced.\nA target raster resolution must be specified.')
+
+    warning('Prediction grid cells are not regularly spaced.\nData will be rasterised and covariate values averaged.')
+
+    check.grid$z <- NULL
+    sp::coordinates(check.grid) <- ~x+y
+    sp::proj4string(check.grid) <- coordinate.system
+
+    # Create empty raster with desired resolution
+
+    ras <- raster::raster(raster::extent(check.grid), res = resolution)
+    raster::crs(ras) <- coordinate.system
+
+    # Create individual rasters for each covariate
+
+    ras.list <- purrr::map(.x = covariate.names,
+                           .f = ~raster::rasterize(as.data.frame(check.grid), ras,
+                                                   prediction.grid[,.x], fun = mean_ras)) %>%
+      purrr::set_names(., covariate.names)
+
+    # Combine all rasters
+
+    ras.list <- raster::stack(ras.list)
+
+    # Update prediction grid
+
+    prediction.grid <- raster::as.data.frame(ras.list, xy = TRUE, na.rm = TRUE)
+
+    # warning('New prediction grid (pred.grid) saved to global environment.')
+    # assign(x = 'pred.grid', prediction.grid, envir = .GlobalEnv)
+
+
+  } # End if class(grid.regular)
+
   #---------------------------------------------
   # Carry out extrapolation analysis for each combination of covariates
   #---------------------------------------------
@@ -116,10 +172,10 @@ compare_covariates <- function(extrapolation.type = "both",
                                         .f = ~{
                                           pb$tick()$print()
                                           compute_extrapolation(segments = segments,
-                                                                    covariate.names = .x,
-                                                                    prediction.grid = prediction.grid,
-                                                                    coordinate.system = coordinate.system,
-                                                                    print.summary = FALSE)},
+                                                                covariate.names = .x,
+                                                                prediction.grid = prediction.grid,
+                                                                coordinate.system = coordinate.system,
+                                                                print.summary = FALSE)},
                                         .pb = pb))
 
   #---------------------------------------------

@@ -6,7 +6,8 @@
 \usage{
 compare_covariates(extrapolation.type = "both", segments,
   covariate.names, n.covariates = NULL, prediction.grid,
-  coordinate.system, create.plots = TRUE, display.percent = TRUE)
+  coordinate.system, create.plots = TRUE, display.percent = TRUE,
+  resolution = NULL)
 }
 \arguments{
 \item{extrapolation.type}{Character string. Type of extrapolation to be assessed. Can be one of \code{univariate}, \code{combinatorial}, or \code{both} (default).}
@@ -24,6 +25,8 @@ compare_covariates(extrapolation.type = "both", segments,
 \item{create.plots}{Logical, defaults to \code{TRUE}. Whether to produce summary plots.}
 
 \item{display.percent}{Logical. If \code{TRUE} (default), scales the y-axis of the summary plots as a percentage of the total number of grid cells in \code{prediction.grid}.}
+
+\item{resolution}{Resolution of the output raster (in units relevant to \code{coordinate.system}). Only required if \code{prediction.grid} is irregular, and thus needs to be rasterised. Defaults to \code{NULL}.}
 }
 \value{
 Prints a summary table in the R console. Also generates summary boxplots if \code{create.plots} is set to \code{TRUE}.

@@ -26,8 +26,8 @@ ExDet <- function(ref, tg, xp){
   # Min/Max for each covariate in reference system
   #---------------------------------------------
 
-  a <- apply(ref, 2, min)
-  b <- apply(ref, 2, max)
+  a <- apply(ref, 2, min, na.rm = TRUE)
+  b <- apply(ref, 2, max, na.rm = TRUE)
 
   #---------------------------------------------
   # Matrices of min and max
@@ -64,7 +64,7 @@ ExDet <- function(ref, tg, xp){
   mic_nt1 <- apply(nt1.df, 1, FUN = function(x) base::which.min(x))
 
   #---------------------------------------------
-  # Set MIC(nt1) to NA outside univariate range
+  # Set MIC(nt1) to NA within univariate range
   #---------------------------------------------
 
   # Zero indicates within univariate range
@@ -78,8 +78,8 @@ ExDet <- function(ref, tg, xp){
 
   tg.univ <- matrix(tg[univ.rge, ], ncol = ncol(tg))
 
-  aa <- apply(ref, 2, mean) # col means
-  bb <- stats::var(ref) # covariance matrix
+  aa <- apply(ref, 2, mean, na.rm = TRUE) # col means
+  bb <- stats::var(ref, na.rm = TRUE) # covariance matrix
 
   #---------------------------------------------
   # Mahalanobis distance from centre of environmental space in reference system
@@ -128,8 +128,8 @@ ExDet <- function(ref, tg, xp){
 
   }else{
 
-    cov.aa <- cov.combs %>% purrr::map(., ~apply(as.matrix(ref[,.]), 2, mean))
-    cov.bb <- cov.combs %>% purrr::map(., ~var(as.matrix(ref[,.])))
+    cov.aa <- cov.combs %>% purrr::map(., ~apply(as.matrix(ref[,.]), 2, mean, na.rm = TRUE))
+    cov.bb <- cov.combs %>% purrr::map(., ~var(as.matrix(ref[,.]), na.rm = TRUE))
 
   }
 
@@ -179,7 +179,7 @@ ExDet <- function(ref, tg, xp){
   #---------------------------------------------
 
   results <- tibble::tibble(ExDet = nt1, mic_univariate = mic_nt1, mic_combinatorial = NA)
-  results[univ.rge,]$mic_combinatorial <- mic_nt2
+  results$mic_combinatorial[univ.rge] <- mic_nt2
 
   # Analog conditions have no MIC
 

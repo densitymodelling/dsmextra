@@ -96,6 +96,9 @@ compute_extrapolation <- function(segments,
 
   coordinate.system <- check_crs(coordinate.system = coordinate.system)
 
+  segments <- na.omit(segments) # Cannot have NA values
+  prediction.grid <- na.omit(prediction.grid)
+
   #---------------------------------------------
   # Check if prediction grid is regular
   #---------------------------------------------
@@ -250,6 +253,7 @@ compute_extrapolation <- function(segments,
 
     } # End for loop length(ms)
   } # End if(length(ms)>0)
+
   #---------------------------------------------
   # Project rasters
   #---------------------------------------------

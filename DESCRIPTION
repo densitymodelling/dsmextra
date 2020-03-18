@@ -1,6 +1,6 @@
 Package: dsmextra
 Title: A Toolkit for Extrapolation Assessments in Density Surface Models
-Version: 1.0.0
+Version: 1.0.2
 Authors@R: c(person("Phil", "Bouchet", email = "pjbouchet@gmail.com", role = c("aut", "cre")), person("David", "Miller", email = "dlm22@st-andrews.ac.uk", role = c("aut")), person("Laura", "Mannocci", email = "laura.mannocci@duke.edu", role = c("aut")), person("Jason", "Roberts", email = "jason.roberts@duke.edu", role = c("ctb")), person("Catriona", "Harris", email = "Catriona.Harris@st-andrews.ac.uk", role = c("ctb")), person("Len", "Thomas", email = "len.thomas@st-andrews.ac.uk", role = c("ctb")))
 Description: User-friendly tools for the detection and assessment of extrapolation in multivariate environmental space (Bouchet et al. 2019), with applications to density surface models of line transect data. Provides convenience functions for summarising and visualising extrapolation in prediction areas.
 License: GPL-3 + file LICENSE

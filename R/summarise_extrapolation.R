@@ -139,7 +139,7 @@ summarise_extrapolation <- function(extrapolation.object,
   # Add separator beneath "Analogue" if present
   #---------------------------------------------
 
-  if("Analogue"%in%as.character(resdf$Type)) add.sep <- TRUE
+  if("Analogue"%in%as.character(resdf$Type)) add.sep <- TRUE else add.sep <- FALSE
 
   resdf <- purrr::map_dfr(resdf, as.character)
 

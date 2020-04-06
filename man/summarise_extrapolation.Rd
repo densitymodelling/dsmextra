@@ -4,8 +4,12 @@
 \alias{summarise_extrapolation}
 \title{Summary of extrapolation}
 \usage{
-summarise_extrapolation(extrapolation.object, covariate.names = NULL,
-  extrapolation = TRUE, mic = TRUE, print.precision = 2)
+summarise_extrapolation(
+  extrapolation.object,
+  covariate.names = NULL,
+  extrapolation = TRUE,
+  mic = TRUE
+)
 }
 \arguments{
 \item{extrapolation.object}{Output object from a run of \link{compute_extrapolation}.}
@@ -15,8 +19,6 @@ summarise_extrapolation(extrapolation.object, covariate.names = NULL,
 \item{extrapolation}{Logical. Whether to return a summary of univariate/combinatorial extrapolation. Defaults to TRUE.}
 
 \item{mic}{Logical. Whether to return a summary of the most influential covariates (MIC) - see \link{compute_extrapolation}. Defaults to TRUE.}
-
-\item{print.precision}{Integer. Number of significant figures to be used when printing the summary. Default value of 2.}
 }
 \value{
 Prints a summary table in the R console. In addition, if assigned to an object, returns a list with the table values (.n = number of locations, .p = corresponding percentage).
@@ -42,17 +44,13 @@ my_crs <- sp::CRS("+proj=aea +lat_1=38 +lat_2=30 +lat_0=34 +lon_0=-73 +x_0=0
 spermw.extrapolation <- compute_extrapolation(segments = segs,
       covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
       prediction.grid = predgrid,
-      coordinate.system = my_crs,
-      print.summary = FALSE,
-      save.summary = TRUE,
-      print.precision = 2)
+      coordinate.system = my_crs)
 
 # Summarise extrapolation
 spermw.summary <- summarise_extrapolation(extrapolation.object = spermw.extrapolation,
      covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
      extrapolation = TRUE,
-     mic = TRUE,
-     print.precision = 2)
+     mic = TRUE)
 
 print(spermw.summary)
 }

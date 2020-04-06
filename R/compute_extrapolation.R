@@ -30,9 +30,9 @@
 #' @param covariate.names Character string. Names of the covariates of interest.
 #' @param prediction.grid Prediction data.frame. This contains both geographic coordinates (\code{x}, \code{y}) and covariate values associated with the target locations for which predictions are desired. Typically, these locations are taken as the centroids of the grid cells in a spatial prediction grid/raster. See \code{\link[dsm]{predict.dsm}}.
 #' @param coordinate.system Projected coordinate system relevant to the study location. Can be either a character string or an object of class \code{\link[sp]{CRS}}.
-#' @param print.summary Logical, defaults to \code{TRUE}. Outputs a summary of the results to the R console.
-#' @param print.precision Integer. Number of significant figures to be used when printing the summary. Default value of 2.
-#' @param save.summary Logical, defaults to \code{FALSE}. Adds summary statistics to the output list.
+# @param print.summary Logical, defaults to \code{TRUE}. Outputs a summary of the results to the R console.
+# @param print.precision Integer. Number of significant figures to be used when printing the summary. Default value of 2.
+# @param save.summary Logical, defaults to \code{FALSE}. Adds summary statistics to the output list.
 #' @param resolution Resolution of the output raster (in units relevant to \code{coordinate.system}). Only required if \code{prediction.grid} is irregular, and thus needs to be rasterised. Defaults to \code{NULL}.
 #'
 #' @return A list object containing extrapolation values in both \code{data.frame} and \code{\link[raster]{raster}} format.
@@ -77,9 +77,9 @@ compute_extrapolation <- function(segments,
                                   covariate.names,
                                   prediction.grid,
                                   coordinate.system,
-                                  print.summary = TRUE,
-                                  print.precision = 2,
-                                  save.summary = FALSE,
+                                  #print.summary = TRUE,
+                                  #print.precision = 2,
+                                  #save.summary = FALSE,
                                   resolution = NULL){
 
   #---------------------------------------------
@@ -266,48 +266,51 @@ compute_extrapolation <- function(segments,
 
   message("Done!")
 
-  #---------------------------------------------
-  # Print/save summary
-  #---------------------------------------------
-
-  if(print.summary){
-
-    if(save.summary){
-
+#  #---------------------------------------------
+#  # Print/save summary
+#  #---------------------------------------------
+#
+#  if(print.summary){
+#
+#    if(save.summary){
+#
       sumres <- summarise_extrapolation(extrapolation.object = reslist,
                                         covariate.names = covariate.names,
                                         extrapolation = TRUE,
-                                        mic = TRUE,
-                                        print.precision = print.precision)
+                                        mic = TRUE)
 
+      class(sumres) <- c("extrapolation_results_summary", class(sumres))
       reslist <- append(x = reslist, values = list(summary = sumres))
+#
+#    }else{
+#
+#      summarise_extrapolation(extrapolation.object = reslist,
+#                              covariate.names = covariate.names,
+#                              extrapolation = TRUE,
+#                              mic = TRUE,
+#                              print.precision = print.precision)
+#    }
+#
+#  }else{
+#
+#    if(save.summary){
+#
+#      sink("/dev/null")
+#      sumres <- summarise_extrapolation(extrapolation.object = reslist,
+#                                        covariate.names = covariate.names,
+#                                        extrapolation = TRUE,
+#                                        mic = TRUE,
+#                                        print.precision = print.precision)
+#      sink()
+#      reslist <- append(x = reslist, values = list(summary = sumres))
+#
+#    }else{
+#
+#    }
+#  }
 
-    }else{
-
-      summarise_extrapolation(extrapolation.object = reslist,
-                              covariate.names = covariate.names,
-                              extrapolation = TRUE,
-                              mic = TRUE,
-                              print.precision = print.precision)
-    }
-
-  }else{
-
-    if(save.summary){
-
-      sink("/dev/null")
-      sumres <- summarise_extrapolation(extrapolation.object = reslist,
-                                        covariate.names = covariate.names,
-                                        extrapolation = TRUE,
-                                        mic = TRUE,
-                                        print.precision = print.precision)
-      sink()
-      reslist <- append(x = reslist, values = list(summary = sumres))
-
-    }else{
-
-    }
-  }
+  # keep it classy
+  class(reslist) <- c("extrapolation_results", class(reslist))
 
   return(reslist)
 

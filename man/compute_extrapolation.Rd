@@ -4,9 +4,13 @@
 \alias{compute_extrapolation}
 \title{Quantify extrapolation in multivariate environmental space}
 \usage{
-compute_extrapolation(segments, covariate.names, prediction.grid,
-  coordinate.system, print.summary = TRUE, print.precision = 2,
-  save.summary = FALSE, resolution = NULL)
+compute_extrapolation(
+  segments,
+  covariate.names,
+  prediction.grid,
+  coordinate.system,
+  resolution = NULL
+)
 }
 \arguments{
 \item{segments}{Segment data.frame (i.e. surveyed transects divided into segments for analysis). This is the reference dataset used for model building and calibration. This must contain one column for each of the covariates in \code{covariate.names}.}
@@ -16,12 +20,6 @@ compute_extrapolation(segments, covariate.names, prediction.grid,
 \item{prediction.grid}{Prediction data.frame. This contains both geographic coordinates (\code{x}, \code{y}) and covariate values associated with the target locations for which predictions are desired. Typically, these locations are taken as the centroids of the grid cells in a spatial prediction grid/raster. See \code{\link[dsm]{predict.dsm}}.}
 
 \item{coordinate.system}{Projected coordinate system relevant to the study location. Can be either a character string or an object of class \code{\link[sp]{CRS}}.}
-
-\item{print.summary}{Logical, defaults to \code{TRUE}. Outputs a summary of the results to the R console.}
-
-\item{print.precision}{Integer. Number of significant figures to be used when printing the summary. Default value of 2.}
-
-\item{save.summary}{Logical, defaults to \code{FALSE}. Adds summary statistics to the output list.}
 
 \item{resolution}{Resolution of the output raster (in units relevant to \code{coordinate.system}). Only required if \code{prediction.grid} is irregular, and thus needs to be rasterised. Defaults to \code{NULL}.}
 }
@@ -43,9 +41,9 @@ The \code{data} list captures ExDet values at prediction locations (i.e. cells i
   \code{analogue} \tab Prediction locations where conditions are analogous to sampled conditions (only)\cr
  }
 
-Each \code{data.frame} contains four columns:
+ Each \code{data.frame} contains four columns:
 
-\tabular{ll}{
+ \tabular{ll}{
   \code{ExDet} \tab ExDet values\cr
   \code{mic_univariate} \tab Integer identifying the univariate MIC\cr
   \code{mic_combinatorial} \tab Integer identifying the combinatorial MIC\cr

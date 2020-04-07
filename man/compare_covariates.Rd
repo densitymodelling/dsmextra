@@ -4,10 +4,17 @@
 \alias{compare_covariates}
 \title{Compare different combinations of covariates}
 \usage{
-compare_covariates(extrapolation.type = "both", segments,
-  covariate.names, n.covariates = NULL, prediction.grid,
-  coordinate.system, create.plots = TRUE, display.percent = TRUE,
-  resolution = NULL)
+compare_covariates(
+  extrapolation.type = "both",
+  segments,
+  covariate.names,
+  n.covariates = NULL,
+  prediction.grid,
+  coordinate.system,
+  create.plots = TRUE,
+  display.percent = TRUE,
+  resolution = NULL
+)
 }
 \arguments{
 \item{extrapolation.type}{Character string. Type of extrapolation to be assessed. Can be one of \code{univariate}, \code{combinatorial}, or \code{both} (default).}

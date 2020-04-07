@@ -4,14 +4,24 @@
 \alias{extrapolation_analysis}
 \title{Full extrapolation assessment}
 \usage{
-extrapolation_analysis(segments, covariate.names, prediction.grid,
-  coordinate.system, summarise.extrapolation = TRUE,
-  summary.print.precision = 2, compare.covariates = FALSE,
-  compare.extrapolation.type = "both", compare.n.covariates = NULL,
-  compare.create.plots = FALSE, compare.display.percent = TRUE,
-  nearby.compute = TRUE, nearby.nearby = 1, nearby.max.size = 1e+07,
-  nearby.no.partitions = 10, map.generate = TRUE,
-  map.sightings = NULL, map.tracks = NULL)
+extrapolation_analysis(
+  segments,
+  covariate.names,
+  prediction.grid,
+  coordinate.system,
+  compare.covariates = FALSE,
+  compare.extrapolation.type = "both",
+  compare.n.covariates = NULL,
+  compare.create.plots = FALSE,
+  compare.display.percent = TRUE,
+  nearby.compute = TRUE,
+  nearby.nearby = 1,
+  nearby.max.size = 1e+07,
+  nearby.no.partitions = 10,
+  map.generate = TRUE,
+  map.sightings = NULL,
+  map.tracks = NULL
+)
 }
 \arguments{
 \item{segments}{Segment data.frame (i.e. surveyed transects divided into segments for analysis). This is the reference dataset used for model building and calibration. This must contain one column for each of the covariates in \code{covariate.names}.}
@@ -21,10 +31,6 @@ extrapolation_analysis(segments, covariate.names, prediction.grid,
 \item{prediction.grid}{Prediction data.frame. This contains both geographic coordinates (\code{x}, \code{y}) and covariate values associated with the target locations for which predictions are desired. Typically, these locations are taken as the centroids of the grid cells in a spatial prediction grid/raster. See \code{\link[dsm]{predict.dsm}}.}
 
 \item{coordinate.system}{Projected coordinate system relevant to the study location. Can be either a character string or an object of class \code{\link[sp]{CRS}}.}
-
-\item{summarise.extrapolation}{Logical. If TRUE, run \code{\link{summarise_extrapolation}}.}
-
-\item{summary.print.precision}{Integer. Number of significant figures to be used when printing the extrapolation summary. Default value of 2.}
 
 \item{compare.covariates}{Logical. If TRUE, run \code{\link{compare_covariates}}.}
 

@@ -174,8 +174,7 @@ compare_covariates <- function(extrapolation.type = "both",
                                           compute_extrapolation(segments = segments,
                                                                 covariate.names = .x,
                                                                 prediction.grid = prediction.grid,
-                                                                coordinate.system = coordinate.system,
-                                                                print.summary = FALSE)},
+                                                                coordinate.system = coordinate.system)},
                                         .pb = pb))
 
   #---------------------------------------------

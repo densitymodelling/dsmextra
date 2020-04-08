@@ -22,15 +22,13 @@ my_cov <- c("Depth", "DistToCAS", "SST", "EKE", "NPP")
 suppressWarnings(spermw.extra <- compute_extrapolation(segments = segs,
                                       covariate.names = my_cov,
                                       prediction.grid = predgrid,
-                                      coordinate.system = my_crs,
-                                      print.summary = FALSE,
-                                      save.summary = TRUE))
+                                      coordinate.system = my_crs))
 
 testthat::test_that("Outputs are correct",{
 
   # compute_extrapolation returns a list containing data, rasters, and a summary if save.summary = TRUE
 
-  testthat::expect_equal(class(spermw.extra), "list")
+  testthat::expect_s3_class(spermw.extra, "extrapolation_results")
   testthat::expect_equal(length(spermw.extra), 3)
   testthat::expect_equal(names(spermw.extra), c("data", "rasters","summary"))
 

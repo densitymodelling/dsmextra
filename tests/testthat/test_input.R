@@ -133,7 +133,6 @@ testthat::test_that("Wrong inputs",{
   # map_extrapolation
 
   suppressWarnings(extrapolation.calc <- compute_extrapolation(segments = segs,
-                                              print.summary = FALSE,
                                               covariate.names = my_cov,
                                               prediction.grid = predgrid,
                                               coordinate.system = my_crs))

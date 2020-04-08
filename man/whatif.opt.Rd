@@ -4,8 +4,14 @@
 \alias{whatif.opt}
 \title{Counterfactual evaluation, optimised for dsmextra}
 \usage{
-whatif.opt(formula = NULL, data, cfact, nearby = 1, miss = "list",
-  no.partitions)
+whatif.opt(
+  formula = NULL,
+  data,
+  cfact,
+  nearby = 1,
+  miss = "list",
+  no.partitions
+)
 }
 \arguments{
 \item{formula}{An optional formula without a dependent variable, allowing transformations of combinations of the variables in both data and cfact.}

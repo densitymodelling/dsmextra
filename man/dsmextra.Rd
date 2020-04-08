@@ -3,7 +3,6 @@
 \docType{package}
 \name{dsmextra}
 \alias{dsmextra}
-\alias{dsmextra-package}
 \title{Extrapolation detection in density surface models}
 \description{
 The \code{dsmextra} package provides functions for detecting, diagnosing and visualising extrapolation in multivariate environmental space, with applications to density surface models (DSMs) created in the \code{\link[dsm]{dsm}} package.

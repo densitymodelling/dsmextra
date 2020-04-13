@@ -4,9 +4,16 @@
 \alias{compute_nearby}
 \title{Quantify the percentage of data nearby}
 \usage{
-compute_nearby(segments, covariate.names, prediction.grid,
-  coordinate.system, nearby, max.size = 1e+07, no.partitions = 10,
-  resolution = NULL)
+compute_nearby(
+  segments,
+  covariate.names,
+  prediction.grid,
+  coordinate.system,
+  nearby,
+  max.size = 1e+07,
+  no.partitions = 10,
+  resolution = NULL
+)
 }
 \arguments{
 \item{segments}{Segment data.frame (i.e. surveyed transects divided into segments for analysis). This is the reference dataset used for model building and calibration. This must contain one column for each of the covariates in \code{covariate.names}.}

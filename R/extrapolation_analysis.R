@@ -9,9 +9,6 @@
 #'  }
 #'
 #' @inheritParams compute_extrapolation
-#' @param summarise.extrapolation Logical. If TRUE, run \code{\link{summarise_extrapolation}}.
-#' @param summary.print.precision Integer. Number of significant figures to be used when printing the extrapolation summary. Default value of 2.
-#'
 #' @param compare.covariates Logical. If TRUE, run \code{\link{compare_covariates}}.
 #' @param compare.extrapolation.type Character string indicating the type of extrapolation to be assessed. One of \code{univariate}, \code{combinatorial}, or \code{both} (default).
 #' @param compare.n.covariates Integer. Maximum number of covariates. The function will compare all combinations of 1 to \code{n.covariates} covariates.
@@ -70,8 +67,6 @@ extrapolation_analysis <- function(segments,
                                   covariate.names,
                                   prediction.grid,
                                   coordinate.system,
-                                  summarise.extrapolation = TRUE,
-                                  summary.print.precision = 2,
                                   compare.covariates = FALSE,
                                   compare.extrapolation.type = "both",
                                   compare.n.covariates = NULL,
@@ -97,28 +92,10 @@ extrapolation_analysis <- function(segments,
 
   message("=== Assessing extrapolation ===\n")
 
-  if(summarise.extrapolation){
-
-    ex1 <- compute_extrapolation(segments = segments,
-                                 covariate.names = covariate.names,
-                                 prediction.grid = prediction.grid,
-                                 coordinate.system = coordinate.system,
-                                 print.summary = TRUE,
-                                 print.precision = summary.print.precision,
-                                 save.summary = TRUE)
-
-  }else{
-
-    ex1 <- compute_extrapolation(segments = segments,
-                                 covariate.names = covariate.names,
-                                 prediction.grid = prediction.grid,
-                                 coordinate.system = coordinate.system,
-                                 print.summary = FALSE,
-                                 print.precision = summary.print.precision,
-                                 save.summary = FALSE)
-
-  }
-
+  ex1 <- compute_extrapolation(segments = segments,
+                               covariate.names = covariate.names,
+                               prediction.grid = prediction.grid,
+                               coordinate.system = coordinate.system)
   resl$extrapolation <- ex1 # Store results
 
   #---------------------------------------------

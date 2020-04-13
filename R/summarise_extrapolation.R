@@ -33,26 +33,20 @@
 #' spermw.extrapolation <- compute_extrapolation(segments = segs,
 #'       covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
 #'       prediction.grid = predgrid,
-#'       coordinate.system = my_crs,
-#'       print.summary = FALSE,
-#'       save.summary = TRUE,
-#'       print.precision = 2)
+#'       coordinate.system = my_crs)
 #'
 #' # Summarise extrapolation
 #' spermw.summary <- summarise_extrapolation(extrapolation.object = spermw.extrapolation,
 #'      covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
 #'      extrapolation = TRUE,
-#'      mic = TRUE,
-#'      print.precision = 2)
+#'      mic = TRUE)
 #'
 #' print(spermw.summary)
 
 summarise_extrapolation <- function(extrapolation.object,
                                     covariate.names = NULL,
                                     extrapolation = TRUE,
-                                    mic = TRUE,
-                                    print.precision = 2){
-
+                                    mic = TRUE){
   #.............................................
   # Extract extrapolation values
   #---------------------------------------------
@@ -85,99 +79,6 @@ summarise_extrapolation <- function(extrapolation.object,
 
   res <- res[zeroes.names]
 
-  #---------------------------------------------
-  # Begin formatting
-  #---------------------------------------------
-
-  resdf <- purrr::map2(.x = res[grepl(pattern = ".n", x = names(res), fixed = TRUE)],
-                       .y = res[grepl(pattern = ".p", x = names(res), fixed = TRUE)],
-                       .f = ~c(paste0("n = ", format(round(as.numeric(.x), 0),
-                                                     nsmall=0, big.mark=",")), paste0(round(.y, print.precision), " %")))
-
-  #---------------------------------------------
-  # Convert to matrix form
-  #---------------------------------------------
-
-  resdf <- purrr::set_names(resdf, tb.names) %>%
-    data.frame(.) %>%
-    t(.)
-
-  resdf <- cbind(resdf, row.names(resdf))
-
-  #---------------------------------------------
-  # Calculate totals
-  #---------------------------------------------
-
-  Total.n <- res[grepl(pattern = ".n", x = names(res), fixed = TRUE)] %>%
-    unlist(.) %>%
-    sum(.) %>%
-    format(round(., 0), nsmall=0, big.mark=",") %>%
-    paste0("n = ", .)
-
-  Total.p <- res[grepl(pattern = ".p", x = names(res), fixed = TRUE)] %>%
-    unlist(.) %>%
-    sum(.) %>%
-    round(., print.precision) %>%
-    paste0(., " %")
-
-  resdf <- data.frame(resdf)
-  names(resdf) <- c("Count", "Percentage", "Type")
-  row.names(resdf) <- NULL
-
-  #---------------------------------------------
-  # Rearrange rows and reorder columns
-  #---------------------------------------------
-
-  resdf <- resdf %>%
-    dplyr::mutate(., Type = factor(Type,
-                                   levels = c("Analogue", "Univariate", "Combinatorial", "-----------", "Total"))) %>%
-    dplyr::arrange(., Type) %>%
-    dplyr::select(., Type, Count, Percentage)
-
-
-  #---------------------------------------------
-  # Add separator beneath "Analogue" if present
-  #---------------------------------------------
-
-  if("Analogue"%in%as.character(resdf$Type)) add.sep <- TRUE else add.sep <- FALSE
-
-  resdf <- purrr::map_dfr(resdf, as.character)
-
-  #---------------------------------------------
-  # Add sub-totals, if necessary
-  #---------------------------------------------
-
-  if("Univariate"%in%resdf[,1] & "Combinatorial"%in%resdf[,1]){
-
-    Totalex.n <- res[!grepl(pattern = "analogue", x = names(res))] %>%
-      .[grepl(pattern = ".n", x = names(.), fixed = TRUE)] %>%
-      unlist(.) %>%
-      sum(.) %>%
-      format(round(., 0), nsmall=0, big.mark=",") %>%
-      paste0("n = ", .)
-
-    Totalex.p <- res[!grepl(pattern = "analogue", x = names(res))] %>%
-      .[grepl(pattern = ".p", x = names(.), fixed = TRUE)] %>%
-      unlist(.) %>%
-      sum(.) %>%
-      round(., print.precision) %>%
-      paste0(., " %")
-
-    resdf <- rbind(resdf, rep("-----------",3))
-    resdf <- rbind(resdf, c("  Sub-total", Totalex.n, Totalex.p))
-
-  }
-
-  #---------------------------------------------
-  # Add totals to matrix
-  #---------------------------------------------
-
-  resdf <- rbind(resdf, rep("-----------",3))
-  resdf <- rbind(resdf, c("Total", Total.n, Total.p))
-
-  if(add.sep) resdf <- rbind(resdf[1,], rep("-----------",3), resdf[2:nrow(resdf),])
-
-  colnames(resdf) <- NULL
 
   #---------------------------------------------
   # Most influential covariates - by extrapolation type
@@ -255,120 +156,9 @@ summarise_extrapolation <- function(extrapolation.object,
         purrr::map(.x = ., .f = ~purrr::map(.x = ., .f = ~as.numeric(.x))) %>%
         purrr::map(.x = ., .f = ~purrr::map(.x = ., .f = ~list(.n = .x[1], .p = .x[2]))) %>%
         purrr::flatten()
+    }
 
-      #---------------------------------------------
-      # Format for output in console
-      #---------------------------------------------
-
-      mic_resdf <- purrr::map(.x = mic_data,
-                              .f = ~dplyr::arrange(.x, desc(perc), covariate) %>%
-                                dplyr::mutate(freq = paste0("n = ", format(round(as.numeric(freq),
-                                                                                 print.precision), nsmall=0, big.mark=","))) %>%
-                                dplyr::mutate(perc = paste0(round(as.numeric(perc), print.precision), " %")))
-
-      mic_data <- purrr::set_names(mic_data, tb.names[which(!tb.names=="Analogue")])
-      mic_resdf <- purrr::set_names(mic_resdf, tb.names[which(!tb.names=="Analogue")])
-
-      #---------------------------------------------
-      # Compact into one tibble
-      #---------------------------------------------
-
-      mic_resdf <- do.call(rbind, mic_resdf)
-
-      #---------------------------------------------
-      # Re-order columns
-      #---------------------------------------------
-
-      mic_resdf <- mic_resdf %>%
-        dplyr::select(., Type, covariate, freq, perc)
-
-      row.names(mic_resdf) <- NULL
-
-      #---------------------------------------------
-      # Calculate totals
-      #---------------------------------------------
-
-      mic_data_total <- do.call(rbind, mic_data)
-      mic_subtotals <- mic_data_total %>%
-        dplyr::group_by(Type) %>%
-        dplyr::summarise(sum(freq), sum(perc))
-
-      names(mic_subtotals) <- c("Type", "freq", "perc")
-
-
-      if("Univariate"%in%as.character(mic_resdf$Type) & "Combinatorial"%in%as.character(mic_resdf$Type)){
-
-        sub.univ <- as.matrix(mic_subtotals[mic_subtotals$Type=="Univariate",])
-        sub.univ <- c("  Sub-total", "", paste0("n = ", format(round(as.numeric(sub.univ[2]),
-                                                                     print.precision),
-                                                               nsmall=0, big.mark=",")),
-                      paste0(round(as.numeric(sub.univ[3]), print.precision), " %"))
-        sub.univ <- data.frame(t(matrix(sub.univ)))
-        names(sub.univ) <- names(mic_resdf)
-
-        sub.comb <- as.matrix(mic_subtotals[mic_subtotals$Type=="Combinatorial",])
-        sub.comb <- c("  Sub-total", "", paste0("n = ", format(round(as.numeric(sub.comb[2]),
-                                                                     print.precision),
-                                                               nsmall=0, big.mark=",")),
-                      paste0(round(as.numeric(sub.comb[3]), print.precision), " %"))
-        sub.comb <- data.frame(t(matrix(sub.comb)))
-        names(sub.comb) <- names(mic_resdf)
-
-        mic_resdf <- rbind(mic_resdf[mic_resdf$Type=="Univariate",],
-                           data.frame(Type = "-----------", covariate = "-----------", freq = "-----------", perc = "-----------"),
-                           sub.univ,
-                           data.frame(Type = "-----------", covariate = "-----------", freq = "-----------", perc = "-----------"),
-                           mic_resdf[mic_resdf$Type=="Combinatorial",],
-                           data.frame(Type = "-----------", covariate = "-----------", freq = "-----------", perc = "-----------"),
-                           sub.comb)
-
-      }
-
-      mic_resdf <- purrr::map_dfr(mic_resdf, as.character)
-
-      mic_resdf <- rbind(mic_resdf, rep("-----------", ncol(mic_resdf)))
-      mic_resdf <- rbind(mic_resdf, c("Total",
-                                      "",
-                                      paste0("n = ", format(round(sum(mic_data_total$freq),
-                                                                  print.precision),
-                                                            nsmall=0, big.mark=",")),
-                                      paste0(round(as.numeric(sum(mic_data_total$perc)), print.precision), " %")))
-
-
-      colnames(mic_resdf) <- NULL
-      rownames(mic_resdf) <- NULL
-
-      # If all covariates contribute equally, then use alphabetical order
-
-      # cols_ordered <- purrr::map(.x = mic_resdf, ~c("Type", as.character(.x$covariate)))
-      #
-      # mic_resdf <- purrr::map2(.x = mic_resdf,
-      #                          .y = cols_ordered,
-      #                          .f = ~tidyr::gather(data = .x, key = item,
-      #                                              value = result, -Type, -covariate) %>%
-      #                            tidyr::spread(data = ., key = covariate, value = result) %>%
-      #                            .[, .y])
-
-    } # End empty mic_data
-
-  } # End mic
-
-
-  #---------------------------------------------
-  # Print in console
-  #---------------------------------------------
-
-  if(extrapolation){
-    print(knitr::kable(resdf,
-                       format = "pandoc",
-                       caption = "Extrapolation"))}
-
-  if(mic){
-    print(knitr::kable(mic_resdf,
-                       format = "pandoc",
-                       caption = "Most influential covariates (MIC)"))
   }
-
   #---------------------------------------------
   # Return output
   #---------------------------------------------
@@ -376,14 +166,11 @@ summarise_extrapolation <- function(extrapolation.object,
   if(mic){
 
     invisible(list(extrapolation = res,
-                   mic = mic_res))
+                   mic = mic_data))
   }else{
 
     invisible(list(extrapolation = res))
   }
 
 
-
-
-
-} # End summarise_extrapolation
+}

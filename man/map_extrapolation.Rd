@@ -4,10 +4,17 @@
 \alias{map_extrapolation}
 \title{Interactive maps of extrapolation}
 \usage{
-map_extrapolation(map.type = NULL, base.layer = "ocean",
-  extrapolation.values = NULL, gower.values = NULL,
-  covariate.names = NULL, prediction.grid = NULL,
-  coordinate.system = NULL, sightings = NULL, tracks = NULL)
+map_extrapolation(
+  map.type = NULL,
+  base.layer = "ocean",
+  extrapolation.values = NULL,
+  gower.values = NULL,
+  covariate.names = NULL,
+  prediction.grid = NULL,
+  coordinate.system = NULL,
+  sightings = NULL,
+  tracks = NULL
+)
 }
 \arguments{
 \item{map.type}{Character string. Type of map to be returned. Either \code{extrapolation} for an extrapolation map, \code{mic} for a map of the most influential covariates, or \code{nearby} for a map of the percentage of data nearby.}

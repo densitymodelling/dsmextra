@@ -523,6 +523,7 @@ compare_covariates <- function(extrapolation.type = "both",
       ylim(c(0, max(res$extrap)+0.15*max(res$extrap)))+
 
       theme(legend.title = element_blank())+
+      theme_minimal()+
       {if(extrapolation.type=="both") scale_fill_manual(values = c('#2E86A6', '#F0B039'))}
 
     p2 <- ggplot2::ggplot(data = varplot, ggplot2::aes(x = factor(var), y = extrap))+
@@ -538,6 +539,7 @@ compare_covariates <- function(extrapolation.type = "both",
       ylim(c(0, max(varplot$extrap)+0.15*max(varplot$extrap)))+
 
       ggplot2::theme(legend.title = element_blank())+
+      theme_minimal()+
       {if(extrapolation.type=="both") scale_fill_manual(values = c('#2E86A6', '#F0B039'))}
 
     p3 <- cowplot::ggdraw() +

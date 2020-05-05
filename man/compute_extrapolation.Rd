@@ -30,7 +30,9 @@ A list object containing extrapolation values in both \code{data.frame} and \cod
 Assesses univariate (Type I) and combinatorial (Type II) extrapolation in density surface models of line transect data. Models are built in a reference (calibration) system and projected into one or more target (prediction) system(s). The function is based on original code from the \href{https://cran.r-project.org/web/packages/ecospat/index.html}{ecospat} package (Broennimann et al. 2016), and tailored to outputs returned by the \href{https://cran.r-project.org/web/packages/dsm/index.html}{dsm} package (Miller et al. 2015), although it can be applied to other predictive modelling scenarios. See the 'Details' section and Bouchet et al. (2019) for more information.
 }
 \details{
-The function calculates values of the ExDet (EXtrapolation DETection) metric as originally proposed by Mesgaran et al. (2014). ExDet takes on strictly negative values during univariate extrapolation (i.e. when predictions are made outside the range of individual covariates), is strictly positive and >1 during combinatorial extrapolation (i.e. when predictions are made within the range of individual covariates, but for combinations of envionmental conditions not encountered in the sample), and lies within the range 0-1 when predictions are made in conditions analogous to those found in the reference system. The function also determines which covariates make the largest contribution to each type of extrapolation; this is the most influential covariate (MIC). See Mesgaran et al. (2014) for details.
+The function calculates values of the ExDet (EXtrapolation DETection) metric as originally proposed by Mesgaran et al. (2014). ExDet takes on strictly negative values during univariate extrapolation (i.e. when predictions are made outside the range of individual covariates), is strictly >1 during combinatorial extrapolation (i.e. when predictions are made within the range of individual covariates, but for combinations of environmental conditions not encountered in the sample), and lies within the range 0-1 when predictions are made in conditions analogous to those found in the reference system. The function also determines which covariates make the largest contribution to each type of extrapolation; this is the most influential covariate (MIC). See Mesgaran et al. (2014) for details.
+
+Note that \code{compute_extrapolation} returns results in both numerical and raster format. The latter is used to support mapping functions and requires the locations in \code{prediction.grid} to be evenly spaced. If this is not the case, \code{dsmextra} will attempt to automatically generate a raster with a resolution given by the \code{resolution} argument (and expressed in the units of \code{coordinate.system}). An error may be returned if no \code{resolution} is specified.
 
 The \code{data} list captures ExDet values at prediction locations (i.e. cells in \code{prediction.grid}) and is organised into multiple \code{data.frame} objects, as follows:
 
@@ -73,10 +75,7 @@ my_crs <- sp::CRS("+proj=aea +lat_1=38 +lat_2=30 +lat_0=34 +lon_0=-73 +x_0=0
 spermw.extrapolation <- compute_extrapolation(segments = segs,
       covariate.names = my_cov,
       prediction.grid = predgrid,
-      coordinate.system = my_crs,
-      print.summary = TRUE,
-      save.summary = TRUE,
-      print.precision = 2)
+      coordinate.system = my_crs)
 }
 \references{
 Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions. CREEM Technical Report 2019-01, 59 p. \href{https://research-repository.st-andrews.ac.uk/handle/10023/18509}{https://research-repository.st-andrews.ac.uk/handle/10023/18509}

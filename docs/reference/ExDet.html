@@ -8,11 +8,13 @@
 
 <title>EXtrapolation DETection tool — ExDet • dsmextra</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -32,10 +34,11 @@
 
 
 
-<meta property="og:title" content="EXtrapolation DETection tool — ExDet" />
 
+<meta property="og:title" content="EXtrapolation DETection tool — ExDet" />
 <meta property="og:description" content="Assesses univariate (Type I) and combinatorial (Type II) extrapolation between a reference system (ref) and a projection system (p). See Mesgaran et al. (2014) for an explanation. This function is an updated version of some original code from the ecospat package (Broennimann et al. 2016)." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -66,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dsmextra</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
       </span>
     </div>
 
@@ -75,7 +78,7 @@
         <li>
   <a href="../index.html">
     <span class="fas fa fas fa-home fa-lg"></span>
-
+     
   </a>
 </li>
 <li>
@@ -84,7 +87,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Articles
-
+     
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -94,16 +97,15 @@
   </ul>
 </li>
       </ul>
-
       <ul class="nav navbar-nav navbar-right">
-
+        
       </ul>
-
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-
+      
 
       </header>
 
@@ -111,14 +113,12 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>EXtrapolation DETection tool</h1>
-
+    
     <div class="hidden name"><code>ExDet.Rd</code></div>
     </div>
 
     <div class="ref-description">
-
     <p>Assesses univariate (Type I) and combinatorial (Type II) extrapolation between a reference system (ref) and a projection system (p). See Mesgaran et al. (2014) for an explanation. This function is an updated version of some original code from the <code><a href='https://rdrr.io/pkg/ecospat/man/ecospat-package.html'>ecospat</a></code> package (Broennimann et al. 2016).</p>
-
     </div>
 
     <pre class="usage"><span class='fu'>ExDet</span>(<span class='no'>ref</span>, <span class='no'>tg</span>, <span class='no'>xp</span>)</pre>
@@ -143,34 +143,29 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Returns a tibble with four columns. (1) <code>ExDet</code>: Value of the ExDet metric (negative for univariate extrapolation, &gt;1 for combinatorial extrapolation, within the range 0-1 for analogue conditions). (2) <code>mic_univariate</code>: Integer indicating the covariate with the largest contribution to univariate extrapolation (most influential covariate, MIC).  (3) <code>mic_combinatorial</code>: Integer indicating the covariate with the largest contribution to combinatorial extrapolation. (4) <code>mic</code>: most influential covariate.</p>
-
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Mesgaran, M.B., Cousens, R.D. &amp; Webber, B.L. (2014) <a href='https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12209'>Here be dragons: a tool for quantifying novelty due to covariate range and correlation change when projecting species distribution models</a>. Diversity &amp; Distributions, 20: 1147-1159, DOI: 10.1111/ddi.12209</p>
 <p>Broennimann O, Di Cola V, Guisan A (2016). ecospat: Spatial Ecology Miscellaneous Methods. R package version 2.1.1. <a href='https://CRAN.R-project.org/package=ecospat'>https://CRAN.R-project.org/package=ecospat</a>.</p>
-
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-
       <li><a href="#value">Value</a></li>
-
       <li><a href="#references">References</a></li>
-          </ul>
+    </ul>
 
-    <h5>Author(s)</h5>
-    <p>Phil J Bouchet<br>
-    David L Miller</p>
+    <h2>Author</h2>
+    <p>Phil J. Bouchet</p>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Phil J Bouchet, David L Miller, and Laura Mannocci.</p>
+  <p>Developed by Phil Bouchet, David Miller, Laura Mannocci.</p>
 </div>
 
 <div class="pkgdown">
@@ -180,7 +175,7 @@
       </footer>
    </div>
 
-
+  
 
 
   </body>

@@ -44,10 +44,7 @@
 #' spermw.extrapolation <- compute_extrapolation(segments = segs,
 #'       covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
 #'       prediction.grid = predgrid,
-#'       coordinate.system = my_crs,
-#'       print.summary = TRUE,
-#'       save.summary = TRUE,
-#'       print.precision = 2)
+#'       coordinate.system = my_crs)
 #'
 #' # Assess the percentage of data nearby
 #' spermw.nearby <- compute_nearby(segments = segs,

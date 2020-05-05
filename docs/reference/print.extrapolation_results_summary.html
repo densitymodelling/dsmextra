@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Counterfactual evaluation, optimised for dsmextra — whatif.opt • dsmextra</title>
+<title>Print extrapolation results summary — print.extrapolation_results_summary • dsmextra</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Counterfactual evaluation, optimised for dsmextra — whatif.opt" />
-<meta property="og:description" content="Implements the methods described in King and Zeng (2007) for evaluating counterfactuals." />
+<meta property="og:title" content="Print extrapolation results summary — print.extrapolation_results_summary" />
+<meta property="og:description" content="Print the summary of extrapolation results (already calculated by compute_extrapolation)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,71 +112,38 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Counterfactual evaluation, optimised for dsmextra</h1>
+    <h1>Print extrapolation results summary</h1>
     
-    <div class="hidden name"><code>whatif.opt.Rd</code></div>
+    <div class="hidden name"><code>print.extrapolation_results_summary.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Implements the methods described in King and Zeng (2007) for evaluating counterfactuals.</p>
+    <p>Print the summary of extrapolation results (already calculated by <code><a href='compute_extrapolation.html'>compute_extrapolation</a></code>).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>whatif.opt</span>(
-  <span class='kw'>formula</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>data</span>,
-  <span class='no'>cfact</span>,
-  <span class='kw'>nearby</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>miss</span> <span class='kw'>=</span> <span class='st'>"list"</span>,
-  <span class='no'>no.partitions</span>
-)</pre>
+    <pre class="usage"><span class='co'># S3 method for extrapolation_results_summary</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>formula</th>
-      <td><p>An optional formula without a dependent variable, allowing transformations of combinations of the variables in both data and cfact.</p></td>
+      <th>x</th>
+      <td><p><code>summary</code> element of the result of <code><a href='compute_extrapolation.html'>compute_extrapolation</a></code></p></td>
     </tr>
     <tr>
-      <th>data</th>
-      <td><p>Either a model output object, or a n-by-k non-character (logical or numeric) matrix or data frame of observed covariate data with n data points or units and k covariates.</p></td>
+      <th>digits</th>
+      <td><p>precision of results</p></td>
     </tr>
     <tr>
-      <th>cfact</th>
-      <td><p>Counterfactuals.</p></td>
-    </tr>
-    <tr>
-      <th>nearby</th>
-      <td><p>Scalar indicating which reference data points are considered to be 'nearby' (i.e. within ‘nearby’ mean geometric Gower's distance of) prediction points.</p></td>
-    </tr>
-    <tr>
-      <th>miss</th>
-      <td><p>Optional string indicating the strategy for dealing with missing data.</p></td>
-    </tr>
-    <tr>
-      <th>no.partitions</th>
-      <td><p>Integer. Number of desired partitions of the data (default of 10).</p></td>
+      <th>...</th>
+      <td><p>for S3 compatability</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list object containing extrapolation values in both data.frame and raster format.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The <code><a href='https://rdrr.io/pkg/WhatIf/man/whatif.html'>whatif</a></code> function from the <a href='https://CRAN.R-project.org/package=WhatIf'>Whatif</a> package (Gandrud et al. 2017) may not run on very large datasets. To circumvent this problem, <code>whatif.opt</code> sets the calculations performed by <code><a href='https://rdrr.io/pkg/WhatIf/man/whatif.html'>whatif</a></code> to run on partitions of the data instead, for greater efficiency. <code>whatif.opt</code> can be called internally within compute_nearby by using two additional arguments, namely:</p><table class='table'>
-<tr><td><code>max.size</code></td><td>Threshold above which partitioning will be triggered</td></tr>
-<tr><td><code>no.partitions</code></td><td>Number of required partitions</td></tr>
-</table>
-<p>In practice, a run of <code><a href='compute_nearby.html'>compute_nearby</a></code> begins with a quick assessment of the dimensions of the input data, i.e. the reference and target data.frames. If the product of their dimensions (i.e. number of segments multiplied by number of prediction grid cells) exceeds the value set for <code>max.size</code>, then <code>no.partitions</code> subsets of the data will be created and the computations run on each using map functions from the <code>purrr</code> package (Henry and Wickham 2019). This means that a smaller <code>max.size</code> will trigger partitioning on correspondingly smaller datasets. By default, <code>max.size</code> is set to <code>1e7</code>. This value was chosen arbitrarily, and should be sufficiently large as to obviate the need for partitioning on most datasets.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>Gandrud C, King G, Stoll H, Zeng L (2017). WhatIf: Evaluate Counterfactuals. R package version 1.5-9. <a href='https://CRAN.R-project.org/package=WhatIf'>https://CRAN.R-project.org/package=WhatIf</a>.</p>
-<p>King G, Zeng L (2007). When can history be our guide? The pitfalls of counterfactual inference. International Studies Quarterly 51, 183–210. DOI: <a href='https://www.jstor.org/stable/pdf/4621707.pdf?seq=1#page_scan_tab_contents'>10.1111/j.1468-2478.2007.00445.x</a></p>
-<p>Henry L, Wickham H (2019). purrr: Functional Programming Tools. R package version 0.3.2. <a href='https://CRAN.R-project.org/package=purrr'>https://CRAN.R-project.org/package=purrr</a>.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='compute_nearby.html'>compute_nearby</a></code>, <code><a href='https://rdrr.io/pkg/WhatIf/man/whatif.html'>whatif</a></code></p></div>
+    <p>invisibly returns the summary part of the object only, printing the results</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -184,13 +151,10 @@
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#see-also">See also</a></li>
     </ul>
 
     <h2>Author</h2>
-    <p>Phil J. Bouchet</p>
+    <p>David L Miller</p>
   </div>
 </div>
 

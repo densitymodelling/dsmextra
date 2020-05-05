@@ -7,7 +7,7 @@
 \method{summary}{extrapolation_results}(object, digits, ...)
 }
 \arguments{
-\item{object}{result of running \code{\link{compute_extapolation}}}
+\item{object}{result of running \code{\link{compute_extrapolation}}}
 
 \item{digits}{precision of results}
 
@@ -17,7 +17,7 @@
 invisibly returns the summary part of the object only, printing the results
 }
 \description{
-Print the summary of extrapolation results (already calculated by \code{\link{compute_extapolation}}).
+Print the summary of extrapolation results (already calculated by \code{\link{compute_extrapolation}}).
 }
 \author{
 David L Miller

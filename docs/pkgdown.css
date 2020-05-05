@@ -52,29 +52,8 @@ img.icon {
   float: right;
 }
 
-.logo{
-    margin: 0 0 20px 20px;
-}
-
 img {
   max-width: 100%;
-}
-
-p{line-height: 1.5em;}
-
-ul > li{margin-bottom: 5px;}
-
-#sidebar > div.developers > ul{
-font-weight:500;}
-
-#additional-reading > ul > li{margin-bottom:5px;}
-
-#additional-reading > ul{
-line-height: 1.5em;}
-
-small {
-    font-weight: 400;
-    color: #327ab7;
 }
 
 /* Fix bug in bootstrap (only seen in firefox) */
@@ -87,8 +66,6 @@ summary {
 .contents .page-header {
   margin-top: calc(-60px + 1em);
 }
-
-.page-header{margin-right: 50px;}
 
 /* Section anchors ---------------------------------*/
 
@@ -115,37 +92,13 @@ a.anchor {
   }
 }
 
-h2{
-  background-color: #e9f5f9;
-  color: #106194;
-  font-size: 20px;
-  padding: 0 0em 0.5em 0.5em;
-}
-
 
 /* Fixes for fixed navbar --------------------------*/
 
-.contents h1, .contents h3, .contents h4 {
+.contents h1, .contents h2, .contents h3, .contents h4 {
   padding-top: 60px;
   margin-top: -40px;
 }
-
-.nav-pills>li>a:hover {
-    border-radius: 0px;
-    background-color: #3083bd;
-    color: white;
-}
-.nav-pills>li>a {
-    border-radius: 0px;
-}
-
-h1 {
-    font-size: 30px;
-}
-
-#sidebar h2:first-child {
-#font-size:20px;
- display: none;}
 
 /* Sidebar --------------------------*/
 
@@ -198,10 +151,6 @@ table {
   overflow: auto;
 }
 
-.table>tbody>tr>td {
-    border-top: 0px solid #ddd;
-}
-
 /* Syntax highlighting ---------------------------------------------------- */
 
 pre {
@@ -244,17 +193,10 @@ a.sourceLine:hover {
 .ch,.st  {color: #036a07;} /* string */
 .kw      {color: #264D66;} /* keyword */
 .co      {color: #888888;} /* comment */
-.co {color: #bb8b00;}
-div.output{color:#616161;}
 
 .message { color: black;   font-weight: bolder;}
-.message {
-    color: #327ab7;
-    font-weight: 500;
-}
 .error   { color: orange;  font-weight: bolder;}
 .warning { color: #6A0366; font-weight: bolder;}
-.warning{color:#bb8b00;font-weight:500;}
 
 /* Clipboard --------------------------*/
 

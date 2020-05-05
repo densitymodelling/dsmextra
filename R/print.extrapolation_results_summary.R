@@ -1,10 +1,10 @@
 #' Print extrapolation results summary
 #'
-#' Print the summary of extrapolation results (already calculated by \code{\link{compute_extapolation}}).
+#' Print the summary of extrapolation results (already calculated by \code{\link{compute_extrapolation}}).
 #'
 #' @export
 #' @author David L Miller
-#' @param x \code{summary} element of the result of \code{\link{compute_extapolation}}
+#' @param x \code{summary} element of the result of \code{\link{compute_extrapolation}}
 #' @param digits precision of results
 #' @param \dots for S3 compatability
 #' @return invisibly returns the summary part of the object only, printing the results

@@ -9,6 +9,7 @@ extrapolation_analysis(
   covariate.names,
   prediction.grid,
   coordinate.system,
+  summarise.extrapolation = TRUE,
   compare.covariates = FALSE,
   compare.extrapolation.type = "both",
   compare.n.covariates = NULL,
@@ -31,6 +32,8 @@ extrapolation_analysis(
 \item{prediction.grid}{Prediction data.frame. This contains both geographic coordinates (\code{x}, \code{y}) and covariate values associated with the target locations for which predictions are desired. Typically, these locations are taken as the centroids of the grid cells in a spatial prediction grid/raster. See \code{\link[dsm]{predict.dsm}}.}
 
 \item{coordinate.system}{Projected coordinate system relevant to the study location. Can be either a character string or an object of class \code{\link[sp]{CRS}}.}
+
+\item{summarise.extrapolation}{Logical. If TRUE, prints a summary of extrapolation to the R console.}
 
 \item{compare.covariates}{Logical. If TRUE, run \code{\link{compare_covariates}}.}
 
@@ -59,7 +62,6 @@ extrapolation_analysis(
 \description{
 Performs a complete evaluation of both univariate (Type I) and combinatorial (Type II) extrapolation in density surface models of line transect data, by calling relevant functions from \code{dsmextra}. As such, arguments \code{extrapolation_analysis} mirror those of the individual functions from which they are taken:
  \tabular{ll}{
-  \code{summarise/summary.arguments} \tab Arguments from \code{\link{summarise_extrapolation}} \cr
   \code{compare.arguments} \tab Arguments from \code{\link{compare_covariates}} \cr
   \code{nearby.arguments} \tab Arguments from \code{\link{compute_nearby}} \cr
   \code{map.arguments} \tab Arguments from \code{\link{map_extrapolation}} \cr
@@ -83,21 +85,20 @@ my_crs <- sp::CRS("+proj=aea +lat_1=38 +lat_2=30 +lat_0=34 +lon_0=-73 +x_0=0
 my_cov <- c("Depth", "DistToCAS", "SST", "EKE", "NPP")
 
 spermw.analysis <- extrapolation_analysis(segments = segs,
-                                         covariate.names = my_cov,
-                                         prediction.grid = predgrid,
-                                         coordinate.system = my_crs,
-                                         summarise.extrapolation = TRUE,
-                                         summary.print.precision = 2,
-                                         compare.covariates = TRUE,
-                                         compare.extrapolation.type = "both",
-                                         compare.n.covariates = NULL,
-                                         compare.create.plots = TRUE,
-                                         compare.display.percent = TRUE,
-                                         nearby.compute = TRUE,
-                                         nearby.nearby = 1,
-                                         nearby.max.size = 1e7,
-                                         nearby.no.partitions = 10,
-                                         map.generate = TRUE)
+                                          covariate.names = my_cov,
+                                          prediction.grid = predgrid,
+                                          coordinate.system = my_crs,
+                                          summarise.extrapolation = TRUE,
+                                          compare.covariates = TRUE,
+                                          compare.extrapolation.type = "both",
+                                          compare.n.covariates = NULL,
+                                          compare.create.plots = TRUE,
+                                          compare.display.percent = TRUE,
+                                          nearby.compute = TRUE,
+                                          nearby.nearby = 1,
+                                          nearby.max.size = 1e7,
+                                          nearby.no.partitions = 10,
+                                          map.generate = TRUE)
 }
 \references{
 Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions. CREEM Technical Report 2019-01, 59 p. \href{https://research-repository.st-andrews.ac.uk/handle/10023/18509}{https://research-repository.st-andrews.ac.uk/handle/10023/18509}

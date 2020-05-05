@@ -62,10 +62,7 @@ my_crs <- sp::CRS("+proj=aea +lat_1=38 +lat_2=30 +lat_0=34 +lon_0=-73 +x_0=0
 spermw.extrapolation <- compute_extrapolation(segments = segs,
       covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
       prediction.grid = predgrid,
-      coordinate.system = my_crs,
-      print.summary = TRUE,
-      save.summary = TRUE,
-      print.precision = 2)
+      coordinate.system = my_crs)
 
 # Assess the percentage of data nearby
 spermw.nearby <- compute_nearby(segments = segs,

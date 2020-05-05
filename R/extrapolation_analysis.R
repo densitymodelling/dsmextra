@@ -2,13 +2,13 @@
 #'
 #' Performs a complete evaluation of both univariate (Type I) and combinatorial (Type II) extrapolation in density surface models of line transect data, by calling relevant functions from \code{dsmextra}. As such, arguments \code{extrapolation_analysis} mirror those of the individual functions from which they are taken:
 #'  \tabular{ll}{
-#'   \code{summarise/summary.arguments} \tab Arguments from \code{\link{summarise_extrapolation}} \cr
 #'   \code{compare.arguments} \tab Arguments from \code{\link{compare_covariates}} \cr
 #'   \code{nearby.arguments} \tab Arguments from \code{\link{compute_nearby}} \cr
 #'   \code{map.arguments} \tab Arguments from \code{\link{map_extrapolation}} \cr
 #'  }
 #'
 #' @inheritParams compute_extrapolation
+#' @param summarise.extrapolation Logical. If TRUE, prints a summary of extrapolation to the R console.
 #' @param compare.covariates Logical. If TRUE, run \code{\link{compare_covariates}}.
 #' @param compare.extrapolation.type Character string indicating the type of extrapolation to be assessed. One of \code{univariate}, \code{combinatorial}, or \code{both} (default).
 #' @param compare.n.covariates Integer. Maximum number of covariates. The function will compare all combinations of 1 to \code{n.covariates} covariates.
@@ -48,37 +48,37 @@
 #' my_cov <- c("Depth", "DistToCAS", "SST", "EKE", "NPP")
 #'
 #' spermw.analysis <- extrapolation_analysis(segments = segs,
-#'                                          covariate.names = my_cov,
-#'                                          prediction.grid = predgrid,
-#'                                          coordinate.system = my_crs,
-#'                                          summarise.extrapolation = TRUE,
-#'                                          summary.print.precision = 2,
-#'                                          compare.covariates = TRUE,
-#'                                          compare.extrapolation.type = "both",
-#'                                          compare.n.covariates = NULL,
-#'                                          compare.create.plots = TRUE,
-#'                                          compare.display.percent = TRUE,
-#'                                          nearby.compute = TRUE,
-#'                                          nearby.nearby = 1,
-#'                                          nearby.max.size = 1e7,
-#'                                          nearby.no.partitions = 10,
-#'                                          map.generate = TRUE)
+#'                                           covariate.names = my_cov,
+#'                                           prediction.grid = predgrid,
+#'                                           coordinate.system = my_crs,
+#'                                           summarise.extrapolation = TRUE,
+#'                                           compare.covariates = TRUE,
+#'                                           compare.extrapolation.type = "both",
+#'                                           compare.n.covariates = NULL,
+#'                                           compare.create.plots = TRUE,
+#'                                           compare.display.percent = TRUE,
+#'                                           nearby.compute = TRUE,
+#'                                           nearby.nearby = 1,
+#'                                           nearby.max.size = 1e7,
+#'                                           nearby.no.partitions = 10,
+#'                                           map.generate = TRUE)
 extrapolation_analysis <- function(segments,
-                                  covariate.names,
-                                  prediction.grid,
-                                  coordinate.system,
-                                  compare.covariates = FALSE,
-                                  compare.extrapolation.type = "both",
-                                  compare.n.covariates = NULL,
-                                  compare.create.plots = FALSE,
-                                  compare.display.percent = TRUE,
-                                  nearby.compute = TRUE,
-                                  nearby.nearby = 1,
-                                  nearby.max.size = 1e7,
-                                  nearby.no.partitions = 10,
-                                  map.generate = TRUE,
-                                  map.sightings = NULL,
-                                  map.tracks = NULL){
+                                   covariate.names,
+                                   prediction.grid,
+                                   coordinate.system,
+                                   summarise.extrapolation = TRUE,
+                                   compare.covariates = FALSE,
+                                   compare.extrapolation.type = "both",
+                                   compare.n.covariates = NULL,
+                                   compare.create.plots = FALSE,
+                                   compare.display.percent = TRUE,
+                                   nearby.compute = TRUE,
+                                   nearby.nearby = 1,
+                                   nearby.max.size = 1e7,
+                                   nearby.no.partitions = 10,
+                                   map.generate = TRUE,
+                                   map.sightings = NULL,
+                                   map.tracks = NULL){
 
   #---------------------------------------------
   # Initiate list (in which results will be stored)
@@ -97,6 +97,12 @@ extrapolation_analysis <- function(segments,
                                prediction.grid = prediction.grid,
                                coordinate.system = coordinate.system)
   resl$extrapolation <- ex1 # Store results
+
+  #---------------------------------------------
+  # Summarise extrapolation
+  #---------------------------------------------
+
+  if(summarise.extrapolation) summary(ex1)
 
   #---------------------------------------------
   # Compare covariate combinations

@@ -16,8 +16,10 @@ rmarkdown::html_vignette:
 bibliography: dsmextra.bib
 vignette: >
   %\VignetteIndexEntry{A short introduction to dsmextra}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -185,7 +187,7 @@ predgrid %>%
 In practice, `compute_extrapolation` returns a list containing both `data.frames` (extrapolation values) and `rasters` (spatial representation of these values), with the following structure:
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-tibble::glimpse(spermwhale.extrapolation)
+str(spermwhale.extrapolation)
 ```
 
 Three types of extrapolation can be identified (**Figure 2**):

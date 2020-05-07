@@ -13,11 +13,13 @@ print.extrapolation_results_summary <- function(x, digits=2, ...){
   class(x) <- class(x)[-1]
 
   if(!is.null(x$extrapolation)){
+
     #---------------------------------------------
     # Begin formatting
     #---------------------------------------------
 
     res <- x$extrapolation
+
     zeroes <- purrr::map_lgl(.x = res, .f = ~.x==0)
     zeroes.names <- names(zeroes[!zeroes])
 
@@ -38,7 +40,8 @@ print.extrapolation_results_summary <- function(x, digits=2, ...){
     #---------------------------------------------
 
     resdf <- t(data.frame(resdf))
-    resdf <- signif(resdf, digits)
+    # resdf <- signif(resdf, digits)
+    resdf <- round(resdf, digits)
     row.names(resdf) <- tb.names
 
     resdf <- cbind.data.frame(row.names(resdf), resdf)
@@ -56,7 +59,7 @@ print.extrapolation_results_summary <- function(x, digits=2, ...){
       unlist(.) %>%
       sum(.)
 
-    resdf <- data.frame(resdf, stringsAsFactors=FALSE)
+    resdf <- data.frame(resdf, stringsAsFactors = FALSE)
 
     #---------------------------------------------
     # Add separator beneath "Analogue" if present
@@ -74,21 +77,23 @@ print.extrapolation_results_summary <- function(x, digits=2, ...){
     # Add sub-totals, if necessary
     #---------------------------------------------
 
-    if("Univariate" %in% resdf[,1] &
-       "Combinatorial" %in% resdf[,1]){
+    if("Univariate" %in% as.character(resdf$Type) & "Combinatorial" %in% as.character(resdf$Type)){
 
       Totalex.n <- res[!grepl(pattern = "analogue", x = names(res))] %>%
         .[grepl(pattern = ".n", x = names(.), fixed = TRUE)] %>%
         unlist(.) %>%
-        sum(.)
+        sum(.) %>% round(., digits)
 
       Totalex.p <- res[!grepl(pattern = "analogue", x = names(res))] %>%
         .[grepl(pattern = ".p", x = names(.), fixed = TRUE)] %>%
         unlist(.) %>%
-        sum(.)
+        sum(.) %>% round(., digits)
 
-      resdf <- rbind(resdf, rep("-----------",3))
-      resdf <- rbind(resdf, c("  Sub-total", Totalex.n, Totalex.p))
+      resdf <- rbind(resdf[resdf$Type%in%c("Univariate", "Combinatorial"),],
+                     rep("-----------",3),
+                     c("Sub-total", Totalex.n, Totalex.p),
+                     rep("-----------",3),
+                     resdf[resdf$Type=="Analogue",])
 
     }
 
@@ -99,7 +104,7 @@ print.extrapolation_results_summary <- function(x, digits=2, ...){
     resdf <- rbind(resdf, rep("-----------",3))
     resdf <- rbind(resdf, c("Total", Total.n, Total.p))
 
-    if(add.sep) resdf <- rbind(resdf[1,], rep("-----------",3), resdf[2:nrow(resdf),])
+    # if(add.sep) resdf <- rbind(resdf[1,], rep("-----------",3), resdf[2:nrow(resdf),])
 
     print(knitr::kable(resdf,
                        format = "pandoc",
@@ -107,6 +112,7 @@ print.extrapolation_results_summary <- function(x, digits=2, ...){
   }
 
   if(!is.null(x$mic)){
+
     mic_data <- x$mic
     #---------------------------------------------
     # Format for output in console

@@ -46,7 +46,7 @@ remotes::install_github("densitymodelling/dsmextra")
 
 ### Important note
 
-The [WhatIf](https://r.iq.harvard.edu/docs/whatif/1.5-5/whatif.pdf) package, on which `dsmextra` depends, has been removed from CRAN. A patch correction has been released in version 1.1.0, ensuring that WhatIf is automatically installed from Github. Alternatively, WhatIf can be installed manually using the below command:
+The [WhatIf](https://r.iq.harvard.edu/docs/whatif/1.5-5/whatif.pdf) package, on which `dsmextra` depends, was removed from CRAN in March 2020. A patch correction has been released as part of version 1.1.0, ensuring that WhatIf is automatically installed from Github. Alternatively, WhatIf can be installed manually using the below command:
 
 ```r
 if (!require("remotes")) {

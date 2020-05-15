@@ -24,9 +24,13 @@ If you are just getting started with `dsmextra`, we recommend reading the tutori
 ### Additional reading
 
 * Mannocci et al. (2018). Assessing cetacean surveys throughout the mediterranean sea: A gap analysis in environmental space. *Scientific Reports* **8**, art3126. DOI: [10.1038/s41598-018-19842-9](https://www.nature.com/articles/s41598-018-19842-9).
+
 * Mannocci et al. (2017). Extrapolating cetacean densities to quantitatively assess human impacts on populations in the high seas. *Conservation Biology* **31**, 601–614. DOI: [10.1111/cobi.12856](https://conbio.onlinelibrary.wiley.com/doi/full/10.1111/cobi.12856).
+
 * Mesgaran et al. (2014). Here be dragons: A tool for quantifying novelty due to covariate range and correlation change when projecting species distribution models. *Diversity and Distributions* **20**, 1147–1159. DOI: [10.1111/ddi.12209](https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12209).
+
 * Miller et al. (2013). Spatial models for distance sampling data: Recent developments and future directions. *Methods in Ecology and Evolution* **4**, 1001–1010. DOI: [10.1111/2041-210X.12105](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12105).
+
 * King G & Zeng L (2007). When can history be our guide? The pitfalls of counterfactual inference. *International Studies Quarterly* **51**, 183–210. DOI: [10.1111/j.1468-2478.2007.00445.x](https://doi.org/10.1111/j.1468-2478.2007.00445.x).
 
 ### Acknowledgements
@@ -44,7 +48,7 @@ remotes::install_github("densitymodelling/dsmextra")
 
 ### Important note
 
-The [WhatIf](https://r.iq.harvard.edu/docs/whatif/1.5-5/whatif.pdf) package, on which `dsmextra` depends, was removed from CRAN on 2020-03-07. A patch correction has been released as part of version 1.1.0, ensuring that WhatIf is automatically installed from Github. If any issues arise, WhatIf can be manually installed from Github, or from one of the available [package archives](https://cran.r-project.org/web/packages/WhatIf/index.html). 
+The [WhatIf](https://r.iq.harvard.edu/docs/whatif/1.5-5/whatif.pdf) package, on which `dsmextra` depends, was removed from CRAN on 2020-03-07. A patch correction has been released as part of version 1.1.0, ensuring that WhatIf is automatically included when `dsmextra` installs. Alternatively, if any issues arise, WhatIf can be manually installed either from Github or from one of the available [package archives](https://cran.r-project.org/web/packages/WhatIf/index.html). 
 
 ```r
 if (!require("remotes")) install.packages("remotes")

@@ -125,9 +125,9 @@ map.argumentsArguments from map_extrapolation
 
     <div class="ref-description">
     <p>Performs a complete evaluation of both univariate (Type I) and combinatorial (Type II) extrapolation in density surface models of line transect data, by calling relevant functions from <code>dsmextra</code>. As such, arguments <code>extrapolation_analysis</code> mirror those of the individual functions from which they are taken:</p><table class='table'>
-<tr><td><code>compare.arguments</code></td><td>Arguments from <code><a href='compare_covariates.html'>compare_covariates</a></code></td></tr>
-<tr><td><code>nearby.arguments</code></td><td>Arguments from <code><a href='compute_nearby.html'>compute_nearby</a></code></td></tr>
-<tr><td><code>map.arguments</code></td><td>Arguments from <code><a href='map_extrapolation.html'>map_extrapolation</a></code></td></tr>
+<tr><td><code>compare.arguments</code></td><td>Arguments from <code>compare_covariates</code></td></tr>
+<tr><td><code>nearby.arguments</code></td><td>Arguments from <code>compute_nearby</code></td></tr>
+<tr><td><code>map.arguments</code></td><td>Arguments from <code>map_extrapolation</code></td></tr>
 </table>
 
 
@@ -178,7 +178,7 @@ map.argumentsArguments from map_extrapolation
     </tr>
     <tr>
       <th>compare.covariates</th>
-      <td><p>Logical. If TRUE, run <code><a href='compare_covariates.html'>compare_covariates</a></code>.</p></td>
+      <td><p>Logical. If TRUE, run <code>compare_covariates</code>.</p></td>
     </tr>
     <tr>
       <th>compare.extrapolation.type</th>
@@ -198,7 +198,7 @@ map.argumentsArguments from map_extrapolation
     </tr>
     <tr>
       <th>nearby.compute</th>
-      <td><p>Logical. If TRUE, run <code><a href='compute_nearby.html'>compute_nearby</a></code>.</p></td>
+      <td><p>Logical. If TRUE, run <code>compute_nearby</code>.</p></td>
     </tr>
     <tr>
       <th>nearby.nearby</th>
@@ -214,7 +214,7 @@ map.argumentsArguments from map_extrapolation
     </tr>
     <tr>
       <th>map.generate</th>
-      <td><p>Logical. If TRUE, run <code><a href='map_extrapolation.html'>map_extrapolation</a></code>.</p></td>
+      <td><p>Logical. If TRUE, run <code>map_extrapolation</code>.</p></td>
     </tr>
     <tr>
       <th>map.sightings</th>
@@ -248,7 +248,7 @@ map.argumentsArguments from map_extrapolation
 <span class='co'># Define covariates of interest</span>
 <span class='no'>my_cov</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Depth"</span>, <span class='st'>"DistToCAS"</span>, <span class='st'>"SST"</span>, <span class='st'>"EKE"</span>, <span class='st'>"NPP"</span>)
 
-<span class='no'>spermw.analysis</span> <span class='kw'>&lt;-</span> <span class='fu'>extrapolation_analysis</span>(<span class='kw'>segments</span> <span class='kw'>=</span> <span class='no'>segs</span>,
+<span class='no'>spermw.analysis</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/dsmextra/man/extrapolation_analysis.html'>extrapolation_analysis</a></span>(<span class='kw'>segments</span> <span class='kw'>=</span> <span class='no'>segs</span>,
                                           <span class='kw'>covariate.names</span> <span class='kw'>=</span> <span class='no'>my_cov</span>,
                                           <span class='kw'>prediction.grid</span> <span class='kw'>=</span> <span class='no'>predgrid</span>,
                                           <span class='kw'>coordinate.system</span> <span class='kw'>=</span> <span class='no'>my_crs</span>,

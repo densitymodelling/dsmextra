@@ -168,7 +168,7 @@
 <tr><td><code>max.size</code></td><td>Threshold above which partitioning will be triggered</td></tr>
 <tr><td><code>no.partitions</code></td><td>Number of required partitions</td></tr>
 </table>
-<p>In practice, a run of <code><a href='compute_nearby.html'>compute_nearby</a></code> begins with a quick assessment of the dimensions of the input data, i.e. the reference and target data.frames. If the product of their dimensions (i.e. number of segments multiplied by number of prediction grid cells) exceeds the value set for <code>max.size</code>, then <code>no.partitions</code> subsets of the data will be created and the computations run on each using map functions from the <code>purrr</code> package (Henry and Wickham 2019). This means that a smaller <code>max.size</code> will trigger partitioning on correspondingly smaller datasets. By default, <code>max.size</code> is set to <code>1e7</code>. This value was chosen arbitrarily, and should be sufficiently large as to obviate the need for partitioning on most datasets.</p>
+<p>In practice, a run of <code>compute_nearby</code> begins with a quick assessment of the dimensions of the input data, i.e. the reference and target data.frames. If the product of their dimensions (i.e. number of segments multiplied by number of prediction grid cells) exceeds the value set for <code>max.size</code>, then <code>no.partitions</code> subsets of the data will be created and the computations run on each using map functions from the <code>purrr</code> package (Henry and Wickham 2019). This means that a smaller <code>max.size</code> will trigger partitioning on correspondingly smaller datasets. By default, <code>max.size</code> is set to <code>1e7</code>. This value was chosen arbitrarily, and should be sufficiently large as to obviate the need for partitioning on most datasets.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Gandrud C, King G, Stoll H, Zeng L (2017). WhatIf: Evaluate Counterfactuals. R package version 1.5-9. <a href='https://CRAN.R-project.org/package=WhatIf'>https://CRAN.R-project.org/package=WhatIf</a>.</p>
@@ -176,7 +176,7 @@
 <p>Henry L, Wickham H (2019). purrr: Functional Programming Tools. R package version 0.3.2. <a href='https://CRAN.R-project.org/package=purrr'>https://CRAN.R-project.org/package=purrr</a>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='compute_nearby.html'>compute_nearby</a></code>, <code><a href='https://rdrr.io/pkg/WhatIf/man/whatif.html'>whatif</a></code></p></div>
+    <div class='dont-index'><p><code>compute_nearby</code>, <code><a href='https://rdrr.io/pkg/WhatIf/man/whatif.html'>whatif</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -146,11 +146,11 @@
     </tr>
     <tr>
       <th>extrapolation.values</th>
-      <td><p>List object as returned by <a href='compute_extrapolation.html'>compute_extrapolation</a>. Only valid when <code>map.type = extrapolation</code> or <code>map.type = mic</code>.</p></td>
+      <td><p>List object as returned by compute_extrapolation. Only valid when <code>map.type = extrapolation</code> or <code>map.type = mic</code>.</p></td>
     </tr>
     <tr>
       <th>gower.values</th>
-      <td><p>Raster layer object as returned by <a href='compute_nearby.html'>compute_nearby</a>. Only valid when <code>map.type = nearby</code>.</p></td>
+      <td><p>Raster layer object as returned by compute_nearby. Only valid when <code>map.type = nearby</code>.</p></td>
     </tr>
     <tr>
       <th>covariate.names</th>
@@ -200,28 +200,28 @@
  <span class='no'>my_cov</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Depth"</span>, <span class='st'>"DistToCAS"</span>, <span class='st'>"SST"</span>, <span class='st'>"EKE"</span>, <span class='st'>"NPP"</span>)
 
 <span class='co'># Assess extrapolation in the multivariate space defined by five covariates</span>
-<span class='no'>spermw.extrapolation</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='compute_extrapolation.html'>compute_extrapolation</a></span>(<span class='kw'>segments</span> <span class='kw'>=</span> <span class='no'>segs</span>,
+<span class='no'>spermw.extrapolation</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/dsmextra/man/compute_extrapolation.html'>compute_extrapolation</a></span>(<span class='kw'>segments</span> <span class='kw'>=</span> <span class='no'>segs</span>,
       <span class='kw'>covariate.names</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Depth"</span>, <span class='st'>"DistToCAS"</span>, <span class='st'>"SST"</span>, <span class='st'>"EKE"</span>, <span class='st'>"NPP"</span>),
       <span class='kw'>prediction.grid</span> <span class='kw'>=</span> <span class='no'>predgrid</span>,
       <span class='kw'>coordinate.system</span> <span class='kw'>=</span> <span class='no'>my_crs</span>)</div><div class='output co'>#&gt; <span class='message'>Computing ...</span></div><div class='output co'>#&gt; <span class='message'>Done!</span></div><div class='input'>
 <span class='co'># Assess the percentage of data nearby</span>
-<span class='no'>spermw.nearby</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='compute_nearby.html'>compute_nearby</a></span>(<span class='kw'>segments</span> <span class='kw'>=</span> <span class='no'>segs</span>,
+<span class='no'>spermw.nearby</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/dsmextra/man/compute_nearby.html'>compute_nearby</a></span>(<span class='kw'>segments</span> <span class='kw'>=</span> <span class='no'>segs</span>,
                                <span class='kw'>prediction.grid</span> <span class='kw'>=</span> <span class='no'>predgrid</span>,
                                <span class='kw'>coordinate.system</span> <span class='kw'>=</span> <span class='no'>my_crs</span>,
                                <span class='kw'>covariate.names</span> <span class='kw'>=</span> <span class='no'>my_cov</span>,
                                <span class='kw'>nearby</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>Preprocessing data ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating distances ....</span></div><div class='output co'>#&gt; <span class='message'>Calculating the geometric variance...</span></div><div class='output co'>#&gt; <span class='message'>Calculating cumulative frequencies ...</span></div><div class='output co'>#&gt; <span class='message'>Finishing up ...</span></div><div class='output co'>#&gt; <span class='message'>Done!</span></div><div class='input'>
 <span class='co'># Generate maps</span>
-<span class='fu'>map_extrapolation</span>(<span class='kw'>map.type</span> <span class='kw'>=</span> <span class='st'>"extrapolation"</span>,
+<span class='fu'><a href='https://rdrr.io/pkg/dsmextra/man/map_extrapolation.html'>map_extrapolation</a></span>(<span class='kw'>map.type</span> <span class='kw'>=</span> <span class='st'>"extrapolation"</span>,
                   <span class='kw'>extrapolation.values</span> <span class='kw'>=</span> <span class='no'>spermw.extrapolation</span>,
                 <span class='kw'>covariate.names</span> <span class='kw'>=</span> <span class='no'>my_cov</span>,
                 <span class='kw'>prediction.grid</span> <span class='kw'>=</span> <span class='no'>predgrid</span>,
                 <span class='kw'>coordinate.system</span> <span class='kw'>=</span> <span class='no'>my_crs</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: map_extrapolation relies on the leaflet package, which is built around a Web Mercator projection (EPSG:3857), and therefore requires rasters to be reprojected for plotting. As a result, minor discrepancies may  occur between the interactive maps shown in the viewer, and the underlying raw data. The latter can be accessed directly from the extrapolation.values or gower.values objects and visualised using alternative packages such as ggplot2.</span></div><div class='input'>
-<span class='fu'>map_extrapolation</span>(<span class='kw'>map.type</span> <span class='kw'>=</span> <span class='st'>"mic"</span>,
+<span class='fu'><a href='https://rdrr.io/pkg/dsmextra/man/map_extrapolation.html'>map_extrapolation</a></span>(<span class='kw'>map.type</span> <span class='kw'>=</span> <span class='st'>"mic"</span>,
                 <span class='kw'>extrapolation.values</span> <span class='kw'>=</span> <span class='no'>spermw.extrapolation</span>,
                 <span class='kw'>covariate.names</span> <span class='kw'>=</span> <span class='no'>my_cov</span>,
                 <span class='kw'>prediction.grid</span> <span class='kw'>=</span> <span class='no'>predgrid</span>,
                 <span class='kw'>coordinate.system</span> <span class='kw'>=</span> <span class='no'>my_crs</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: map_extrapolation relies on the leaflet package, which is built around a Web Mercator projection (EPSG:3857), and therefore requires rasters to be reprojected for plotting. As a result, minor discrepancies may  occur between the interactive maps shown in the viewer, and the underlying raw data. The latter can be accessed directly from the extrapolation.values or gower.values objects and visualised using alternative packages such as ggplot2.</span></div><div class='input'>
-<span class='fu'>map_extrapolation</span>(<span class='kw'>map.type</span> <span class='kw'>=</span> <span class='st'>"nearby"</span>,
+<span class='fu'><a href='https://rdrr.io/pkg/dsmextra/man/map_extrapolation.html'>map_extrapolation</a></span>(<span class='kw'>map.type</span> <span class='kw'>=</span> <span class='st'>"nearby"</span>,
                 <span class='kw'>gower.values</span> <span class='kw'>=</span> <span class='no'>spermw.nearby</span>,
                 <span class='kw'>covariate.names</span> <span class='kw'>=</span> <span class='no'>my_cov</span>,
                 <span class='kw'>prediction.grid</span> <span class='kw'>=</span> <span class='no'>predgrid</span>,

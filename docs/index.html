@@ -77,12 +77,12 @@
 </h1></div>
 <!-- badges: start -->
 
-<p><code>dsmextra</code> provides a toolkit for quantifying and visualising extrapolation in density surface models (as implemented in package <a href="https://cran.r-project.org/web/packages/dsm/index.html">dsm</a>) projected into novel environmental space. Currently, <code>dsmextra</code> defines extrapolation on the basis of two metrics: <strong>(1) ExDet</strong> (Mesgaran et al. 2014), and <strong>(2) %N</strong> (percentage of data nearby, Mannocci et al. 2018).</p>
+<p><code>dsmextra</code> provides a toolkit for quantifying and visualising extrapolation in ecological models (with a focus on density surface models, as implemented in package <a href="https://cran.r-project.org/web/packages/dsm/index.html">dsm</a>) projected into novel environmental space. Currently, <code>dsmextra</code> defines extrapolation on the basis of two metrics: <strong>(1) ExDet</strong> (Mesgaran et al. 2014), and <strong>(2) %N</strong> (the percentage of data nearby, King &amp; Zeng 2007).</p>
 <p><code>dsmextra</code> offers a variety of numerical and graphical outputs, including summary plots and interactive maps created as <a href="https://ggplot2.tidyverse.org/">ggplot2</a> and <a href="https://rstudio.github.io/leaflet/">html</a> objects, respectively. Additional functionality (e.g. assessment methods for dynamic covariates) will be added in future releases.</p>
 <p>The idea behind <code>dsmextra</code> is to aid ecologists, practitioners, and model end-users in identifying conditions (e.g. areas) under which predicted density surfaces may be prone to errors. In so doing, <code>dsmextra</code> may support:</p>
 <ul>
-<li>Better-informed interpretations of density surface model outputs and their associated uncertainties.</li>
-<li>Improvements to model development and selection protocols.</li>
+<li>Better-informed interpretations of (density surface) model outputs and their associated uncertainties.</li>
+<li>Improvements to model development and covariate selection protocols.</li>
 <li>Cost-effective allocation of future survey effort towards priority, data-poor areas.</li>
 </ul>
 <div id="getting-started" class="section level3">
@@ -97,10 +97,11 @@
 <h3 class="hasAnchor">
 <a href="#additional-reading" class="anchor"></a>Additional reading</h3>
 <ul>
-<li>Mannocci et al. (2018). Assessing cetacean surveys throughout the mediterranean sea: A gap analysis in environmental space. <em>Scientific Reports</em> <strong>8</strong>, art3126. DOI: <a href="https://www.nature.com/articles/s41598-018-19842-9">10.1038/s41598-018-19842-9</a>.</li>
-<li>Mannocci et al. (2017). Extrapolating cetacean densities to quantitatively assess human impacts on populations in the high seas. <em>Conservation Biology</em> <strong>31</strong>, 601–614. DOI: <a href="https://conbio.onlinelibrary.wiley.com/doi/full/10.1111/cobi.12856">10.1111/cobi.12856</a>.</li>
-<li>Mesgaran et al. (2014). Here be dragons: A tool for quantifying novelty due to covariate range and correlation change when projecting species distribution models. <em>Diversity and Distributions</em> <strong>20</strong>, 1147–1159. DOI: <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12209">10.1111/ddi.12209</a>.</li>
-<li>Miller et al. (2013). Spatial models for distance sampling data: Recent developments and future directions. <em>Methods in Ecology and Evolution</em> <strong>4</strong>, 1001–1010. DOI: <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12105">10.1111/2041-210X.12105</a>.</li>
+<li><p>Mannocci et al. (2018). Assessing cetacean surveys throughout the mediterranean sea: A gap analysis in environmental space. <em>Scientific Reports</em> <strong>8</strong>, art3126. DOI: <a href="https://www.nature.com/articles/s41598-018-19842-9">10.1038/s41598-018-19842-9</a>.</p></li>
+<li><p>Mannocci et al. (2017). Extrapolating cetacean densities to quantitatively assess human impacts on populations in the high seas. <em>Conservation Biology</em> <strong>31</strong>, 601–614. DOI: <a href="https://conbio.onlinelibrary.wiley.com/doi/full/10.1111/cobi.12856">10.1111/cobi.12856</a>.</p></li>
+<li><p>Mesgaran et al. (2014). Here be dragons: A tool for quantifying novelty due to covariate range and correlation change when projecting species distribution models. <em>Diversity and Distributions</em> <strong>20</strong>, 1147–1159. DOI: <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12209">10.1111/ddi.12209</a>.</p></li>
+<li><p>Miller et al. (2013). Spatial models for distance sampling data: Recent developments and future directions. <em>Methods in Ecology and Evolution</em> <strong>4</strong>, 1001–1010. DOI: <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12105">10.1111/2041-210X.12105</a>.</p></li>
+<li><p>King G &amp; Zeng L (2007). When can history be our guide? The pitfalls of counterfactual inference. <em>International Studies Quarterly</em> <strong>51</strong>, 183–210. DOI: <a href="https://doi.org/10.1111/j.1468-2478.2007.00445.x">10.1111/j.1468-2478.2007.00445.x</a>.</p></li>
 </ul>
 </div>
 <div id="acknowledgements" class="section level3">
@@ -111,11 +112,16 @@
 <div id="installation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h3>
-<p>Install the latest development version from Github (requires the <a href="https://github.com/r-lib/remotes">remotes</a> package):</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="st">"remotes"</span>)) {</a>
-<a class="sourceLine" id="cb1-2" title="2">  <span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"remotes"</span>)</a>
-<a class="sourceLine" id="cb1-3" title="3">}</a>
-<a class="sourceLine" id="cb1-4" title="4">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"densitymodelling/dsmextra"</span>)</a></code></pre></div>
+<p>The latest development version can be installed from Github (requires the <a href="https://github.com/r-lib/remotes">remotes</a> package):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="st">"remotes"</span>)) <span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"remotes"</span>)</a>
+<a class="sourceLine" id="cb1-2" title="2">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"densitymodelling/dsmextra"</span>)</a></code></pre></div>
+</div>
+<div id="important-note" class="section level3">
+<h3 class="hasAnchor">
+<a href="#important-note" class="anchor"></a>Important note</h3>
+<p>The <a href="https://r.iq.harvard.edu/docs/whatif/1.5-5/whatif.pdf">WhatIf</a> package, on which <code>dsmextra</code> depends, was removed from CRAN on 2020-03-07. A patch correction has been released as part of version 1.1.0, ensuring that WhatIf is automatically included when <code>dsmextra</code> installs. Alternatively, if any issues arise, WhatIf can be manually installed either from Github or from one of the available <a href="https://cran.r-project.org/web/packages/WhatIf/index.html">package archives</a>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="st">"remotes"</span>)) <span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"remotes"</span>)</a>
+<a class="sourceLine" id="cb2-2" title="2">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"IQSS/WhatIf"</span>)</a></code></pre></div>
 </div>
 <div id="found-a-bug-have-a-feature-request" class="section level3">
 <h3 class="hasAnchor">

@@ -20,6 +20,7 @@ Imports:
     tidyr,
     tidyverse,
     leaflet,
+    Zelig,
     WhatIf,
     dichromat,
     pals,

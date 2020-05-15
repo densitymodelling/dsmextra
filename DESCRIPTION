@@ -8,9 +8,9 @@ Encoding: UTF-8
 Date: 2019-11-04
 LazyData: true
 Depends:
-    R (>= 3.5.0)
-Imports:
     raster,
+    R (>= 3.6.0)
+Imports:
     magrittr,
     plyr,
     dplyr,

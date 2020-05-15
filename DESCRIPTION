@@ -36,7 +36,7 @@ Suggests:
     methods,
     rmarkdown,
     testthat
-Remotes: IQSS/WhatIf,
-    IQSS/Zelig
+Remotes: IQSS/Zelig,
+    IQSS/WhatIf
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr

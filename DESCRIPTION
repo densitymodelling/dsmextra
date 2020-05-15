@@ -28,7 +28,8 @@ Imports:
     utils,
     tools, 
     sp,
-    rgdal
+    rgdal,
+    zeligverse
 Suggests:
     smoothr,
     maps,
@@ -36,7 +37,6 @@ Suggests:
     methods,
     rmarkdown,
     testthat
-Remotes: IQSS/Zelig,
-    IQSS/WhatIf
+Remotes: github::IQSS/Zelig, github::IQSS/WhatIf
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr

@@ -9,7 +9,7 @@ Date: 2019-11-04
 LazyData: true
 Depends:
     raster,
-    R (>= 3.6.0)
+    R (>= 3.5.0)
 Imports:
     magrittr,
     plyr,
@@ -36,6 +36,8 @@ Suggests:
     methods,
     rmarkdown,
     testthat
-Remotes: github::IQSS/WhatIf
+Remotes: 
+    github::IQSS/WhatIf,
+    github::IQSS/Zelig
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr

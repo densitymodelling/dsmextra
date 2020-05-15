@@ -38,7 +38,7 @@ This R package was developed for the [DenMod project](https://synergy.st-andrews
 The latest development version can be installed from Github (requires the [remotes](https://github.com/r-lib/remotes) package):
 
 ```r
-if (!require("remotes"))  install.packages("remotes")
+if (!require("remotes")) install.packages("remotes")
 remotes::install_github("densitymodelling/dsmextra")
 ```
 

@@ -38,20 +38,16 @@ This R package was developed for the [DenMod project](https://synergy.st-andrews
 The latest development version can be installed from Github (requires the [remotes](https://github.com/r-lib/remotes) package):
 
 ```r
-if (!require("remotes")) {
-  install.packages("remotes")
-}
+if (!require("remotes"))  install.packages("remotes")
 remotes::install_github("densitymodelling/dsmextra")
 ```
 
 ### Important note
 
-The [WhatIf](https://r.iq.harvard.edu/docs/whatif/1.5-5/whatif.pdf) package, on which `dsmextra` depends, was removed from CRAN on 2020-03-07. A patch correction has been released as part of version 1.1.0, ensuring that WhatIf is automatically installed from Github. If any issues occur, WhatIf can be installed manually from Github by using the command below, or downloading one of the [package archives](https://cran.r-project.org/web/packages/WhatIf/index.html). 
+The [WhatIf](https://r.iq.harvard.edu/docs/whatif/1.5-5/whatif.pdf) package, on which `dsmextra` depends, was removed from CRAN on 2020-03-07. A patch correction has been released as part of version 1.1.0, ensuring that WhatIf is automatically installed from Github. If any issues arise, WhatIf can be manually installed from Github, or from one of the available [package archives](https://cran.r-project.org/web/packages/WhatIf/index.html). 
 
 ```r
-if (!require("remotes")) {
-  install.packages("remotes")
-}
+if (!require("remotes")) install.packages("remotes")
 remotes::install_github("IQSS/WhatIf")
 ```
 

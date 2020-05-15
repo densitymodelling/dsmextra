@@ -28,8 +28,7 @@ Imports:
     utils,
     tools, 
     sp,
-    rgdal,
-    zeligverse
+    rgdal
 Suggests:
     smoothr,
     maps,

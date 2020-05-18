@@ -48,10 +48,13 @@ remotes::install_github("densitymodelling/dsmextra")
 
 ### Important note
 
-The [WhatIf](https://r.iq.harvard.edu/docs/whatif/1.5-5/whatif.pdf) package, on which `dsmextra` depends, was removed from CRAN on 2020-03-07. A patch correction has been released as part of version 1.1.0, ensuring that WhatIf is automatically included when `dsmextra` installs. Alternatively, if any issues arise, WhatIf can be manually installed either from Github or from one of the available [package archives](https://cran.r-project.org/web/packages/WhatIf/index.html). 
+**May 2020**
+
+The [WhatIf](https://gking.harvard.edu/whatif) package, on which `dsmextra` depends, was removed from CRAN on 2020-03-07. Similarly, the [Zelig](https://zeligproject.org/) package (a dependency of WhatIf) was temporarily archived on 2020-03-24. As this may cause issues when first setting up `dsmextra`, a patch correction has been released under version 1.1.0 to ensure that `WhatIf` and `Zelig` are automatically pulled from Github during installation. Alternatively, both packages can be manually installed either from Github or from their respective archives (see [here](https://cran.r-project.org/web/packages/WhatIf/index.html) and [here](https://cran.r-project.org/web/packages/Zelig/index.html)). 
 
 ```r
 if (!require("remotes")) install.packages("remotes")
+remotes::install_github("IQSS/Zelig")
 remotes::install_github("IQSS/WhatIf")
 ```
 

@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -43,7 +47,6 @@ map.argumentsArguments from map_extrapolation
 
 
 " />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -61,7 +64,7 @@ map.argumentsArguments from map_extrapolation
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -125,9 +128,9 @@ map.argumentsArguments from map_extrapolation
 
     <div class="ref-description">
     <p>Performs a complete evaluation of both univariate (Type I) and combinatorial (Type II) extrapolation in density surface models of line transect data, by calling relevant functions from <code>dsmextra</code>. As such, arguments <code>extrapolation_analysis</code> mirror those of the individual functions from which they are taken:</p><table class='table'>
-<tr><td><code>compare.arguments</code></td><td>Arguments from <code>compare_covariates</code></td></tr>
-<tr><td><code>nearby.arguments</code></td><td>Arguments from <code>compute_nearby</code></td></tr>
-<tr><td><code>map.arguments</code></td><td>Arguments from <code>map_extrapolation</code></td></tr>
+<tr><td><code>compare.arguments</code></td><td>Arguments from <code><a href='compare_covariates.html'>compare_covariates</a></code></td></tr>
+<tr><td><code>nearby.arguments</code></td><td>Arguments from <code><a href='compute_nearby.html'>compute_nearby</a></code></td></tr>
+<tr><td><code>map.arguments</code></td><td>Arguments from <code><a href='map_extrapolation.html'>map_extrapolation</a></code></td></tr>
 </table>
 
 
@@ -178,7 +181,7 @@ map.argumentsArguments from map_extrapolation
     </tr>
     <tr>
       <th>compare.covariates</th>
-      <td><p>Logical. If TRUE, run <code>compare_covariates</code>.</p></td>
+      <td><p>Logical. If TRUE, run <code><a href='compare_covariates.html'>compare_covariates</a></code>.</p></td>
     </tr>
     <tr>
       <th>compare.extrapolation.type</th>
@@ -198,7 +201,7 @@ map.argumentsArguments from map_extrapolation
     </tr>
     <tr>
       <th>nearby.compute</th>
-      <td><p>Logical. If TRUE, run <code>compute_nearby</code>.</p></td>
+      <td><p>Logical. If TRUE, run <code><a href='compute_nearby.html'>compute_nearby</a></code>.</p></td>
     </tr>
     <tr>
       <th>nearby.nearby</th>
@@ -214,7 +217,7 @@ map.argumentsArguments from map_extrapolation
     </tr>
     <tr>
       <th>map.generate</th>
-      <td><p>Logical. If TRUE, run <code>map_extrapolation</code>.</p></td>
+      <td><p>Logical. If TRUE, run <code><a href='map_extrapolation.html'>map_extrapolation</a></code>.</p></td>
     </tr>
     <tr>
       <th>map.sightings</th>
@@ -248,7 +251,7 @@ map.argumentsArguments from map_extrapolation
 <span class='co'># Define covariates of interest</span>
 <span class='no'>my_cov</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Depth"</span>, <span class='st'>"DistToCAS"</span>, <span class='st'>"SST"</span>, <span class='st'>"EKE"</span>, <span class='st'>"NPP"</span>)
 
-<span class='no'>spermw.analysis</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/dsmextra/man/extrapolation_analysis.html'>extrapolation_analysis</a></span>(<span class='kw'>segments</span> <span class='kw'>=</span> <span class='no'>segs</span>,
+<span class='no'>spermw.analysis</span> <span class='kw'>&lt;-</span> <span class='fu'>extrapolation_analysis</span>(<span class='kw'>segments</span> <span class='kw'>=</span> <span class='no'>segs</span>,
                                           <span class='kw'>covariate.names</span> <span class='kw'>=</span> <span class='no'>my_cov</span>,
                                           <span class='kw'>prediction.grid</span> <span class='kw'>=</span> <span class='no'>predgrid</span>,
                                           <span class='kw'>coordinate.system</span> <span class='kw'>=</span> <span class='no'>my_crs</span>,
@@ -284,16 +287,10 @@ map.argumentsArguments from map_extrapolation
 #&gt; <span class='message'>=== Generating maps ===</span></div><div class='output co'>#&gt; <span class='warning'>Warning: map_extrapolation relies on the leaflet package, which is built around a Web Mercator projection (EPSG:3857), and therefore requires rasters to be reprojected for plotting. As a result, minor discrepancies may  occur between the interactive maps shown in the viewer, and the underlying raw data. The latter can be accessed directly from the extrapolation.values or gower.values objects and visualised using alternative packages such as ggplot2.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: map_extrapolation relies on the leaflet package, which is built around a Web Mercator projection (EPSG:3857), and therefore requires rasters to be reprojected for plotting. As a result, minor discrepancies may  occur between the interactive maps shown in the viewer, and the underlying raw data. The latter can be accessed directly from the extrapolation.values or gower.values objects and visualised using alternative packages such as ggplot2.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: map_extrapolation relies on the leaflet package, which is built around a Web Mercator projection (EPSG:3857), and therefore requires rasters to be reprojected for plotting. As a result, minor discrepancies may  occur between the interactive maps shown in the viewer, and the underlying raw data. The latter can be accessed directly from the extrapolation.values or gower.values objects and visualised using alternative packages such as ggplot2.</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>=== Analysis complete! ===</span></div><div class='img'><img src='extrapolation_analysis-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Phil J. Bouchet</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -304,7 +301,7 @@ map.argumentsArguments from map_extrapolation
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

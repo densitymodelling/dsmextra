@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="Quantify the percentage of data nearby — compute_nearby" />
 <meta property="og:description" content="Calculates the proportion of sample (reference) points lying in the vicinity of prediction (target) points in multivariate environmental space. See the 'Details' section and King &amp;amp; Zeng (2007) for a technical explanation." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -174,11 +177,11 @@
     <p>A raster object mapping the proportion of reference data nearby each point in <code>prediction.grid</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>While extrapolation is often seen as a binary concept (i.e. it either does or does not take place), it is reasonable to expect that predictions made at target points situated just outside the sampled environmental space may be more reliable than those made at points far outside it. The ExDet tool available through <code><a href='https://rdrr.io/pkg/dsmextra/man/compute_extrapolation.html'>compute_extrapolation</a></code> inherently quantifies this notion of <em>distance</em> from the envelope of the reference data.</p>
+    <p>While extrapolation is often seen as a binary concept (i.e. it either does or does not take place), it is reasonable to expect that predictions made at target points situated just outside the sampled environmental space may be more reliable than those made at points far outside it. The ExDet tool available through <code><a href='compute_extrapolation.html'>compute_extrapolation</a></code> inherently quantifies this notion of <em>distance</em> from the envelope of the reference data.</p>
 <p>However, the multivariate distribution of reference data points is often far from homogeneous. It is possible, therefore, for target points representing analogue conditions to fall within sparsely sampled regions of the reference space; or conversely, for two target points reflecting an equal degree of extrapolation to have very different amounts of reference data within their vicinity.</p>
 <p>The notion of neighbourhood (or percentage/proportion of data nearby, %N) captures this idea, and provides an additional measure of the reliability of extrapolations in multivariate environmental space (Virgili et al. 2017; Mannocci et al. 2018). In practice, %N for any target point can be defined as the proportion of reference data within a radius of one geometric mean Gower’s distance (G^2), calculated between all pairs of reference points (King and Zeng 2007). The Gower’s distance between two points <em>i</em> and <em>j</em> defined along the axes of <em>K</em> covariates is calculated as the average absolute distance between the values of these two points in each dimension, divided by the range of the data, such that:</p>
 <p>\(G_{ij}^2=\frac{1}{K}\sum_{k=1}^{K}\frac{\left|x_{ik}-x_{jk}\right|}{\textrm{max}(X_k)-\textrm{min}(X_k)}\)</p>
-<p>The <code><a href='https://rdrr.io/pkg/dsmextra/man/compute_nearby.html'>compute_nearby</a></code> function is adapted from the code given in Mannocci et al. (2018) and allows the calculation of Gower’s distances as a basis for defining the neighbourhood.</p>
+<p>The <code>compute_nearby</code> function is adapted from the code given in Mannocci et al. (2018) and allows the calculation of Gower’s distances as a basis for defining the neighbourhood.</p>
 <p>In addition, the <code><a href='https://rdrr.io/pkg/WhatIf/man/whatif.html'>whatif</a></code> function from the <a href='https://CRAN.R-project.org/package=WhatIf'>Whatif</a> package (Gandrud et al. 2017), which <code>compute_nearby</code> calls internally, may not run on very large datasets. Running calculations on partitions of the data may circumvent this problem and lead to speed gains. Two arguments can be used to do this:</p><table class='table'>
 <tr><td><code>max.size</code></td><td>Threshold above which partitioning will be triggered</td></tr>
 <tr><td><code>no.partitions</code></td><td>Number of required partitions</td></tr>
@@ -208,24 +211,16 @@
  +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"</span>)
 
 <span class='co'># Assess the percentage of data nearby</span>
-<span class='no'>spermw.nearby</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/dsmextra/man/compute_nearby.html'>compute_nearby</a></span>(<span class='kw'>segments</span> <span class='kw'>=</span> <span class='no'>segs</span>,
+<span class='no'>spermw.nearby</span> <span class='kw'>&lt;-</span> <span class='fu'>compute_nearby</span>(<span class='kw'>segments</span> <span class='kw'>=</span> <span class='no'>segs</span>,
                                <span class='kw'>prediction.grid</span> <span class='kw'>=</span> <span class='no'>predgrid</span>,
                                <span class='kw'>coordinate.system</span> <span class='kw'>=</span> <span class='no'>my_crs</span>,
                                <span class='kw'>covariate.names</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Depth"</span>, <span class='st'>"DistToCAS"</span>, <span class='st'>"SST"</span>, <span class='st'>"EKE"</span>, <span class='st'>"NPP"</span>),
                                <span class='kw'>nearby</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>Preprocessing data ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating distances ....</span></div><div class='output co'>#&gt; <span class='message'>Calculating the geometric variance...</span></div><div class='output co'>#&gt; <span class='message'>Calculating cumulative frequencies ...</span></div><div class='output co'>#&gt; <span class='message'>Finishing up ...</span></div><div class='output co'>#&gt; <span class='message'>Done!</span></div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Phil J. Bouchet, Laura Mannocci.</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -236,7 +231,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

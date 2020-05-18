@@ -22,3 +22,4 @@ Print the summary of extrapolation results (already calculated by \code{\link{co
 \author{
 David L Miller
 }
+\keyword{internal}

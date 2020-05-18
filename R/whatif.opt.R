@@ -29,7 +29,8 @@
 #' King G, Zeng L (2007). When can history be our guide? The pitfalls of counterfactual inference. International Studies Quarterly 51, 183–210. DOI: \href{https://www.jstor.org/stable/pdf/4621707.pdf?seq=1#page_scan_tab_contents}{10.1111/j.1468-2478.2007.00445.x}
 #'
 #' Henry L, Wickham H (2019). purrr: Functional Programming Tools. R package version 0.3.2. \href{https://CRAN.R-project.org/package=purrr}{https://CRAN.R-project.org/package=purrr}.
-#'
+#'@keywords internal
+
 whatif.opt <- function (formula = NULL,
                         data, cfact,
                         nearby = 1,

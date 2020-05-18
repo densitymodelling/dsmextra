@@ -8,6 +8,8 @@
 #' @param digits precision of results
 #' @param \dots for S3 compatability
 #' @return invisibly returns the summary part of the object only, printing the results
+#' @keywords internal
+
 print.extrapolation_results_summary <- function(x, digits=2, ...){
 
   class(x) <- class(x)[-1]

@@ -53,3 +53,4 @@ Henry L, Wickham H (2019). purrr: Functional Programming Tools. R package versio
 \author{
 Phil J. Bouchet
 }
+\keyword{internal}

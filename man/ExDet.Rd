@@ -27,3 +27,4 @@ Broennimann O, Di Cola V, Guisan A (2016). ecospat: Spatial Ecology Miscellaneou
 \author{
 Phil J. Bouchet
 }
+\keyword{internal}

@@ -187,7 +187,7 @@ predgrid %>%
 In practice, `compute_extrapolation` returns a list containing both `data.frames` (extrapolation values) and `rasters` (spatial representation of these values), with the following structure:
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-str(spermwhale.extrapolation)
+str(spermwhale.extrapolation, 2)
 ```
 
 Three types of extrapolation can be identified (**Figure 2**):
@@ -196,7 +196,7 @@ Three types of extrapolation can be identified (**Figure 2**):
 + **Combinatorial** extrapolation occurs when `ExDet` values > 1. This is also known as *multivariate* or *Type 2* extrapolation, and describes novel combinations of values encountered within the univariate range of reference covariates. Such combinations are identified based on the Mahalanobis distance metric (D^2^), a well-known and scale-invariant measure of multivariate outliers [@Rousseeuw1990].
 + Lastly, values between 0 and 1 denote predictions made in **analogue** conditions. These correspond to what is commonly referred to as *interpolation*, although if found in a different region in space or past/future period in time, then the terms *geographical/temporal* extrapolation are sometimes also used.
 
-```{r ExDet, echo=FALSE, out.width = '50%', fig.align="center", fig.cap="<b>Fig. 2:</b> Schematic representation of extrapolation in multivariate environmental space, based on two hypothetical covariates. Reference data points are represented as grey circles. Shaded areas correspond to different types of extrapolation outside the envelope of the reference data. Univariate extrapolation occurs beyond the range of individual covariates. Combinatorial extrapolation occurs within this range, but outside the reference hyperspace/hypervolume. <u>Source</u>: @Bouchet2019, adapted from @Mesgaran2014."}
+```{r ExDet, echo=FALSE, out.width = '50%', fig.align="left", fig.cap="<b>Fig. 2:</b> Schematic representation of extrapolation in multivariate environmental space, based on two hypothetical covariates. Reference data points are represented as grey circles. Shaded areas correspond to different types of extrapolation outside the envelope of the reference data. Univariate extrapolation occurs beyond the range of individual covariates. Combinatorial extrapolation occurs within this range, but outside the reference hyperspace/hypervolume. <u>Source</u>: @Bouchet2019, adapted from @Mesgaran2014."}
 knitr::include_graphics("dsmextra_Figure2.png")
 ```
 
@@ -259,7 +259,7 @@ However, the multivariate distribution of reference data points is often far fro
 
 An example of this is shown in **Figure 3B**, where three target points $x_1$, $x_2$ and $x_3$ are located equally close to the envelope of the reference data. In essence, these reflect identical degrees of extrapolation, as defined under the ExDet framework. However, given the shape of the data cloud in multivariate space, it is clear that predictions made at target point $x_1$ will far 'better informed' by the sample than those made at $x_2$ or $x_3$, as a bigger cluster of reference points lies in their vicinity (green circle around $x_1$).
 
-```{r neighbour, echo=FALSE, out.width = '85%', fig.align="center", fig.cap="<b>Fig. 3:</b> Conceptual representation of two key extrapolation metrics. (A) Distance from the sampled environmental space. A target point far from the envelope of the reference data (eg. falling in the yellow area) is arguably 'more of an extrapolation' than one close to it (eg. falling in the purple area).  (B) Neighbourhood (syn. percentage of data nearby). Due to the shape of the reference data cloud, the amount of sample information available to 'inform' predictions made at target points can vary considerably. <u>Source</u>: @Bouchet2019."}
+```{r neighbour, echo=FALSE, out.width = '85%', fig.align="left", fig.cap="<b>Fig. 3:</b> Conceptual representation of two key extrapolation metrics. (A) Distance from the sampled environmental space. A target point far from the envelope of the reference data (eg. falling in the yellow area) is arguably 'more of an extrapolation' than one close to it (eg. falling in the purple area).  (B) Neighbourhood (syn. percentage of data nearby). Due to the shape of the reference data cloud, the amount of sample information available to 'inform' predictions made at target points can vary considerably. <u>Source</u>: @Bouchet2019."}
 knitr::include_graphics("dsmextra_Figure3.png")
 ```
 

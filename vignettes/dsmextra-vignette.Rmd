@@ -103,11 +103,6 @@ knitr::kable(head(predgrid), format = "pandoc")
 
 A quick map is useful to assess the distribution of sperm whale sightings throughout the area. (Note: the transect lines (`transects`) and sightings (`obs`) are not included in the package, but are shown here for illustrative purposes).
 
-
-```{r echo=TRUE, message=FALSE, warning=FALSE, include=FALSE}
-load('../R/sysdata.rda')
-```
-
 ```{r echo=TRUE, message=FALSE, warning=FALSE, fig.cap="<b>Fig. 1:</b> Distribution of sperm whale (<em>Physeter macrocephalus</em>) sightings within the study area off the US East coast. Surveyed transects are shown as solid lines."}
 #'---------------------------------------------
 # Create an outline of the study area boundaries

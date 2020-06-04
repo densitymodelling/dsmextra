@@ -47,10 +47,10 @@ library(raster)
 library(magrittr)
 ```
 
-Alternatively, the latest development version can be installed from GitHub (this requires the [devtools](https://cran.r-project.org/web/packages/devtools/index.html) package):
+Alternatively, the latest development version can be installed from GitHub (this requires the [remotes](https://cran.r-project.org/web/packages/remotes/index.html) package):
 
 ```{r eval=FALSE, include=TRUE}
-devtools::install_github("densitymodelling/dsmextra", dependencies = TRUE, build_vignettes = FALSE)
+remotes::install_github("densitymodelling/dsmextra", dependencies = TRUE)
 ```
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}

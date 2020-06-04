@@ -35,7 +35,7 @@ If you are just getting started with `dsmextra`, we recommend reading the tutori
 
 ### Acknowledgements
 
-This R package was developed for the [DenMod project](https://synergy.st-andrews.ac.uk/denmod/) (Working group for the advancement of marine species density surface modelling), and was funded by OPNAV N45 and the SURTASS LFA Settlement Agreement, being managed by the U.S. Navy’s Living Marine Resources program under Contract No. N39430-17-C-1982.
+This R package was developed for the [DenMod project](https://synergy.st-andrews.ac.uk/denmod/) (Working group for the advancement of marine species density surface modelling), and was funded by OPNAV N45 and the SURTASS LFA Settlement Agreement, being managed by the U.S. Navy’s Living Marine Resources program under Contract No. N39430-17-C-1982. The sperm whale data showcased in the [online vignette](https://densitymodelling.github.io/dsmextra/articles/dsmextra-vignette.html) were provided by Debi Palka (NOAA North East Fisheries Science Center) and Lance Garrison (NOAA South East Fisheries Science Center). Initial data processing was undertaken by Jason Roberts (Marine Geospatial Ecology Lab, Duke University).
 
 ### Installation
 

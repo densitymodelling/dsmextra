@@ -68,7 +68,7 @@ compare_covariates <- function(extrapolation.type = "both",
   # Perform function checks
   #---------------------------------------------
 
-  if(!extrapolation.type%in%c("both", "univariate", "multivariate"))
+  if(!extrapolation.type%in%c("both", "univariate", "combinatorial"))
     stop("Unknown extrapolation type")
 
   if(!is.null(n.covariates)){
@@ -215,7 +215,7 @@ compare_covariates <- function(extrapolation.type = "both",
 
   vars <- exsum %>%
     purrr::map(.x = ., .f = ~.x[names(.x)%in%paste0(extype, ".n")]) %>%
-    unlist(.)
+    unlist(., use.names = FALSE)
 
   #---------------------------------------------
   # Build text string of variables

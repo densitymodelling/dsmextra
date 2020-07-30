@@ -7,7 +7,7 @@
 ExDet(ref, tg, xp)
 }
 \arguments{
-\item{ref}{Reference data. A data.frame with the values of the variables (i.e. columns) for each sample point (segments).}
+\item{ref}{Reference data. A data.frame with the values of the variables (i.e. columns) for each sample unit (e.g. segments).}
 
 \item{tg}{Target data. A data.frame with the values of the variables (i.e. columns) for each point of the prediction extent.}
 

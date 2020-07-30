@@ -19,7 +19,7 @@ my_crs <- sp::CRS("+proj=aea +lat_1=38 +lat_2=30 +lat_0=34 +lon_0=-73 +x_0=0 +y_
 # Define covariates of interest
 my_cov <- c("Depth", "DistToCAS", "SST", "EKE", "NPP")
 
-suppressWarnings(spermw.extra <- compute_extrapolation(segments = segs,
+suppressWarnings(spermw.extra <- compute_extrapolation(samples = segs,
                                       covariate.names = my_cov,
                                       prediction.grid = predgrid,
                                       coordinate.system = my_crs))

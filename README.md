@@ -5,7 +5,7 @@
 [![DOI](https://img.shields.io/badge/DOI-10.5281.zenodo.3529465-green.svg?style=flat-square)](https://doi.org/10.5281/zenodo.3529465)
 <!-- badges: end -->
 
-`dsmextra` provides a toolkit for quantifying and visualising extrapolation in ecological models (with a focus on density surface models, as implemented in package [dsm](https://cran.r-project.org/web/packages/dsm/index.html)) projected into novel environmental space. Currently, `dsmextra` defines extrapolation on the basis of two metrics: **(1) ExDet** (Mesgaran et al. 2014), and **(2) %N** (the percentage of data nearby, King & Zeng 2007). 
+`dsmextra` provides a toolkit for quantifying and visualising extrapolation in spatially-explicit ecological models (with a focus on density surface models, as implemented in package [dsm](https://cran.r-project.org/web/packages/dsm/index.html)) projected into novel environmental space. Currently, `dsmextra` defines extrapolation on the basis of two metrics: **(1) ExDet** (Mesgaran et al. 2014), and **(2) %N** (the percentage of data nearby, King & Zeng 2007). 
 
 `dsmextra` offers a variety of numerical and graphical outputs, including summary plots and interactive maps created as [ggplot2](https://ggplot2.tidyverse.org/) and [html](https://rstudio.github.io/leaflet/) objects, respectively. Additional functionality (e.g. assessment methods for dynamic covariates) will be added in future releases.
 

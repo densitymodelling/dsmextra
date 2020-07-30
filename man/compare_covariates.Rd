@@ -6,7 +6,7 @@
 \usage{
 compare_covariates(
   extrapolation.type = "both",
-  segments,
+  samples,
   covariate.names,
   n.covariates = NULL,
   prediction.grid,
@@ -19,7 +19,7 @@ compare_covariates(
 \arguments{
 \item{extrapolation.type}{Character string. Type of extrapolation to be assessed. Can be one of \code{univariate}, \code{combinatorial}, or \code{both} (default).}
 
-\item{segments}{Segment data.frame (i.e. surveyed transects divided into segments for analysis). This is the reference dataset used for model building and calibration. This must contain one column for each of the covariates in \code{covariate.names}.}
+\item{samples}{Sample (reference) dataset used for model building and calibration. This corresponds to the \code{segment.data} used when building density surface models in \code{dsm}. It must contain one column for each of the covariates in \code{covariate.names}.}
 
 \item{covariate.names}{Character string. Names of the covariates of interest.}
 
@@ -66,7 +66,7 @@ my_cov <- c("Depth", "SST", "NPP", "DistToCAS", "EKE")
 compare_covariates(extrapolation.type = "both",
                   covariate.names = my_cov,
                   n.covariates = NULL,
-                  segments = segs,
+                  samples = segs,
                   prediction.grid = predgrid,
                   coordinate.system = my_crs,
                   create.plots = TRUE,

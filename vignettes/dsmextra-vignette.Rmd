@@ -82,7 +82,7 @@ This vignette covers all the steps required to undertake an extrapolation assess
 + Generate maps of extrapolation using `map_extrapolation`.
 + Run a full assessment using `extrapolation_analysis`.
 
-The data for this example are included in `dsmextra` as a list containing information about both (1) the surveyed area (i.e. the line transects 'chopped' into segments) and (2) the prediction area. We refer to `segs` as the **reference (or calibration) data/system/conditions**, and to `predgrid`as the **target data/system/conditions** [@Sequeira2018]. Note that `predgrid` holds the coordinates and covariate values for grid cells over which density surface model predictions are sought (although model fitting is outside the scope of this vignette).
+The data for this example are included in `dsmextra` as a list containing information about both (1) the surveyed area (i.e. here, the line transects 'chopped' into segments) and (2) the prediction area. We refer to `segs` as the **reference (or calibration) data/system/conditions**, and to `predgrid`as the **target data/system/conditions** [@Sequeira2018]. Note that `predgrid` holds the coordinates and covariate values for grid cells over which density surface model predictions are sought (although model fitting is outside the scope of this vignette).
 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -152,7 +152,7 @@ To assess extrapolation in environmental space, we can run the extrapolation det
 
 The following arguments are required:
 
-+ `segments`: reference data
++ `samples`: reference data
 + `covariate.names`: names of covariates of interest
 + `prediction.grid`: target data
 + `coordinate.system`: projected coordinate system relevant to study location
@@ -160,7 +160,7 @@ The following arguments are required:
 Here, we store the results in an object called `spermwhale.extrapolation`. Values are expressed as both the number (`n`) of grid cells subject to extrapolation, and the proportion (`%`) of the target system that this represents.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-spermwhale.extrapolation <- compute_extrapolation(segments = segs, 
+spermwhale.extrapolation <- compute_extrapolation(samples = segs, 
                                    covariate.names = covariates.spermwhale, 
                                    prediction.grid = predgrid,
                                    coordinate.system = aftt_crs)
@@ -222,7 +222,7 @@ The `compare_covariates` function is available for this purpose. It is designed 
 Additional arguments include:
 
 + `extrapolation.type`: one of `'univariate'`, `'combinatorial'` or `'both'`
-+ `segments`: reference data
++ `samples`: reference data
 + `covariate.names`: names of covariates of interest
 + `prediction.grid`: target data
 + `coordinate.system`: projected coordinate system relevant to study location
@@ -235,7 +235,7 @@ Below is an example for both types of extrapolation (univariate and combinatoria
 compare_covariates(extrapolation.type = "both",
                    covariate.names = covariates.spermwhale,
                    n.covariates = NULL,
-                   segments = segs, 
+                   samples = segs, 
                    prediction.grid = predgrid,
                    coordinate.system = aftt_crs,
                    create.plots = TRUE,
@@ -274,7 +274,7 @@ The `nearby` argument to this function corresponds to the radius within which ne
 # Calculate Gower's distances and %N
 #'---------------------------------------------
 
-spermwhale.nearby <- compute_nearby(segments = segs, 
+spermwhale.nearby <- compute_nearby(samples = segs, 
                                     prediction.grid = predgrid, 
                                     coordinate.system = aftt_crs,
                                     covariate.names = covariates.spermwhale,
@@ -356,7 +356,7 @@ For simplicity, all the above analyses can be performed in a single step by call
 # One function to bring them all, and in the darkness bind them.
 #'---------------------------------------------
 
-spermwhale.analysis <- extrapolation_analysis(segments = segs,
+spermwhale.analysis <- extrapolation_analysis(samples = segs,
                                           covariate.names = covariates.spermwhale,
                                           prediction.grid = predgrid,
                                           coordinate.system = aftt_crs,

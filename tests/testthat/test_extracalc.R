@@ -24,14 +24,14 @@ my_cov <- c("Depth", "DistToCAS", "SST", "EKE", "NPP")
 
 testthat::test_that("Do we get the same results?",{
 
-  suppressWarnings(spermw.extra <- compute_extrapolation(segments = segs,
+  suppressWarnings(spermw.extra <- compute_extrapolation(samples = segs,
                         covariate.names = my_cov,
                         prediction.grid = predgrid,
                         coordinate.system = my_crs))
 
   testthat::expect_equal(spermw.extra$summary$extrapolation$univariate.n, 105, tolerance = par.tol)
 
-  suppressWarnings(spermw.near <- compute_nearby(segments = segs,
+  suppressWarnings(spermw.near <- compute_nearby(samples = segs,
                                 covariate.names = my_cov,
                                 prediction.grid = predgrid,
                                 coordinate.system = my_crs,

@@ -42,14 +42,14 @@
 #' compare_covariates(extrapolation.type = "both",
 #'                   covariate.names = my_cov,
 #'                   n.covariates = NULL,
-#'                   segments = segs,
+#'                   samples = segs,
 #'                   prediction.grid = predgrid,
 #'                   coordinate.system = my_crs,
 #'                   create.plots = TRUE,
 #'                   display.percent = TRUE)
 #' @author Phil J. Bouchet
 compare_covariates <- function(extrapolation.type = "both",
-                               segments,
+                               samples,
                                covariate.names,
                                n.covariates = NULL,
                                prediction.grid,
@@ -77,7 +77,7 @@ compare_covariates <- function(extrapolation.type = "both",
 
   coordinate.system <- check_crs(coordinate.system = coordinate.system)
 
-  segments <- na.omit(segments)
+  samples <- na.omit(samples)
   prediction.grid <- na.omit(prediction.grid)
 
   #---------------------------------------------
@@ -171,7 +171,7 @@ compare_covariates <- function(extrapolation.type = "both",
   extrap <- suppressMessages(purrr::map(.x = combs,
                                         .f = ~{
                                           pb$tick()$print()
-                                          compute_extrapolation(segments = segments,
+                                          compute_extrapolation(samples = samples,
                                                                 covariate.names = .x,
                                                                 prediction.grid = prediction.grid,
                                                                 coordinate.system = coordinate.system)},

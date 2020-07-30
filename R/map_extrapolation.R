@@ -41,13 +41,13 @@
 #'  my_cov <- c("Depth", "DistToCAS", "SST", "EKE", "NPP")
 #'
 #' # Assess extrapolation in the multivariate space defined by five covariates
-#' spermw.extrapolation <- compute_extrapolation(segments = segs,
+#' spermw.extrapolation <- compute_extrapolation(samples = segs,
 #'       covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
 #'       prediction.grid = predgrid,
 #'       coordinate.system = my_crs)
 #'
 #' # Assess the percentage of data nearby
-#' spermw.nearby <- compute_nearby(segments = segs,
+#' spermw.nearby <- compute_nearby(samples = segs,
 #'                                prediction.grid = predgrid,
 #'                                coordinate.system = my_crs,
 #'                                covariate.names = my_cov,

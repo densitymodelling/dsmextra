@@ -19,21 +19,21 @@ testthat::test_that("Missing columns",{
 
   # Missing covariates
 
-  testthat::expect_error(object = compute_extrapolation(segments = segs,
+  testthat::expect_error(object = compute_extrapolation(samples = segs,
                         covariate.names = my_cov,
                         prediction.grid = predgrid[, 1:3],
                         coordinate.system = my_crs),
                         regexp = "Missing/unrecognised covariates in the prediction grid")
 
-  testthat::expect_error(object = compute_extrapolation(segments = segs[,1:4],
+  testthat::expect_error(object = compute_extrapolation(samples = segs[,1:4],
                                                         covariate.names = my_cov,
                                                         prediction.grid = predgrid,
                                                         coordinate.system = my_crs),
-                         regexp = "Missing/unrecognised covariates in the segment data")
+                         regexp = "Missing/unrecognised covariates in the sample data")
 
   # Missing coordinates
 
-  testthat::expect_error(object = compute_extrapolation(segments = segs,
+  testthat::expect_error(object = compute_extrapolation(samples = segs,
                                                         covariate.names = my_cov,
                                                         prediction.grid = predgrid[, !names(predgrid)%in%c("x")] ,
                                                         coordinate.system = my_crs),
@@ -48,24 +48,24 @@ testthat::test_that("Wrong inputs",{
   segs.pts <- sp::SpatialPointsDataFrame(coords = segs[, c("x", "y")], data = segs, proj4string = my_crs)
   pred.pts <- sp::SpatialPointsDataFrame(coords = predgrid[, c("x", "y")], data = predgrid, proj4string = my_crs)
 
-  testthat::expect_error(object = compute_extrapolation(segments = segs.pts,
+  testthat::expect_error(object = compute_extrapolation(samples = segs.pts,
                                                         covariate.names = my_cov,
                                                         prediction.grid = predgrid,
                                                         coordinate.system = my_crs),
-                         regexp = "segments must be of class data.frame")
+                         regexp = "samples must be of class data.frame")
 
   # Covariate names don't match ----------------------------------
 
   segs.wrongnames <- segs; names(segs.wrongnames) <- tolower(names(segs))
   pred.wrongnames <- predgrid; names(pred.wrongnames) <- tolower(names(predgrid))
 
-  testthat::expect_error(object = compute_extrapolation(segments = segs.wrongnames,
+  testthat::expect_error(object = compute_extrapolation(samples = segs.wrongnames,
                                                         covariate.names = my_cov,
                                                         prediction.grid = predgrid,
                                                         coordinate.system = my_crs),
-                         regexp = "Missing/unrecognised covariates in the segment data")
+                         regexp = "Missing/unrecognised covariates in the sample data")
 
-  testthat::expect_error(object = compute_extrapolation(segments = segs,
+  testthat::expect_error(object = compute_extrapolation(samples = segs,
                                                         covariate.names = my_cov,
                                                         prediction.grid = pred.wrongnames,
                                                         coordinate.system = my_crs),
@@ -73,7 +73,7 @@ testthat::test_that("Wrong inputs",{
 
   # Unrecognised coordinate system ----------------------------------
 
-  testthat::expect_error(object = compute_extrapolation(segments = segs,
+  testthat::expect_error(object = compute_extrapolation(samples = segs,
                                                         covariate.names = my_cov,
                                                         prediction.grid = predgrid,
                                                         coordinate.system = "batman"),
@@ -81,7 +81,7 @@ testthat::test_that("Wrong inputs",{
 
   # Missing coordinate system ----------------------------------
 
-  testthat::expect_error(object = compute_extrapolation(segments = segs,
+  testthat::expect_error(object = compute_extrapolation(samples = segs,
                                                         covariate.names = my_cov,
                                                         prediction.grid = predgrid),
                          regexp = "argument \"coordinate.system\" is missing, with no default")
@@ -91,7 +91,7 @@ testthat::test_that("Wrong inputs",{
   # compare_covariates
 
   testthat::expect_error(object = compare_covariates(extrapolation.type = "bananas",
-                                                     segments = segs,
+                                                     samples = segs,
                                                      covariate.names = my_cov,
                                                      n.covariates = 3,
                                                      prediction.grid = predgrid,
@@ -99,7 +99,7 @@ testthat::test_that("Wrong inputs",{
                          regexp = "Unknown extrapolation type")
 
   testthat::expect_error(object = compare_covariates(extrapolation.type = "both",
-                                                     segments = segs,
+                                                     samples = segs,
                                                      covariate.names = my_cov,
                                                      n.covariates = 15,
                                                      prediction.grid = predgrid,
@@ -108,14 +108,14 @@ testthat::test_that("Wrong inputs",{
 
   # compute_nearby
 
-  testthat::expect_error(object = compute_nearby(segments = segs,
+  testthat::expect_error(object = compute_nearby(samples = segs,
                                                  prediction.grid = predgrid,
                                                  coordinate.system = my_crs,
                                                  covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
                                                  nearby = 0),
                          regexp = "nearby must be strictly positive")
 
-  testthat::expect_error(object = compute_nearby(segments = segs,
+  testthat::expect_error(object = compute_nearby(samples = segs,
                                                  prediction.grid = predgrid,
                                                  coordinate.system = my_crs,
                                                  covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
@@ -123,7 +123,7 @@ testthat::test_that("Wrong inputs",{
                                                  max.size = "big data"),
                          regexp = "Non-numeric input to argument: max.size")
 
-  testthat::expect_error(object = compute_nearby(segments = segs,
+  testthat::expect_error(object = compute_nearby(samples = segs,
                                                  prediction.grid = predgrid,
                                                  coordinate.system = my_crs,
                                                  covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
@@ -132,7 +132,7 @@ testthat::test_that("Wrong inputs",{
 
   # map_extrapolation
 
-  suppressWarnings(extrapolation.calc <- compute_extrapolation(segments = segs,
+  suppressWarnings(extrapolation.calc <- compute_extrapolation(samples = segs,
                                               covariate.names = my_cov,
                                               prediction.grid = predgrid,
                                               coordinate.system = my_crs))

@@ -2,7 +2,7 @@
 #'
 #' Assesses univariate (Type I) and combinatorial (Type II) extrapolation between a reference system (ref) and a projection system (p). See Mesgaran et al. (2014) for an explanation. This function is an updated version of some original code from the \code{\link[ecospat]{ecospat}} package (Broennimann et al. 2016).
 #'
-#' @param ref Reference data. A data.frame with the values of the variables (i.e. columns) for each sample point (segments).
+#' @param ref Reference data. A data.frame with the values of the variables (i.e. columns) for each sample unit (e.g. segments).
 #' @param tg Target data. A data.frame with the values of the variables (i.e. columns) for each point of the prediction extent.
 #' @param xp Character string. Names of the covariates of interest.
 #' @return Returns a tibble with four columns. (1) \code{ExDet}: Value of the ExDet metric (negative for univariate extrapolation, >1 for combinatorial extrapolation, within the range 0-1 for analogue conditions). (2) \code{mic_univariate}: Integer indicating the covariate with the largest contribution to univariate extrapolation (most influential covariate, MIC).  (3) \code{mic_combinatorial}: Integer indicating the covariate with the largest contribution to combinatorial extrapolation. (4) \code{mic}: most influential covariate.

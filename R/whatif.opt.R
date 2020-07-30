@@ -7,7 +7,7 @@
 #'   \code{max.size} \tab Threshold above which partitioning will be triggered \cr
 #'   \code{no.partitions} \tab Number of required partitions \cr
 #'  }
-#'  In practice, a run of \code{\link{compute_nearby}} begins with a quick assessment of the dimensions of the input data, i.e. the reference and target data.frames. If the product of their dimensions (i.e. number of segments multiplied by number of prediction grid cells) exceeds the value set for \code{max.size}, then \code{no.partitions} subsets of the data will be created and the computations run on each using map functions from the \code{\link{purrr}} package (Henry and Wickham 2019). This means that a smaller \code{max.size} will trigger partitioning on correspondingly smaller datasets. By default, \code{max.size} is set to \code{1e7}. This value was chosen arbitrarily, and should be sufficiently large as to obviate the need for partitioning on most datasets.
+#'  In practice, a run of \code{\link{compute_nearby}} begins with a quick assessment of the dimensions of the input data, i.e. the reference and target data.frames. If the product of their dimensions (i.e. number of samples multiplied by number of prediction grid cells) exceeds the value set for \code{max.size}, then \code{no.partitions} subsets of the data will be created and the computations run on each using map functions from the \code{\link{purrr}} package (Henry and Wickham 2019). This means that a smaller \code{max.size} will trigger partitioning on correspondingly smaller datasets. By default, \code{max.size} is set to \code{1e7}. This value was chosen arbitrarily, and should be sufficiently large as to obviate the need for partitioning on most datasets.
 #'
 #' @param formula An optional formula without a dependent variable, allowing transformations of combinations of the variables in both data and cfact.
 #' @param data Either a model output object, or a n-by-k non-character (logical or numeric) matrix or data frame of observed covariate data with n data points or units and k covariates.
@@ -248,7 +248,7 @@ whatif.opt <- function (formula = NULL,
     chunkdat <- purrr::map(.x = nlist, .f = ~dat[.x,])
     chunkcf <- purrr::map(.x = mlist, .f = ~cf[.x,])
 
-    # split segments then rbind
+    # split samples then rbind
     # split predgrid then cbind
 
     pb <- dplyr::progress_estimated(split.factor, 0) # Progress bar

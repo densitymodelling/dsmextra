@@ -5,7 +5,7 @@
 \title{Full extrapolation assessment}
 \usage{
 extrapolation_analysis(
-  segments,
+  samples,
   covariate.names,
   prediction.grid,
   coordinate.system,
@@ -25,7 +25,7 @@ extrapolation_analysis(
 )
 }
 \arguments{
-\item{segments}{Segment data.frame (i.e. surveyed transects divided into segments for analysis). This is the reference dataset used for model building and calibration. This must contain one column for each of the covariates in \code{covariate.names}.}
+\item{samples}{Sample (reference) dataset used for model building and calibration. This corresponds to the \code{segment.data} used when building density surface models in \code{dsm}. It must contain one column for each of the covariates in \code{covariate.names}.}
 
 \item{covariate.names}{Character string. Names of the covariates of interest.}
 
@@ -49,7 +49,7 @@ extrapolation_analysis(
 
 \item{nearby.nearby}{Scalar indicating which reference data points are considered to be 'nearby' (i.e. withing ‘nearby’ mean geometric Gower's distances of) prediction points. Defaults to 1.}
 
-\item{nearby.max.size}{Minimum size threshold for partitioning computations. Calculated as \code{\link[base]{prod}(\link[base]{nrow}(segments),\link[base]{nrow}(prediction.grid))}. Has a default value of \code{1e7}.}
+\item{nearby.max.size}{Minimum size threshold for partitioning computations. Calculated as \code{\link[base]{prod}(\link[base]{nrow}(samples),\link[base]{nrow}(prediction.grid))}. Has a default value of \code{1e7}.}
 
 \item{nearby.no.partitions}{Integer. Number of desired partitions of the data (default of 10).}
 
@@ -84,7 +84,7 @@ my_crs <- sp::CRS("+proj=aea +lat_1=38 +lat_2=30 +lat_0=34 +lon_0=-73 +x_0=0
 # Define covariates of interest
 my_cov <- c("Depth", "DistToCAS", "SST", "EKE", "NPP")
 
-spermw.analysis <- extrapolation_analysis(segments = segs,
+spermw.analysis <- extrapolation_analysis(samples = segs,
                                           covariate.names = my_cov,
                                           prediction.grid = predgrid,
                                           coordinate.system = my_crs,

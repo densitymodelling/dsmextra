@@ -17,11 +17,11 @@
 #'   \code{max.size} \tab Threshold above which partitioning will be triggered \cr
 #'   \code{no.partitions} \tab Number of required partitions \cr
 #'  }
-#' In practice, a run of \code{compute_nearby} begins with a quick assessment of the dimensions of the input data, i.e. the reference and target data.frames. If the product of their dimensions (i.e. number of segments multiplied by number of prediction grid cells) exceeds the value set for \code{max.size}, then \code{no.partitions} subsets of the data will be created and the computations run on each using \code{\link[purrr]{map}} functions from the \href{https://cran.r-project.org/web/packages/purrr/index.html}{purrr} package (Henry and Wickham 2019). This means that a smaller \code{max.size} will trigger partitioning on correspondingly smaller datasets. By default, \code{max.size} is set to \code{1e7}. This value was chosen arbitrarily, and should be sufficiently large as to obviate the need for partitioning on most datasets.
+#' In practice, a run of \code{compute_nearby} begins with a quick assessment of the dimensions of the input data, i.e. the reference and target data.frames. If the product of their dimensions (i.e. number of samples multiplied by number of prediction grid cells) exceeds the value set for \code{max.size}, then \code{no.partitions} subsets of the data will be created and the computations run on each using \code{\link[purrr]{map}} functions from the \href{https://cran.r-project.org/web/packages/purrr/index.html}{purrr} package (Henry and Wickham 2019). This means that a smaller \code{max.size} will trigger partitioning on correspondingly smaller datasets. By default, \code{max.size} is set to \code{1e7}. This value was chosen arbitrarily, and should be sufficiently large as to obviate the need for partitioning on most datasets.
 #'
 #' @inheritParams compute_extrapolation
 #' @param nearby Scalar indicating which reference data points are considered to be 'nearby' (i.e. within ‘nearby’ mean geometric Gower's distances of) prediction points. Defaults to 1, as per Mannocci et al. (2018) and Virgili et al. (2017).
-#' @param max.size Minimum size threshold for partitioning computations. Calculated as \code{\link[base]{prod}(\link[base]{nrow}(segments),\link[base]{nrow}(prediction.grid))}. Has a default value of \code{1e7}. See the 'Details' section.
+#' @param max.size Minimum size threshold for partitioning computations. Calculated as \code{\link[base]{prod}(\link[base]{nrow}(samples),\link[base]{nrow}(prediction.grid))}. Has a default value of \code{1e7}. See the 'Details' section.
 #' @param no.partitions Integer. Number of desired partitions of the data (default of 10). See the 'Details' section.
 #' @param resolution Resolution of the output raster (in units relevant to \code{coordinate.system}). Only required if \code{prediction.grid} is irregular, and thus needs to be rasterised. Defaults to NULL.
 #' @return A raster object mapping the proportion of reference data nearby each point in \code{prediction.grid}.
@@ -55,12 +55,12 @@
 #'  +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
 #'
 #' # Assess the percentage of data nearby
-#' spermw.nearby <- compute_nearby(segments = segs,
+#' spermw.nearby <- compute_nearby(samples = segs,
 #'                                prediction.grid = predgrid,
 #'                                coordinate.system = my_crs,
 #'                                covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),
 #'                                nearby = 1)
-compute_nearby <- function (segments,
+compute_nearby <- function (samples,
                             covariate.names,
                             prediction.grid,
                             coordinate.system,
@@ -135,7 +135,7 @@ compute_nearby <- function (segments,
   # Check size of input datasets
   #---------------------------------------------
 
-  big.data <- ifelse(prod(nrow(segments), nrow(prediction.grid)) > max.size, TRUE, FALSE)
+  big.data <- ifelse(prod(nrow(samples), nrow(prediction.grid)) > max.size, TRUE, FALSE)
 
   #---------------------------------------------
   # Compute counterfactuals
@@ -144,10 +144,10 @@ compute_nearby <- function (segments,
   if(big.data){
 
     counterfact <- whatif.opt(formula = NULL,
-                              data = make_X(calibration_data = segments,
-                                            test_data = segments,
+                              data = make_X(calibration_data = samples,
+                                            test_data = samples,
                                             covariate.names),
-                              cfact = make_X(calibration_data = segments,
+                              cfact = make_X(calibration_data = samples,
                                              test_data = prediction.grid,
                                              covariate.names),
                               nearby = nearby,
@@ -156,10 +156,10 @@ compute_nearby <- function (segments,
   }else{
 
     counterfact <- WhatIf::whatif(formula = NULL,
-                                  data = make_X(calibration_data = segments,
-                                                test_data = segments,
+                                  data = make_X(calibration_data = samples,
+                                                test_data = samples,
                                                 covariate.names),
-                                  cfact = make_X(calibration_data = segments,
+                                  cfact = make_X(calibration_data = samples,
                                                  test_data = prediction.grid,
                                                  covariate.names),
                                   nearby = nearby,

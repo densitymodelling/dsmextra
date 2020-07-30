@@ -120,7 +120,7 @@
 <li>Generate maps of extrapolation using <code>map_extrapolation</code>.</li>
 <li>Run a full assessment using <code>extrapolation_analysis</code>.</li>
 </ul>
-<p>The data for this example are included in <code>dsmextra</code> as a list containing information about both (1) the surveyed area (i.e. the line transects ‘chopped’ into segments) and (2) the prediction area. We refer to <code>segs</code> as the <strong>reference (or calibration) data/system/conditions</strong>, and to <code>predgrid</code>as the <strong>target data/system/conditions</strong> <span class="citation">(Sequeira <em>et al.</em> <a href="#ref-Sequeira2018" role="doc-biblioref">2018</a>)</span>. Note that <code>predgrid</code> holds the coordinates and covariate values for grid cells over which density surface model predictions are sought (although model fitting is outside the scope of this vignette).</p>
+<p>The data for this example are included in <code>dsmextra</code> as a list containing information about both (1) the surveyed area (i.e. here, the line transects ‘chopped’ into segments) and (2) the prediction area. We refer to <code>segs</code> as the <strong>reference (or calibration) data/system/conditions</strong>, and to <code>predgrid</code>as the <strong>target data/system/conditions</strong> <span class="citation">(Sequeira <em>et al.</em> <a href="#ref-Sequeira2018" role="doc-biblioref">2018</a>)</span>. Note that <code>predgrid</code> holds the coordinates and covariate values for grid cells over which density surface model predictions are sought (although model fitting is outside the scope of this vignette).</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="co">#'---------------------------------------------</span>
 <span class="co"># Load and extract the data</span>
 <span class="co">#'---------------------------------------------</span>
@@ -367,7 +367,7 @@
 <p>The following arguments are required:</p>
 <ul>
 <li>
-<code>segments</code>: reference data</li>
+<code>samples</code>: reference data</li>
 <li>
 <code>covariate.names</code>: names of covariates of interest</li>
 <li>
@@ -376,7 +376,7 @@
 <code>coordinate.system</code>: projected coordinate system relevant to study location</li>
 </ul>
 <p>Here, we store the results in an object called <code>spermwhale.extrapolation</code>. Values are expressed as both the number (<code>n</code>) of grid cells subject to extrapolation, and the proportion (<code>%</code>) of the target system that this represents.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">spermwhale.extrapolation</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/compute_extrapolation.html">compute_extrapolation</a></span>(<span class="kw">segments</span> <span class="kw">=</span> <span class="no">segs</span>,
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">spermwhale.extrapolation</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/compute_extrapolation.html">compute_extrapolation</a></span>(<span class="kw">samples</span> <span class="kw">=</span> <span class="no">segs</span>,
                                    <span class="kw">covariate.names</span> <span class="kw">=</span> <span class="no">covariates.spermwhale</span>,
                                    <span class="kw">prediction.grid</span> <span class="kw">=</span> <span class="no">predgrid</span>,
                                    <span class="kw">coordinate.system</span> <span class="kw">=</span> <span class="no">aftt_crs</span>)</pre></body></html></div>
@@ -483,7 +483,7 @@
 <code>extrapolation.type</code>: one of <code>'univariate'</code>, <code>'combinatorial'</code> or <code>'both'</code>
 </li>
 <li>
-<code>segments</code>: reference data</li>
+<code>samples</code>: reference data</li>
 <li>
 <code>covariate.names</code>: names of covariates of interest</li>
 <li>
@@ -500,7 +500,7 @@
 <div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu"><a href="../reference/compare_covariates.html">compare_covariates</a></span>(<span class="kw">extrapolation.type</span> <span class="kw">=</span> <span class="st">"both"</span>,
                    <span class="kw">covariate.names</span> <span class="kw">=</span> <span class="no">covariates.spermwhale</span>,
                    <span class="kw">n.covariates</span> <span class="kw">=</span> <span class="kw">NULL</span>,
-                   <span class="kw">segments</span> <span class="kw">=</span> <span class="no">segs</span>,
+                   <span class="kw">samples</span> <span class="kw">=</span> <span class="no">segs</span>,
                    <span class="kw">prediction.grid</span> <span class="kw">=</span> <span class="no">predgrid</span>,
                    <span class="kw">coordinate.system</span> <span class="kw">=</span> <span class="no">aftt_crs</span>,
                    <span class="kw">create.plots</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
@@ -551,7 +551,7 @@
 <span class="co"># Calculate Gower's distances and %N</span>
 <span class="co">#'---------------------------------------------</span>
 
-<span class="no">spermwhale.nearby</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/compute_nearby.html">compute_nearby</a></span>(<span class="kw">segments</span> <span class="kw">=</span> <span class="no">segs</span>,
+<span class="no">spermwhale.nearby</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/compute_nearby.html">compute_nearby</a></span>(<span class="kw">samples</span> <span class="kw">=</span> <span class="no">segs</span>,
                                     <span class="kw">prediction.grid</span> <span class="kw">=</span> <span class="no">predgrid</span>,
                                     <span class="kw">coordinate.system</span> <span class="kw">=</span> <span class="no">aftt_crs</span>,
                                     <span class="kw">covariate.names</span> <span class="kw">=</span> <span class="no">covariates.spermwhale</span>,
@@ -645,7 +645,7 @@
 <span class="co"># One function to bring them all, and in the darkness bind them.</span>
 <span class="co">#'---------------------------------------------</span>
 
-<span class="no">spermwhale.analysis</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/extrapolation_analysis.html">extrapolation_analysis</a></span>(<span class="kw">segments</span> <span class="kw">=</span> <span class="no">segs</span>,
+<span class="no">spermwhale.analysis</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/extrapolation_analysis.html">extrapolation_analysis</a></span>(<span class="kw">samples</span> <span class="kw">=</span> <span class="no">segs</span>,
                                           <span class="kw">covariate.names</span> <span class="kw">=</span> <span class="no">covariates.spermwhale</span>,
                                           <span class="kw">prediction.grid</span> <span class="kw">=</span> <span class="no">predgrid</span>,
                                           <span class="kw">coordinate.system</span> <span class="kw">=</span> <span class="no">aftt_crs</span>,

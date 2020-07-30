@@ -5,7 +5,7 @@
 \title{Quantify the percentage of data nearby}
 \usage{
 compute_nearby(
-  segments,
+  samples,
   covariate.names,
   prediction.grid,
   coordinate.system,
@@ -16,7 +16,7 @@ compute_nearby(
 )
 }
 \arguments{
-\item{segments}{Segment data.frame (i.e. surveyed transects divided into segments for analysis). This is the reference dataset used for model building and calibration. This must contain one column for each of the covariates in \code{covariate.names}.}
+\item{samples}{Sample (reference) dataset used for model building and calibration. This corresponds to the \code{segment.data} used when building density surface models in \code{dsm}. It must contain one column for each of the covariates in \code{covariate.names}.}
 
 \item{covariate.names}{Character string. Names of the covariates of interest.}
 
@@ -26,7 +26,7 @@ compute_nearby(
 
 \item{nearby}{Scalar indicating which reference data points are considered to be 'nearby' (i.e. within ‘nearby’ mean geometric Gower's distances of) prediction points. Defaults to 1, as per Mannocci et al. (2018) and Virgili et al. (2017).}
 
-\item{max.size}{Minimum size threshold for partitioning computations. Calculated as \code{\link[base]{prod}(\link[base]{nrow}(segments),\link[base]{nrow}(prediction.grid))}. Has a default value of \code{1e7}. See the 'Details' section.}
+\item{max.size}{Minimum size threshold for partitioning computations. Calculated as \code{\link[base]{prod}(\link[base]{nrow}(samples),\link[base]{nrow}(prediction.grid))}. Has a default value of \code{1e7}. See the 'Details' section.}
 
 \item{no.partitions}{Integer. Number of desired partitions of the data (default of 10). See the 'Details' section.}
 
@@ -54,7 +54,7 @@ In addition, the \code{\link[WhatIf]{whatif}} function from the \href{https://CR
   \code{max.size} \tab Threshold above which partitioning will be triggered \cr
   \code{no.partitions} \tab Number of required partitions \cr
  }
-In practice, a run of \code{compute_nearby} begins with a quick assessment of the dimensions of the input data, i.e. the reference and target data.frames. If the product of their dimensions (i.e. number of segments multiplied by number of prediction grid cells) exceeds the value set for \code{max.size}, then \code{no.partitions} subsets of the data will be created and the computations run on each using \code{\link[purrr]{map}} functions from the \href{https://cran.r-project.org/web/packages/purrr/index.html}{purrr} package (Henry and Wickham 2019). This means that a smaller \code{max.size} will trigger partitioning on correspondingly smaller datasets. By default, \code{max.size} is set to \code{1e7}. This value was chosen arbitrarily, and should be sufficiently large as to obviate the need for partitioning on most datasets.
+In practice, a run of \code{compute_nearby} begins with a quick assessment of the dimensions of the input data, i.e. the reference and target data.frames. If the product of their dimensions (i.e. number of samples multiplied by number of prediction grid cells) exceeds the value set for \code{max.size}, then \code{no.partitions} subsets of the data will be created and the computations run on each using \code{\link[purrr]{map}} functions from the \href{https://cran.r-project.org/web/packages/purrr/index.html}{purrr} package (Henry and Wickham 2019). This means that a smaller \code{max.size} will trigger partitioning on correspondingly smaller datasets. By default, \code{max.size} is set to \code{1e7}. This value was chosen arbitrarily, and should be sufficiently large as to obviate the need for partitioning on most datasets.
 }
 \examples{
 library(dsmextra)
@@ -71,7 +71,7 @@ my_crs <- sp::CRS("+proj=aea +lat_1=38 +lat_2=30 +lat_0=34 +lon_0=-73 +x_0=0
  +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
 
 # Assess the percentage of data nearby
-spermw.nearby <- compute_nearby(segments = segs,
+spermw.nearby <- compute_nearby(samples = segs,
                                prediction.grid = predgrid,
                                coordinate.system = my_crs,
                                covariate.names = c("Depth", "DistToCAS", "SST", "EKE", "NPP"),

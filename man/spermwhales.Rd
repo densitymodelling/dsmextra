@@ -25,8 +25,8 @@ NOAA Northeast Fisheries Science Center (2004). A survey for abundance and distr
 
 NOAA Northeast Fisheries Science Center (2004). Report on the 2004 Mid-Atlantic Marine Mammal Shipboard Abundance Survey aboard the R/V Endeavor, Cruise No. EN 04-395/396.
 
-Palka, DL 2012. Cetacean abundance estimates in US northwestern Atlantic Ocean waters from summer 2011 line transect survey. Northeast Fisheries Science Center Reference Document 12-29, 37 p.
+Palka DL (2012). Cetacean abundance estimates in US northwestern Atlantic Ocean waters from summer 2011 line transect survey. Northeast Fisheries Science Center Reference Document 12-29, 37 p.
 
-Palka, DL 2006 Summer abundance estimates of cetaceans in US North Atlantic Navy operating areas. Northeast Fisheries Science Center Reference Document 06-03, 41 p.
+Palka DL (2006) Summer abundance estimates of cetaceans in US North Atlantic Navy operating areas. Northeast Fisheries Science Center Reference Document 06-03, 41 p.
 }
 \keyword{datasets}

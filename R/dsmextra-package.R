@@ -28,9 +28,9 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("."))
 #'
 #' NOAA Northeast Fisheries Science Center (2004). Report on the 2004 Mid-Atlantic Marine Mammal Shipboard Abundance Survey aboard the R/V Endeavor, Cruise No. EN 04-395/396.
 #'
-#' Palka, DL 2012. Cetacean abundance estimates in US northwestern Atlantic Ocean waters from summer 2011 line transect survey. Northeast Fisheries Science Center Reference Document 12-29, 37 p.
+#' Palka DL (2012). Cetacean abundance estimates in US northwestern Atlantic Ocean waters from summer 2011 line transect survey. Northeast Fisheries Science Center Reference Document 12-29, 37 p.
 #'
-#' Palka, DL 2006 Summer abundance estimates of cetaceans in US North Atlantic Navy operating areas. Northeast Fisheries Science Center Reference Document 06-03, 41 p.
+#' Palka DL (2006) Summer abundance estimates of cetaceans in US North Atlantic Navy operating areas. Northeast Fisheries Science Center Reference Document 06-03, 41 p.
 #'
 #' @format A list of two
 #' \describe{
@@ -43,3 +43,25 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("."))
 #' @source Data provided by Debi Palka (NOAA North East Fisheries Science Center) and Lance Garrison (NOAA South East Fisheries Science Center). Initial data processing by Jason Roberts (Marine Geospatial Ecology Lab, Duke University). A subset of the data are held and described on OBIS-SEAMAP at: \url{http://seamap.env.duke.edu/dataset/396}.
 #' @keywords datasets
 NULL
+
+
+#' Native and introduced range of Acacia cyclops
+#'
+#' Spatial extents of the native and introduced ranges of A. cyclops, a small shrub species.
+#'
+#'#' Mesgaran MB, Cousens RD, Webber BL (2014). Here be dragons: a tool for quantifying novelty due to covariate range and correlation change when projecting species distribution models. Diversity & Distributions, 20: 1147-1159, DOI: \href{https://onlinelibrary.wiley.com/doi/full/10.1111/j.1472-4642.2011.00811.x}{10.1111/j.1472-4642.2011.00811.x}
+#'
+#' Webber BL, Yates, CJ, Le Maitre DC, Scott JK, Kriticos DJ, Ota N, McNeill A, Le Roux JJ, Midgley GF (2011). Modelling horses for novel climate courses: Insights from projecting potential distributions of native and alien Australian acacias with correlative and mechanistic models. Diversity and Distributions, 17: 978–1000. DOI: \href{https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12209}{10.1111/ddi.12209}
+#'
+#' @format A list of two
+#' \describe{
+#'   \item{south_australia}{\code{SpatialPolygonsDataFrame} of the native range (reference area).}
+#'   \item{south_africa}{\code{SpatialPolygonsDataFrame} of the introduced range (target area).}
+#' }
+#'
+#' @name acacia
+#' @docType data
+#' @source Sample data from the ExDet tutorial available from https://www.climond.org/ExDet.aspx.
+#' @keywords datasets
+NULL
+

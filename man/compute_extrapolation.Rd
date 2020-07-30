@@ -87,6 +87,9 @@ library(raster)
 library(sp)
 library(magrittr)
 
+# Native and introduced range
+data(acacia)
+
 # Download BioClim data
 r <- raster::getData(name = "worldclim", var = "bio", res = 10)
 
@@ -94,13 +97,13 @@ r <- raster::getData(name = "worldclim", var = "bio", res = 10)
 bioclim.variables <- c("bio1", "bio5", "bio6", "bio12", "bio13", "bio14")
 
 # Reference system (South Australia)
-ref <- raster::crop(x = r[[bioclim.variables]], y = south_australia) \%>\%
-raster::mask(x = ., mask = south_australia) \%>\%
+ref <- raster::crop(x = r[[bioclim.variables]], y = acacia$south_australia) \%>\%
+raster::mask(x = ., mask = acacia$south_australia) \%>\%
 raster::as.data.frame(x = ., xy = TRUE, na.rm = TRUE)
 
 # Target system (South Africa)
-target <- raster::crop(x = r[[bioclim.variables]], y = south_africa) \%>\%
-raster::mask(x = ., mask = south_africa) \%>\%
+target <- raster::crop(x = r[[bioclim.variables]], y = acacia$south_africa) \%>\%
+raster::mask(x = ., mask = acacia$south_africa) \%>\%
 raster::as.data.frame(., xy = TRUE, na.rm = TRUE)
 
 # Assess extrapolation
@@ -121,7 +124,7 @@ Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). Fr
 
 Broennimann O, Di Cola V, Guisan A (2016). ecospat: Spatial Ecology Miscellaneous Methods. R package version 2.1.1. \href{https://CRAN.R-project.org/package=ecospat}{https://CRAN.R-project.org/package=ecospat}
 
-Mesgaran MB, Cousens RD, Webber BL (2014). Here be dragons: a tool for quantifying novelty due to covariate range and correlation change when projecting species distribution models. Diversity & Distributions, 20: 1147-1159, DOI: \href{https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12209}{10.1111/ddi.12209}
+Mesgaran MB, Cousens RD, Webber BL (2014). Here be dragons: a tool for quantifying novelty due to covariate range and correlation change when projecting species distribution models. Diversity & Distributions, 20: 1147-115. DOI: \href{https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12209}{10.1111/ddi.12209}
 
 Miller DL, Rexstad E, Burt L, Bravington MV, Hedley S (2015). dsm: Density Surface Modelling of Distance Sampling Data. R package version 2.2.9. \href{https://CRAN.R-project.org/package=dsm}{https://CRAN.R-project.org/package=dsm}
 }

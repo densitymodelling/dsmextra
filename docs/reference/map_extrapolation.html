@@ -203,12 +203,12 @@
  <span class='no'>my_cov</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Depth"</span>, <span class='st'>"DistToCAS"</span>, <span class='st'>"SST"</span>, <span class='st'>"EKE"</span>, <span class='st'>"NPP"</span>)
 
 <span class='co'># Assess extrapolation in the multivariate space defined by five covariates</span>
-<span class='no'>spermw.extrapolation</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='compute_extrapolation.html'>compute_extrapolation</a></span>(<span class='kw'>segments</span> <span class='kw'>=</span> <span class='no'>segs</span>,
+<span class='no'>spermw.extrapolation</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='compute_extrapolation.html'>compute_extrapolation</a></span>(<span class='kw'>samples</span> <span class='kw'>=</span> <span class='no'>segs</span>,
       <span class='kw'>covariate.names</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Depth"</span>, <span class='st'>"DistToCAS"</span>, <span class='st'>"SST"</span>, <span class='st'>"EKE"</span>, <span class='st'>"NPP"</span>),
       <span class='kw'>prediction.grid</span> <span class='kw'>=</span> <span class='no'>predgrid</span>,
       <span class='kw'>coordinate.system</span> <span class='kw'>=</span> <span class='no'>my_crs</span>)</div><div class='output co'>#&gt; <span class='message'>Computing ...</span></div><div class='output co'>#&gt; <span class='message'>Done!</span></div><div class='input'>
 <span class='co'># Assess the percentage of data nearby</span>
-<span class='no'>spermw.nearby</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='compute_nearby.html'>compute_nearby</a></span>(<span class='kw'>segments</span> <span class='kw'>=</span> <span class='no'>segs</span>,
+<span class='no'>spermw.nearby</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='compute_nearby.html'>compute_nearby</a></span>(<span class='kw'>samples</span> <span class='kw'>=</span> <span class='no'>segs</span>,
                                <span class='kw'>prediction.grid</span> <span class='kw'>=</span> <span class='no'>predgrid</span>,
                                <span class='kw'>coordinate.system</span> <span class='kw'>=</span> <span class='no'>my_crs</span>,
                                <span class='kw'>covariate.names</span> <span class='kw'>=</span> <span class='no'>my_cov</span>,
@@ -240,7 +240,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Phil Bouchet, David Miller, Laura Mannocci.</p>
+  <p>Developed by Phil Bouchet, David Miller, Laura Mannocci, Jason Roberts, Catriona Harris, Len Thomas.</p>
 </div>
 
 <div class="pkgdown">

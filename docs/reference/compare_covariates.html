@@ -126,7 +126,7 @@
 
     <pre class="usage"><span class='fu'>compare_covariates</span>(
   <span class='kw'>extrapolation.type</span> <span class='kw'>=</span> <span class='st'>"both"</span>,
-  <span class='no'>segments</span>,
+  <span class='no'>samples</span>,
   <span class='no'>covariate.names</span>,
   <span class='kw'>n.covariates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>prediction.grid</span>,
@@ -144,8 +144,8 @@
       <td><p>Character string. Type of extrapolation to be assessed. Can be one of <code>univariate</code>, <code>combinatorial</code>, or <code>both</code> (default).</p></td>
     </tr>
     <tr>
-      <th>segments</th>
-      <td><p>Segment data.frame (i.e. surveyed transects divided into segments for analysis). This is the reference dataset used for model building and calibration. This must contain one column for each of the covariates in <code>covariate.names</code>.</p></td>
+      <th>samples</th>
+      <td><p>Sample (reference) dataset used for model building and calibration. This corresponds to the <code>segment.data</code> used when building density surface models in <code>dsm</code>. It must contain one column for each of the covariates in <code>covariate.names</code>.</p></td>
     </tr>
     <tr>
       <th>covariate.names</th>
@@ -186,7 +186,7 @@
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions. CREEM Technical Report 2019-01, 59 p. <a href='https://research-repository.st-andrews.ac.uk/handle/10023/18509'>https://research-repository.st-andrews.ac.uk/handle/10023/18509</a></p>
-<p>Mesgaran MB, Cousens RD, Webber BL (2014). Here be dragons: a tool for quantifying novelty due to covariate range and correlation change when projecting species distribution models. Diversity &amp; Distributions, 20: 1147-1159, DOI: <a href='https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12209'>10.1111/ddi.12209</a></p>
+<p>Mesgaran MB, Cousens RD, Webber BL (2014). Here be dragons: a tool for quantifying novelty due to covariate range and correlation change when projecting species distribution models. Diversity &amp; Distributions, 20: 1147-1159. DOI: <a href='https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12209'>10.1111/ddi.12209</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='compute_extrapolation.html'>compute_extrapolation</a></code>, <code><a href='summarise_extrapolation.html'>summarise_extrapolation</a></code></p></div>
@@ -213,7 +213,7 @@
 <span class='fu'>compare_covariates</span>(<span class='kw'>extrapolation.type</span> <span class='kw'>=</span> <span class='st'>"both"</span>,
                   <span class='kw'>covariate.names</span> <span class='kw'>=</span> <span class='no'>my_cov</span>,
                   <span class='kw'>n.covariates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-                  <span class='kw'>segments</span> <span class='kw'>=</span> <span class='no'>segs</span>,
+                  <span class='kw'>samples</span> <span class='kw'>=</span> <span class='no'>segs</span>,
                   <span class='kw'>prediction.grid</span> <span class='kw'>=</span> <span class='no'>predgrid</span>,
                   <span class='kw'>coordinate.system</span> <span class='kw'>=</span> <span class='no'>my_crs</span>,
                   <span class='kw'>create.plots</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
@@ -245,7 +245,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Phil Bouchet, David Miller, Laura Mannocci.</p>
+  <p>Developed by Phil Bouchet, David Miller, Laura Mannocci, Jason Roberts, Catriona Harris, Len Thomas.</p>
 </div>
 
 <div class="pkgdown">

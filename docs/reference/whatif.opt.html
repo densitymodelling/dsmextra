@@ -171,7 +171,7 @@
 <tr><td><code>max.size</code></td><td>Threshold above which partitioning will be triggered</td></tr>
 <tr><td><code>no.partitions</code></td><td>Number of required partitions</td></tr>
 </table>
-<p>In practice, a run of <code><a href='compute_nearby.html'>compute_nearby</a></code> begins with a quick assessment of the dimensions of the input data, i.e. the reference and target data.frames. If the product of their dimensions (i.e. number of segments multiplied by number of prediction grid cells) exceeds the value set for <code>max.size</code>, then <code>no.partitions</code> subsets of the data will be created and the computations run on each using map functions from the <code>purrr</code> package (Henry and Wickham 2019). This means that a smaller <code>max.size</code> will trigger partitioning on correspondingly smaller datasets. By default, <code>max.size</code> is set to <code>1e7</code>. This value was chosen arbitrarily, and should be sufficiently large as to obviate the need for partitioning on most datasets.</p>
+<p>In practice, a run of <code><a href='compute_nearby.html'>compute_nearby</a></code> begins with a quick assessment of the dimensions of the input data, i.e. the reference and target data.frames. If the product of their dimensions (i.e. number of samples multiplied by number of prediction grid cells) exceeds the value set for <code>max.size</code>, then <code>no.partitions</code> subsets of the data will be created and the computations run on each using map functions from the <code>purrr</code> package (Henry and Wickham 2019). This means that a smaller <code>max.size</code> will trigger partitioning on correspondingly smaller datasets. By default, <code>max.size</code> is set to <code>1e7</code>. This value was chosen arbitrarily, and should be sufficiently large as to obviate the need for partitioning on most datasets.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Gandrud C, King G, Stoll H, Zeng L (2017). WhatIf: Evaluate Counterfactuals. R package version 1.5-9. <a href='https://CRAN.R-project.org/package=WhatIf'>https://CRAN.R-project.org/package=WhatIf</a>.</p>
@@ -192,7 +192,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Phil Bouchet, David Miller, Laura Mannocci.</p>
+  <p>Developed by Phil Bouchet, David Miller, Laura Mannocci, Jason Roberts, Catriona Harris, Len Thomas.</p>
 </div>
 
 <div class="pkgdown">

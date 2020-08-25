@@ -137,7 +137,7 @@ map.argumentsArguments from map_extrapolation
     </div>
 
     <pre class="usage"><span class='fu'>extrapolation_analysis</span>(
-  <span class='no'>segments</span>,
+  <span class='no'>samples</span>,
   <span class='no'>covariate.names</span>,
   <span class='no'>prediction.grid</span>,
   <span class='no'>coordinate.system</span>,
@@ -160,8 +160,8 @@ map.argumentsArguments from map_extrapolation
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>segments</th>
-      <td><p>Segment data.frame (i.e. surveyed transects divided into segments for analysis). This is the reference dataset used for model building and calibration. This must contain one column for each of the covariates in <code>covariate.names</code>.</p></td>
+      <th>samples</th>
+      <td><p>Sample (reference) dataset used for model building and calibration. This corresponds to the <code>segment.data</code> used when building density surface models in <code>dsm</code>. It must contain one column for each of the covariates in <code>covariate.names</code>.</p></td>
     </tr>
     <tr>
       <th>covariate.names</th>
@@ -209,7 +209,7 @@ map.argumentsArguments from map_extrapolation
     </tr>
     <tr>
       <th>nearby.max.size</th>
-      <td><p>Minimum size threshold for partitioning computations. Calculated as <code><a href='https://rdrr.io/r/base/prod.html'>prod</a>(<a href='https://rdrr.io/r/base/nrow.html'>nrow</a>(segments),<a href='https://rdrr.io/r/base/nrow.html'>nrow</a>(prediction.grid))</code>. Has a default value of <code>1e7</code>.</p></td>
+      <td><p>Minimum size threshold for partitioning computations. Calculated as <code><a href='https://rdrr.io/r/base/prod.html'>prod</a>(<a href='https://rdrr.io/r/base/nrow.html'>nrow</a>(samples),<a href='https://rdrr.io/r/base/nrow.html'>nrow</a>(prediction.grid))</code>. Has a default value of <code>1e7</code>.</p></td>
     </tr>
     <tr>
       <th>nearby.no.partitions</th>
@@ -232,7 +232,7 @@ map.argumentsArguments from map_extrapolation
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions. CREEM Technical Report 2019-01, 59 p. <a href='https://research-repository.st-andrews.ac.uk/handle/10023/18509'>https://research-repository.st-andrews.ac.uk/handle/10023/18509</a></p>
-<p>Mesgaran MB, Cousens RD, Webber BL (2014). Here be dragons: a tool for quantifying novelty due to covariate range and correlation change when projecting species distribution models. Diversity &amp; Distributions, 20: 1147-1159, DOI: <a href='https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12209'>10.1111/ddi.12209</a></p>
+<p>Mesgaran MB, Cousens RD, Webber BL (2014). Here be dragons: a tool for quantifying novelty due to covariate range and correlation change when projecting species distribution models. Diversity &amp; Distributions, 20: 1147-1159. DOI: <a href='https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12209'>10.1111/ddi.12209</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dsmextra</span>)
@@ -251,7 +251,7 @@ map.argumentsArguments from map_extrapolation
 <span class='co'># Define covariates of interest</span>
 <span class='no'>my_cov</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Depth"</span>, <span class='st'>"DistToCAS"</span>, <span class='st'>"SST"</span>, <span class='st'>"EKE"</span>, <span class='st'>"NPP"</span>)
 
-<span class='no'>spermw.analysis</span> <span class='kw'>&lt;-</span> <span class='fu'>extrapolation_analysis</span>(<span class='kw'>segments</span> <span class='kw'>=</span> <span class='no'>segs</span>,
+<span class='no'>spermw.analysis</span> <span class='kw'>&lt;-</span> <span class='fu'>extrapolation_analysis</span>(<span class='kw'>samples</span> <span class='kw'>=</span> <span class='no'>segs</span>,
                                           <span class='kw'>covariate.names</span> <span class='kw'>=</span> <span class='no'>my_cov</span>,
                                           <span class='kw'>prediction.grid</span> <span class='kw'>=</span> <span class='no'>predgrid</span>,
                                           <span class='kw'>coordinate.system</span> <span class='kw'>=</span> <span class='no'>my_crs</span>,
@@ -297,7 +297,7 @@ map.argumentsArguments from map_extrapolation
 
       <footer>
       <div class="copyright">
-  <p>Developed by Phil Bouchet, David Miller, Laura Mannocci.</p>
+  <p>Developed by Phil Bouchet, David Miller, Laura Mannocci, Jason Roberts, Catriona Harris, Len Thomas.</p>
 </div>
 
 <div class="pkgdown">

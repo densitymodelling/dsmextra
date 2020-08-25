@@ -126,6 +126,7 @@ compute_extrapolation <- function(samples,
   #---------------------------------------------
 
   calls <- names(sapply(match.call(), deparse))[-1]
+
   if(any("segments" %in% calls)) {
     warning("The 'segments' argument is deprecated, please use 'samples' instead.")
     samples <- segments

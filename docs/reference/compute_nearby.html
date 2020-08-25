@@ -125,7 +125,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>compute_nearby</span>(
-  <span class='no'>segments</span>,
+  <span class='no'>samples</span>,
   <span class='no'>covariate.names</span>,
   <span class='no'>prediction.grid</span>,
   <span class='no'>coordinate.system</span>,
@@ -139,8 +139,8 @@
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>segments</th>
-      <td><p>Segment data.frame (i.e. surveyed transects divided into segments for analysis). This is the reference dataset used for model building and calibration. This must contain one column for each of the covariates in <code>covariate.names</code>.</p></td>
+      <th>samples</th>
+      <td><p>Sample (reference) dataset used for model building and calibration. This corresponds to the <code>segment.data</code> used when building density surface models in <code>dsm</code>. It must contain one column for each of the covariates in <code>covariate.names</code>.</p></td>
     </tr>
     <tr>
       <th>covariate.names</th>
@@ -160,7 +160,7 @@
     </tr>
     <tr>
       <th>max.size</th>
-      <td><p>Minimum size threshold for partitioning computations. Calculated as <code><a href='https://rdrr.io/r/base/prod.html'>prod</a>(<a href='https://rdrr.io/r/base/nrow.html'>nrow</a>(segments),<a href='https://rdrr.io/r/base/nrow.html'>nrow</a>(prediction.grid))</code>. Has a default value of <code>1e7</code>. See the 'Details' section.</p></td>
+      <td><p>Minimum size threshold for partitioning computations. Calculated as <code><a href='https://rdrr.io/r/base/prod.html'>prod</a>(<a href='https://rdrr.io/r/base/nrow.html'>nrow</a>(samples),<a href='https://rdrr.io/r/base/nrow.html'>nrow</a>(prediction.grid))</code>. Has a default value of <code>1e7</code>. See the 'Details' section.</p></td>
     </tr>
     <tr>
       <th>no.partitions</th>
@@ -186,7 +186,7 @@
 <tr><td><code>max.size</code></td><td>Threshold above which partitioning will be triggered</td></tr>
 <tr><td><code>no.partitions</code></td><td>Number of required partitions</td></tr>
 </table>
-<p>In practice, a run of <code>compute_nearby</code> begins with a quick assessment of the dimensions of the input data, i.e. the reference and target data.frames. If the product of their dimensions (i.e. number of segments multiplied by number of prediction grid cells) exceeds the value set for <code>max.size</code>, then <code>no.partitions</code> subsets of the data will be created and the computations run on each using <code><a href='https://purrr.tidyverse.org/reference/map.html'>map</a></code> functions from the <a href='https://cran.r-project.org/web/packages/purrr/index.html'>purrr</a> package (Henry and Wickham 2019). This means that a smaller <code>max.size</code> will trigger partitioning on correspondingly smaller datasets. By default, <code>max.size</code> is set to <code>1e7</code>. This value was chosen arbitrarily, and should be sufficiently large as to obviate the need for partitioning on most datasets.</p>
+<p>In practice, a run of <code>compute_nearby</code> begins with a quick assessment of the dimensions of the input data, i.e. the reference and target data.frames. If the product of their dimensions (i.e. number of samples multiplied by number of prediction grid cells) exceeds the value set for <code>max.size</code>, then <code>no.partitions</code> subsets of the data will be created and the computations run on each using <code><a href='https://purrr.tidyverse.org/reference/map.html'>map</a></code> functions from the <a href='https://cran.r-project.org/web/packages/purrr/index.html'>purrr</a> package (Henry and Wickham 2019). This means that a smaller <code>max.size</code> will trigger partitioning on correspondingly smaller datasets. By default, <code>max.size</code> is set to <code>1e7</code>. This value was chosen arbitrarily, and should be sufficiently large as to obviate the need for partitioning on most datasets.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions. CREEM Technical Report 2019-01, 59 p. <a href='https://research-repository.st-andrews.ac.uk/handle/10023/18509'>https://research-repository.st-andrews.ac.uk/handle/10023/18509</a></p>
@@ -211,7 +211,7 @@
  +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"</span>)
 
 <span class='co'># Assess the percentage of data nearby</span>
-<span class='no'>spermw.nearby</span> <span class='kw'>&lt;-</span> <span class='fu'>compute_nearby</span>(<span class='kw'>segments</span> <span class='kw'>=</span> <span class='no'>segs</span>,
+<span class='no'>spermw.nearby</span> <span class='kw'>&lt;-</span> <span class='fu'>compute_nearby</span>(<span class='kw'>samples</span> <span class='kw'>=</span> <span class='no'>segs</span>,
                                <span class='kw'>prediction.grid</span> <span class='kw'>=</span> <span class='no'>predgrid</span>,
                                <span class='kw'>coordinate.system</span> <span class='kw'>=</span> <span class='no'>my_crs</span>,
                                <span class='kw'>covariate.names</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Depth"</span>, <span class='st'>"DistToCAS"</span>, <span class='st'>"SST"</span>, <span class='st'>"EKE"</span>, <span class='st'>"NPP"</span>),
@@ -227,7 +227,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Phil Bouchet, David Miller, Laura Mannocci.</p>
+  <p>Developed by Phil Bouchet, David Miller, Laura Mannocci, Jason Roberts, Catriona Harris, Len Thomas.</p>
 </div>
 
 <div class="pkgdown">

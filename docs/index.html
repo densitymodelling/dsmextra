@@ -40,7 +40,7 @@
 <li>
   <a href="index.html">
     <span class="fas fa fas fa-home fa-lg"></span>
-     
+
   </a>
 </li>
 <li>
@@ -52,15 +52,15 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/dsmextra-bigdata.html">Using dsmextra with 'big data': An example, with a note on covariate transformations</a>
+      <a href="articles/dsmextra-bigdata.html">Using compute_nearby on big datasets</a>
     </li>
     <li>
-      <a href="articles/dsmextra-covariateselection.html">A priori covariate selection using dsmextra</a>
+      <a href="articles/dsmextra-covariateselection.html">Selecting covariates using dsmextra</a>
     </li>
   </ul>
 </li>
@@ -73,7 +73,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="contents col-md-9">
@@ -122,15 +122,6 @@
 <p>The latest development version can be installed from Github (requires the <a href="https://github.com/r-lib/remotes">remotes</a> package):</p>
 <div class="sourceCode" id="cb1"><pre class="r"><span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="st">"remotes"</span>)) <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"remotes"</span>)
 <span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"densitymodelling/dsmextra"</span>)</pre></div>
-</div>
-<div id="important-note" class="section level3">
-<h3 class="hasAnchor">
-<a href="#important-note" class="anchor"></a>Important note</h3>
-<p><strong>May 2020</strong></p>
-<p>The <a href="https://gking.harvard.edu/whatif">WhatIf</a> package, on which <code>dsmextra</code> depends, was removed from CRAN on 2020-03-07. Similarly, the <a href="https://zeligproject.org/">Zelig</a> package (a dependency of WhatIf) was temporarily archived on 2020-03-24. As this may cause issues when first setting up <code>dsmextra</code>, a patch correction has been released under version 1.1.0 to ensure that <code>WhatIf</code> and <code>Zelig</code> are automatically pulled from Github during installation. Alternatively, both packages can be manually installed either from Github or from their respective archives (see <a href="https://cran.r-project.org/web/packages/WhatIf/index.html">here</a> and <a href="https://cran.r-project.org/web/packages/Zelig/index.html">here</a>).</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="st">"remotes"</span>)) <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"remotes"</span>)
-<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"IQSS/Zelig"</span>)
-<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"IQSS/WhatIf"</span>)</pre></div>
 </div>
 <div id="found-a-bug-have-a-feature-request" class="section level3">
 <h3 class="hasAnchor">
@@ -183,7 +174,7 @@
       </footer>
 </div>
 
-  
+
 
 
   </body>

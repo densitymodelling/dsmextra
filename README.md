@@ -17,7 +17,7 @@ The idea behind `dsmextra` is to aid ecologists, practitioners, and model end-us
 
 ### Getting started 
 
-If you are just getting started with `dsmextra`, we recommend reading the tutorial [vignette](https://densitymodelling.github.io/dsmextra/articles/dsmextra.html), which provides a quick introduction to the package. You may also find the below technical report useful:
+If you are just getting started with `dsmextra`, we recommend reading the tutorial [vignette](https://densitymodelling.github.io/dsmextra/articles/dsmextra.html), which provides a quick introduction to the package. You may also find the below paper and technical report useful:
 
 * Bouchet et al. (2020). dsmextra: Extrapolation assessment tools for density surface models. Methods in Ecology and Evolution. DOI: [10.1111/2041-210X.13469](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13469)
 
@@ -37,7 +37,7 @@ If you are just getting started with `dsmextra`, we recommend reading the tutori
 
 ### Acknowledgements
 
-This R package was developed for the [DenMod project](https://synergy.st-andrews.ac.uk/denmod/) (Working group for the advancement of marine species density surface modelling), and was funded by OPNAV N45 and the SURTASS LFA Settlement Agreement, being managed by the U.S. Navy’s Living Marine Resources program under Contract No. N39430-17-C-1982. The sperm whale data showcased in the [online vignette](https://densitymodelling.github.io/dsmextra/articles/dsmextra-vignette.html) were provided by Debi Palka (NOAA North East Fisheries Science Center) and Lance Garrison (NOAA South East Fisheries Science Center). Initial data processing was undertaken by Jason Roberts (Marine Geospatial Ecology Lab, Duke University).
+This R package was developed for the [DenMod project](https://synergy.st-andrews.ac.uk/denmod/) (Working group for the advancement of marine species density surface modelling), and was funded by OPNAV N45 and the SURTASS LFA Settlement Agreement, being managed by the U.S. Navy’s Living Marine Resources program under Contract No. N39430-17-C-1982. The sperm whale data showcased in the [online vignette](https://densitymodelling.github.io/dsmextra/articles/dsmextra.html) were provided by Debi Palka (NOAA North East Fisheries Science Center) and Lance Garrison (NOAA South East Fisheries Science Center). Initial data processing was undertaken by Jason Roberts (Marine Geospatial Ecology Lab, Duke University).
 
 ### Installation
 
@@ -46,18 +46,6 @@ The latest development version can be installed from Github (requires the [remot
 ```r
 if (!require("remotes")) install.packages("remotes")
 remotes::install_github("densitymodelling/dsmextra")
-```
-
-### Important note
-
-**May 2020**
-
-The [WhatIf](https://gking.harvard.edu/whatif) package, on which `dsmextra` depends, was removed from CRAN on 2020-03-07. Similarly, the [Zelig](https://zeligproject.org/) package (a dependency of WhatIf) was temporarily archived on 2020-03-24. As this may cause issues when first setting up `dsmextra`, a patch correction has been released under version 1.1.0 to ensure that `WhatIf` and `Zelig` are automatically pulled from Github during installation. Alternatively, both packages can be manually installed either from Github or from their respective archives (see [here](https://cran.r-project.org/web/packages/WhatIf/index.html) and [here](https://cran.r-project.org/web/packages/Zelig/index.html)). 
-
-```r
-if (!require("remotes")) install.packages("remotes")
-remotes::install_github("IQSS/Zelig")
-remotes::install_github("IQSS/WhatIf")
 ```
 
 ### Found a bug? Have a feature request?  

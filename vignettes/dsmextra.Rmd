@@ -43,7 +43,7 @@ remotes::install_github("densitymodelling/dsmextra", dependencies = TRUE)
 
 The code below loads required libraries and sets some general options.
 
-```{r echo=T, results='hide'}
+```{r echo=T, results='hide', message = F}
 #'---------------------------------------------
 # Other required libraries
 #'---------------------------------------------

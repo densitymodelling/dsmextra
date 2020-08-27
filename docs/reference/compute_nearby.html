@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dsmextra</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
       </span>
     </div>
 
@@ -85,6 +85,9 @@
   </a>
 </li>
 <li>
+  <a href="../articles/dsmextra.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -95,7 +98,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/dsmextra-vignette.html">A short introduction to dsmextra</a>
+      <a href="../articles/dsmextra-bigdata.html">Using dsmextra with 'big data': An example, with a note on covariate transformations</a>
+    </li>
+    <li>
+      <a href="../articles/dsmextra-covariateselection.html">A priori covariate selection using dsmextra</a>
     </li>
   </ul>
 </li>
@@ -182,7 +188,7 @@
 <p>The notion of neighbourhood (or percentage/proportion of data nearby, %N) captures this idea, and provides an additional measure of the reliability of extrapolations in multivariate environmental space (Virgili et al. 2017; Mannocci et al. 2018). In practice, %N for any target point can be defined as the proportion of reference data within a radius of one geometric mean Gower’s distance (G^2), calculated between all pairs of reference points (King and Zeng 2007). The Gower’s distance between two points <em>i</em> and <em>j</em> defined along the axes of <em>K</em> covariates is calculated as the average absolute distance between the values of these two points in each dimension, divided by the range of the data, such that:</p>
 <p>\(G_{ij}^2=\frac{1}{K}\sum_{k=1}^{K}\frac{\left|x_{ik}-x_{jk}\right|}{\textrm{max}(X_k)-\textrm{min}(X_k)}\)</p>
 <p>The <code>compute_nearby</code> function is adapted from the code given in Mannocci et al. (2018) and allows the calculation of Gower’s distances as a basis for defining the neighbourhood.</p>
-<p>In addition, the <code><a href='https://rdrr.io/pkg/WhatIf/man/whatif.html'>whatif</a></code> function from the <a href='https://CRAN.R-project.org/package=WhatIf'>Whatif</a> package (Gandrud et al. 2017), which <code>compute_nearby</code> calls internally, may not run on very large datasets. Running calculations on partitions of the data may circumvent this problem and lead to speed gains. Two arguments can be used to do this:</p><table class='table'>
+<p>In addition, the <code>whatif</code> function from the <a href='https://CRAN.R-project.org/package=WhatIf'>Whatif</a> package (Gandrud et al. 2017), which <code>compute_nearby</code> calls internally, may not run on very large datasets. Running calculations on partitions of the data may circumvent this problem and lead to speed gains. Two arguments can be used to do this:</p><table class='table'>
 <tr><td><code>max.size</code></td><td>Threshold above which partitioning will be triggered</td></tr>
 <tr><td><code>no.partitions</code></td><td>Number of required partitions</td></tr>
 </table>

@@ -1,0 +1,305 @@
+---
+title: "A priori covariate selection using dsmextra"
+author:
+  affiliation: Centre for Research into Ecological & Environmental Modelling, University
+    of St Andrews
+  name: Phil J. Bouchet, David L. Miller, Jason Roberts, Laura Mannocci, Catriona
+    M Harris, Len Thomas
+date: "`r Sys.Date()`"
+css: dsmextra.css
+csl: dsmextra.csl
+link-citations: yes
+rmarkdown::html_vignette:
+  fig_caption: yes
+  toc: yes
+  toc_depth: 4
+bibliography: dsmextra.bib
+vignette: >
+  %\VignetteIndexEntry{A priori covariate selection using dsmextra}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+## Preamble
+
+This vignette demonstrates how `dsmextra` can be used to guide covariate selection *a priori*, before model fitting. Full details on the case study can be found in the Supplementay Material accompanying @Bouchet2020.
+
+## Installation
+
+The latest development version of `dsmextra` can be installed from GitHub (this requires the [remotes](https://cran.r-project.org/web/packages/remotes/index.html) package):
+
+```{r eval=FALSE, include=TRUE}
+remotes::install_github("densitymodelling/dsmextra", dependencies = TRUE)
+```
+
+The code below loads required libraries and sets some general options.
+
+```{r message=FALSE, warning=FALSE}
+#'---------------------------------------------
+# Other required libraries
+#'---------------------------------------------
+library(dsm)                  # Density surface modelling of distance sampling data
+library(dsmextra)             # Extrapolation toolkit for ecological models
+library(Distance)             # Distance sampling detection function and abundance estimation
+library(raster)               # Geographic data analysis and modelling
+library(tidyverse)            # Tools and functions for data science
+library(sf)                   # Simple features in R
+library(magrittr)            # Code semantics
+library(GGally)               # Extension to ggplot2
+library(viridisLite)          # Default Color Maps from 'matplotlib'
+library(smoothr)              # Smooth and tidy spatial features
+library(sp)                   # Classes and methods for spatial data
+
+
+set.seed(42) # Set the random seed
+
+#'---------------------------------------------
+# Set tibble options
+#'---------------------------------------------
+options(tibble.width = Inf) # All tibble columns shown
+options(pillar.neg = FALSE) # No colouring negative numbers
+options(pillar.subtle = TRUE)
+options(pillar.sigfig = 4)
+
+#'---------------------------------------------
+# Set knitr options
+#'---------------------------------------------
+knitr::opts_chunk$set(echo = TRUE)
+
+#'---------------------------------------------
+# Set ggplot2 options
+#'---------------------------------------------
+gg.opts <- theme(panel.grid.minor = element_blank(),
+                 panel.background = element_blank(),
+                 plot.title = element_text(size = 13, face = "bold"),
+                 legend.title = element_text(size = 12), 
+                 legend.text = element_text(size = 11),
+                 axis.text = element_text(size = 11),
+                 panel.grid.major = element_line(colour = 'lightgrey', size = 0.1),
+                 axis.title.x = element_blank(),
+                 axis.title.y = element_blank(),
+                 legend.position = "bottom")
+
+#'---------------------------------------------
+# Geographic coordinate systems
+#'---------------------------------------------
+latlon_proj <- sp::CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+aftt_proj <- sp::CRS("+proj=aea +lat_1=40.66666666666666 +lat_2=27.33333333333333 +lat_0=34 +lon_0=-78 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
+GulfMexico_proj <- sp::CRS("+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs ")
+```
+
+## Data
+
+The data and custom functions required to run this example can be downloaded as a ZIP archive from the Supplementary Information section of @Bouchet2020, available at https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13469. The below assumes that the data files have been saved in the working directory.
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+source("stenella_functions.R") # Load all functions
+
+#'---------------------------------------------
+# Distance sampling data from package dsm
+#'---------------------------------------------
+data("mexdolphins")
+head(distdata) # Distance sampling data that will be used to fit the detection function.
+head(obsdata) # Links the distance data to the segments.
+
+# Segment data, i.e. the transects have already been “chopped” into segments.
+survey.segdata <- segdata %>% dplyr::select(-depth)
+head(survey.segdata)
+
+#'---------------------------------------------
+# Create a spatial object for survey tracklines
+#'---------------------------------------------
+survey.tracks <- survey.segdata %>%
+  split(.$Transect.Label) %>%
+  purrr::map(.x = ., .f = ~dplyr::select(.x, x, y) %>%
+               as.matrix(.) %>%
+               raster::spLines(., crs = GulfMexico_proj)) %>%
+  do.call("rbind", .) %>%  
+  sp::spTransform(., CRSobj = latlon_proj)
+
+#'---------------------------------------------
+# Shapefiles of the study area and the surrounding landmass
+#'---------------------------------------------
+survey.area <- raster::shapefile("study_area.shp")
+america <- raster::shapefile("america.shp")
+
+# Prediction area (Gulf of Mexico)
+prediction.area <- raster::shapefile("gulf_mexico.shp")
+prediction.area <- smoothr::smooth(prediction.area, method = "ksmooth") # Make edges smoother
+prediction.area_proj <- sp::spTransform(prediction.area, CRSobj = aftt_proj) # Project
+```
+
+The environmental covariates of interest include:
+
+(1) Bathymetric depth [static]
+(2) Seabed slope [static]
+(3) Distance to the coast [static]
+(4) Distance to the nearest submarine canyon or seamount [static]
+(5) Current speed [dynamic]
+(6) Sea surface temperature [dynamic]
+
+Note that for simplicity, dynamic covariates were summarised as a yearly median across 12 monthly rasters.
+Note also that the raster stack in covariates.rda also contains layer representing the surface area of each grid cell. This will be useful when making predictions from density surface models, which include an offset term for the area effectively surveyed.
+
+```{r}
+#'---------------------------------------------
+# Load the covariate rasters
+#'---------------------------------------------
+load("covariates.rda")
+
+#'---------------------------------------------
+# Create the final prediction data.frame
+#'---------------------------------------------
+pred.grid <- raster::stack(env.rasters) %>% 
+  raster::projectRaster(from = ., crs = GulfMexico_proj) %>% 
+  raster::as.data.frame(., xy = TRUE) %>% 
+  na.omit()
+
+#'---------------------------------------------
+# Retrieve covariate values for each segment
+#'---------------------------------------------
+survey.segdata <- raster::projectRaster(from = raster::stack(env.rasters), crs = GulfMexico_proj) %>% 
+  raster::extract(x = ., y = sp::SpatialPointsDataFrame(coords = survey.segdata[, c("x", "y")], 
+                         data = survey.segdata, proj4string = GulfMexico_proj), sp = TRUE) %>% 
+  raster::as.data.frame(.) %>% 
+  dplyr::select(-c(x.1, y.1))
+
+#'---------------------------------------------
+# Check collinearity between covariates
+#'---------------------------------------------
+survey.segdata[, names(env.rasters)[1:6]] %>%
+  GGally::ggcorr(., geom = "blank", label = TRUE, hjust = 0.75, method = c('complete.obs', 'pearson')) +
+  geom_point(size = 10, aes(color = coefficient > 0, alpha = abs(coefficient) > 0.7)) +
+  scale_alpha_manual(values = c("TRUE" = 0.25, "FALSE" = 0)) +
+  guides(color = FALSE, alpha = FALSE)
+```
+
+## Extrapolation assessment
+
+```{r}
+# Define environmental covariates of interest
+stenella.covariates <- names(env.rasters)[1:6]
+
+# Univariate + combinatorial extrapolation (ExDet)
+stenella.exdet <- dsmextra::compute_extrapolation(samples = survey.segdata,
+                                                  covariate.names = stenella.covariates,
+                                                  prediction.grid = pred.grid, 
+                                                  coordinate.system = GulfMexico_proj)
+summary(stenella.exdet)
+
+# Percentage of data nearby (%N)
+stenella.nearby <- dsmextra::compute_nearby(samples = survey.segdata,
+                                            covariate.names = stenella.covariates,
+                                            prediction.grid = pred.grid, 
+                                            nearby = 1,
+                                            coordinate.system = GulfMexico_proj)
+
+# Maps
+
+# (1) Univariate + combinatorial extrapolation (ExDet)
+dsmextra::map_extrapolation(map.type = "extrapolation", 
+                            base.layer = "ocean", 
+                            extrapolation.values = stenella.exdet, 
+                            covariate.names = stenella.covariates, 
+                            prediction.grid = pred.grid, 
+                            coordinate.system = GulfMexico_proj)
+
+# (2) Most influential covariates (MIC)
+dsmextra::map_extrapolation(map.type = "mic", 
+                            base.layer = "gray", 
+                            extrapolation.values = stenella.exdet, 
+                            covariate.names = stenella.covariates, 
+                            prediction.grid = pred.grid, 
+                            coordinate.system = GulfMexico_proj)
+
+# (3) Percentage of data nearby (%N)
+dsmextra::map_extrapolation(map.type = "nearby", 
+                            base.layer = "ocean", 
+                            gower.values = stenella.nearby, 
+                            covariate.names = stenella.covariates,
+                            prediction.grid = pred.grid, 
+                            coordinate.system = GulfMexico_proj)
+
+
+# Compare the extent of univariate and combinatorial extrapolation 
+# (ExDet metric) associated with different combinations of covariates
+dsmextra::compare_covariates(extrapolation.type = "both", 
+                             samples = survey.segdata,
+                             n.covariates = NULL, # All possible combinations
+                             covariate.names = stenella.covariates,
+                             prediction.grid = pred.grid, 
+                             coordinate.system = GulfMexico_proj,
+                             create.plots = TRUE, 
+                             display.percent = TRUE)
+```
+
+## Density surface model
+
+```{r}
+# Fit a simple hazard-rate detection model to the distance data (no covariates)
+detfc.hr.null <- Distance::ds(data = distdata, truncation = max(distdata$distance),
+                              key = "hr", adjustment = NULL)
+
+# Plot the fitted model on top of a histogram of distances
+plot(detfc.hr.null, showpoints = FALSE, lwd = 2, pl.col = "lightblue")
+
+# Create model formulae with and without chosen covariates 
+
+dsm.formulas <- make_formulas(remove.covariates = c("depth", "sst"))
+
+# Fit the two competing density surface models: 0 (all covariates), 1 (filtered set)
+dsm.0 <- dsm::dsm(formula = dsm.formulas$f0,
+                  ddf.obj = detfc.hr.null,
+                  segment.data = survey.segdata, 
+                  observation.data = obsdata, 
+                  method = "REML",
+                  family = tw())
+
+dsm.1 <- dsm::dsm(formula = dsm.formulas$f1,
+                  ddf.obj = detfc.hr.null,
+                  segment.data = survey.segdata, 
+                  observation.data = obsdata, 
+                  method = "REML",
+                  family = tw())
+
+AIC(dsm.0, dsm.1) # AIC scores
+```
+
+``` {r eval = FALSE}
+# Perform residual checks
+model_checks(dsm.0)
+model_checks(dsm.1)
+```
+
+```{r}
+# Model predictions
+dsm.0.pred <- predict(object = dsm.0, pred.grid, pred.grid$area)
+dsm.1.pred <- predict(object = dsm.1, pred.grid, pred.grid$area)
+
+# Abundance estimates
+sum(dsm.0.pred); sum(dsm.1.pred)
+
+# Variance estimation - there are no covariates in the detection function
+# so we use dsm.var.gam rather than dsm.var.prop
+# The below code may take several minutes, so is commented out.
+
+# varsplit <- split(pred.grid, 1:nrow(pred.grid))
+# dsm.0.var <- dsm::dsm.var.gam(dsm.obj = dsm.0, pred.data = varsplit, off.set = pred.grid$area)
+# dsm.1.var <- dsm::dsm.var.gam(dsm.obj = dsm.1, pred.data = varsplit, off.set = pred.grid$area)
+
+# summary(dsm.0.var)
+# summary(dsm.1.var)
+
+# Plot predicted density surfaces
+plot_predictions(dsm.predictions = dsm.0.pred)
+plot_predictions(dsm.predictions = dsm.1.pred)
+
+# Plot uncertainty surfaces
+# plot_uncertainty(varprop.output = dsm.0.var, cutpoints = c(0,1,1.5,2,3,4))
+# plot_uncertainty(varprop.output = dsm.1.var, cutpoints = c(0,1,1.5,2,3,4))
+```
+
+## References
+

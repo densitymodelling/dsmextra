@@ -155,15 +155,16 @@ compute_nearby <- function (samples,
 
   }else{
 
-    counterfact <- WhatIf::whatif(formula = NULL,
-                                  data = make_X(calibration_data = samples,
-                                                test_data = samples,
-                                                covariate.names),
-                                  cfact = make_X(calibration_data = samples,
-                                                 test_data = prediction.grid,
-                                                 covariate.names),
-                                  nearby = nearby,
-                                  choice = "distance")
+    counterfact <- whatif(formula = NULL,
+                           data = make_X(calibration_data = samples,
+                                         test_data = samples,
+                                         covariate.names),
+                           cfact = make_X(calibration_data = samples,
+                                          test_data = prediction.grid,
+                                          covariate.names),
+                           nearby = nearby,
+                           choice = "distance")
+
   }
 
   #---------------------------------------------

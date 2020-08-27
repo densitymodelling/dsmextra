@@ -44,14 +44,6 @@ whatif.opt <- function (formula = NULL,
   # Perform function checks
   #---------------------------------------------
 
-  # if (grepl("Zelig*", class(data)) & missing(cfact))
-  #   cfact <- Zelig::zelig_setx_to_df(data)
-  #
-  # if (grepl("Zelig*", class(data)) & !missing(cfact)) {
-  #   formula <- formula(stats::delete.response(stats::terms(data$formula)))
-  #   data <- data$zelig.out$z.out[[1]]$model
-  # }
-
   if (!((is.character(cfact) && is.vector(cfact) && length(cfact) ==
          1) || is.data.frame(cfact) || (is.matrix(cfact) && !is.character(cfact)))) {
     stop("'cfact' must be either a string, a R data frame, or a R non-character matrix")

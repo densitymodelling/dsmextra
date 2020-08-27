@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dsmextra</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
       </span>
     </div>
 
@@ -85,6 +85,9 @@
   </a>
 </li>
 <li>
+  <a href="../articles/dsmextra.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -95,7 +98,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/dsmextra-vignette.html">A short introduction to dsmextra</a>
+      <a href="../articles/dsmextra-bigdata.html">Using dsmextra with 'big data': An example, with a note on covariate transformations</a>
+    </li>
+    <li>
+      <a href="../articles/dsmextra-covariateselection.html">A priori covariate selection using dsmextra</a>
     </li>
   </ul>
 </li>
@@ -167,7 +173,7 @@
     <p>A list object containing extrapolation values in both data.frame and raster format.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The <code><a href='https://rdrr.io/pkg/WhatIf/man/whatif.html'>whatif</a></code> function from the <a href='https://CRAN.R-project.org/package=WhatIf'>Whatif</a> package (Gandrud et al. 2017) may not run on very large datasets. To circumvent this problem, <code>whatif.opt</code> sets the calculations performed by <code><a href='https://rdrr.io/pkg/WhatIf/man/whatif.html'>whatif</a></code> to run on partitions of the data instead, for greater efficiency. <code>whatif.opt</code> can be called internally within compute_nearby by using two additional arguments, namely:</p><table class='table'>
+    <p>The <code>whatif</code> function from the <a href='https://CRAN.R-project.org/package=WhatIf'>Whatif</a> package (Gandrud et al. 2017) may not run on very large datasets. To circumvent this problem, <code>whatif.opt</code> sets the calculations performed by <code>whatif</code> to run on partitions of the data instead, for greater efficiency. <code>whatif.opt</code> can be called internally within compute_nearby by using two additional arguments, namely:</p><table class='table'>
 <tr><td><code>max.size</code></td><td>Threshold above which partitioning will be triggered</td></tr>
 <tr><td><code>no.partitions</code></td><td>Number of required partitions</td></tr>
 </table>
@@ -179,7 +185,7 @@
 <p>Henry L, Wickham H (2019). purrr: Functional Programming Tools. R package version 0.3.2. <a href='https://CRAN.R-project.org/package=purrr'>https://CRAN.R-project.org/package=purrr</a>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='compute_nearby.html'>compute_nearby</a></code>, <code><a href='https://rdrr.io/pkg/WhatIf/man/whatif.html'>whatif</a></code></p></div>
+    <div class='dont-index'><p><code><a href='compute_nearby.html'>compute_nearby</a></code>, <code>whatif</code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -1,0 +1,331 @@
+---
+title: "Using dsmextra with 'big data': An example, with a note on covariate transformations"
+author:
+  affiliation: Centre for Research into Ecological & Environmental Modelling, University
+    of St Andrews
+  name: Phil J. Bouchet, David L. Miller, Jason Roberts, Laura Mannocci, Catriona
+    M Harris, Len Thomas
+date: "`r Sys.Date()`"
+css: dsmextra.css
+csl: dsmextra.csl
+link-citations: yes
+rmarkdown::html_vignette:
+  fig_caption: yes
+  toc: yes
+  toc_depth: 4
+bibliography: dsmextra.bib
+vignette: >
+  %\VignetteIndexEntry{Using dsmextra with big data}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+## Preamble
+
+This vignette demonstrates an application of `dsmextra` to a much larger dataset, which comprises 100 times as many segments (i.e., reference/calibration data points) as in the sperm whale example presented in the introductory vignette, and where the prediction area spans half the of the North Atlantic Ocean. We also briefly explore the effects of covariate transformations on extrapolation assessments.
+
+## Installation
+
+The latest development version of `dsmextra` can be installed from GitHub (this requires the [remotes](https://cran.r-project.org/web/packages/remotes/index.html) package):
+
+```{r eval=FALSE, include=TRUE}
+remotes::install_github("densitymodelling/dsmextra", dependencies = TRUE)
+```
+
+The code below loads required libraries and sets some general options.
+
+```{r echo=T, results='hide', message=F}
+#'---------------------------------------------
+# Other required libraries
+#'---------------------------------------------
+library(dsmextra)     # Extrapolation toolkit for ecological models
+library(raster)       # Geographic data analysis and modeling
+library(tidyverse)    # Packages for data science
+library(magrittr)     # Pipe operator
+
+#'---------------------------------------------
+# Set tibble options
+#'---------------------------------------------
+options(tibble.width = Inf) # All tibble columns shown
+options(pillar.neg = FALSE) # No colouring negative numbers
+options(pillar.subtle = TRUE)
+options(pillar.sigfig = 4)
+
+#'---------------------------------------------
+# Set knitr options
+#'---------------------------------------------
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Overview
+
+In the following, we show:
+
++ How to run the `compute_nearby` function on 'big' data;
++ How covariate transformations, which are common in ecological research, may affect extrapolation assessments.
+
+## Data
+
+The data for this example are stored in a list object called `ziphius`. These are fully described in @Roberts2016 and @Mannocci2017, and remain very similar in nature to the sperm whale data showcased in the introductory vignette.
+
+```{r include=FALSE}
+load("~/Google Drive/Documents/git/dsmextra/R/sysdata.rda")
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+str(ziphius, max.level = 2) # Inspect the list
+```
+
+As before, `segs` is a `data.frame` containing the segment data. Note, however, that coordinates for the segment mid-points are not available. Covariate layers are available as a `RasterStack` in `ziphius$rasters`.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+knitr::kable(head(ziphius$segs), format = "pandoc")
+```
+
+We consider four covariates likely to influence beaked whale density and distribution. Two of those are static (`Depth` and `DistToCanyonOrSeamount`), and two are dynamic (`Chl1` and `CurrentSpeed`). For simplicity, dynamic covariates are taken as the yearly means across 12 monthly rasters.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#'---------------------------------------------
+# Define projected coordinate system
+#'---------------------------------------------
+aftt_crs <- sp::CRS("+proj=aea +lat_1=38 +lat_2=30 +lat_0=34 +lon_0=-73 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
+
+#'---------------------------------------------
+# Define environmental covariates of interest
+#'---------------------------------------------
+covariates.ziphius <- c("Depth", "DistToCanyonOrSeamount", "Chl1", "CurrentSpeed")
+```
+
+## Analysis
+
+### Transforming covariates
+
+Transforming explanatory covariates (for instance, to reduce the influence of outliers or make skewed distributions more symmetric) is common practice in ecological modelling. We can explore the effects of data transformations on extrapolation metrics by constructing two separate datasets, i.e., one with transformed values, the other not. 
+
+Within the `ziphius` list object, the data in `segs` have already been transformed, whereas those in `rasters` have not. In our case, $log_{10}$ and square root transformations are applied to `Depth`/`CurrentSpeed` and to `DistToCanyonOrSeamount`, respectively. Remote-sensed chlorophyll-a values are frequently only used, and already provided, in $log_{10}$ form - these will not be tempered with.
+
+We apply the relevant (back)-transformations, as shown below: 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+segments.ziphius <- predgrid.ziphius <- list(transformed = NULL, untransformed = NULL)
+
+#'---------------------------------------------
+# Back-transform the segment-level covariate values
+#'---------------------------------------------
+segments.ziphius$transformed <- ziphius$segs
+segments.ziphius$untransformed <- ziphius$segs %>% 
+  dplyr::mutate(Depth = 10^Depth) %>% 
+  dplyr::mutate(DistToCanyonOrSeamount = (DistToCanyonOrSeamount^2)*1000) %>% 
+  dplyr::mutate(CurrentSpeed = 10^CurrentSpeed)
+
+#'---------------------------------------------
+# Transform covariate rasters
+#'---------------------------------------------
+predgrid.ziphius$untransformed <- ziphius$rasters
+predgrid.ziphius$transformed <- purrr::map(.x = seq_len(raster::nlayers(ziphius$rasters)), 
+                .f = ~{
+                  r <- ziphius$rasters[[.x]]
+                  if(names(ziphius$rasters)[.x]%in%c("Depth", "CurrentSpeed")) r <- log10(r)
+                  if(names(ziphius$rasters)[.x]=="DistToCanyonOrSeamount") r <- sqrt(r/1000)
+                  names(r) <- names(ziphius$rasters)[.x]
+                  r
+                }) %>% raster::stack(.)
+```
+
+The final prediction grids (i.e., target data) can now be put together.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+predgrid.ziphius$untransformed <- raster::as.data.frame(predgrid.ziphius$untransformed, 
+                                                         xy = TRUE, na.rm = TRUE)
+predgrid.ziphius$transformed <- raster::as.data.frame(predgrid.ziphius$transformed, 
+                                                       xy = TRUE, na.rm = TRUE)
+```
+
+### Quantifying extrapolation
+
+ExDet values can be calculated on both the transformed and untransformed datasets.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ziphius.extrapolation <- list(transformed = NULL, untransformed = NULL)
+
+ziphius.extrapolation$untransformed <- 
+  compute_extrapolation(samples = segments.ziphius$untransformed, 
+                        covariate.names = covariates.ziphius, 
+                        prediction.grid = predgrid.ziphius$untransformed,
+                        coordinate.system = aftt_crs)
+
+ziphius.extrapolation$transformed <- 
+  compute_extrapolation(samples = segments.ziphius$transformed, 
+                        covariate.names = covariates.ziphius, 
+                        prediction.grid = predgrid.ziphius$transformed,
+                        coordinate.system = aftt_crs)
+```
+
+Transformations appear to have a minimal effect on extrapolation results, as the extent of univariate extrapolation is identical amongst datasets. Current speed is the only covariate responsible for combinatorial extrapolation in the untransformed case, albeit to a minute degree.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+purrr::map(.x = ziphius.extrapolation, .f = summary)
+```
+
+### Comparing covariates
+
+Running the code on the untransformed data:
+
+```{r echo=TRUE, message=TRUE, warning=FALSE}
+compare_covariates(extrapolation.type = "both",
+                   covariate.names = covariates.ziphius,
+                   n.covariates = NULL,
+                   samples = segments.ziphius$untransformed, 
+                   prediction.grid = predgrid.ziphius$untransformed,
+                   coordinate.system = aftt_crs,
+                   create.plots = TRUE,
+                   display.percent = TRUE)
+
+```
+
+Running the code on the transformed data:
+
+```{r echo=TRUE, message=TRUE, warning=FALSE}
+compare_covariates(extrapolation.type = "both",
+                   covariate.names = covariates.ziphius,
+                   n.covariates = NULL,
+                   samples = segments.ziphius$transformed, 
+                   prediction.grid = predgrid.ziphius$transformed,
+                   coordinate.system = aftt_crs,
+                   create.plots = TRUE,
+                   display.percent = TRUE)
+
+```
+
+### Finding nearby data
+
+The `whatif` function from the `Whatif` package [@Gandrud2017], which is called internally by `compute_nearby`, may not run on very large datasets. While this was not an issue with the sperm whale case study in the introductory vignette, the beaked whale dataset is several orders of magnitude larger.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, tidy=TRUE}
+data("spermwhales")
+size.df <- tibble(species = c("Sperm whales", "Beaked whales"),
+                  size = c(format(prod(nrow(spermwhales$segs), nrow(spermwhales$predgrid)), 
+                                  nsmall=0, big.mark=","), 
+                           format(prod(nrow(ziphius$segs), nrow(predgrid.ziphius$transformed)),
+                                  nsmall=0, big.mark=",")))
+knitr::kable(size.df, format = "pandoc")
+```
+
+To circumvent this problem, the `whatif.opt` function sets the calculations performed by `whatif` to run on partitions of the data instead, for greater efficiency. `whatif.opt` can be called internally within `compute_nearby` by using two additional arguments, namely:
+
++ `max.size`: Threshold above which partitioning will be triggered.
++ `no.partitions`: Number of required partitions.
+
+In practice, a run of `compute_nearby` begins with a quick assessment of the dimensions of the input data, i.e., the reference and target `data.frames`. If the product of their dimensions (i.e., number of segments multiplied by number of prediction grid cells) exceeds the value set for `max.size`, then `no.partitions` subsets of the data will be created and the computations run on each using `map` functions from the `purrr` package [@Henry2019]. This means that a smaller `max.size` will trigger partitioning on correspondingly smaller datasets. By default, `max.size` is set to 1e7. This value was chosen arbitrarily, and is sufficiently large as to obviate the need for partitioning on the sperm whale dataset that is shipped with `dsmextra`. That said, note that `max.size` makes little difference to computation time in the analysis of the sperm whale surveys.
+
+It is quite crucial, however, to use partitioning on the beaked whale data. Given the large size of the dataset, the default value of `max.size` is just fine in this instance, but we could lower it if we wanted. No sensitivity analysis has been conducted on `no.partitions`, but manual testing suggests that `10` provides a reasonable all-rounder value.
+
+The below code ran in a couple of hours on a recent machine.
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE, echo=TRUE}
+#'---------------------------------------------
+# Calculate Gower's distances and %N
+#'---------------------------------------------
+ziphiids.nearby <- list(transformed = NULL, untransformed = NULL)
+
+ziphiids.nearby$untransformed <- compute_nearby(samples = segments.ziphiids$untransformed, 
+                                  prediction.grid = predgrid.ziphiids$untransformed, 
+                                  coordinate.system = aftt_crs,
+                                  covariate.names = covariates.ziphiids,
+                                  neighbourhood = 1,
+                                  max.size = 1e7, 
+                                  no.partitions = 10)
+
+ziphiids.nearby$transformed <- compute_nearby(samples = segments.ziphiids$transformed, 
+                                  prediction.grid = predgrid.ziphiids$transformed, 
+                                  coordinate.system = aftt_crs,
+                                  covariate.names = covariates.ziphiids,
+                                  neighbourhood = 1,
+                                  max.size = 1e7, 
+                                  no.partitions = 10)
+
+#'---------------------------------------------
+# Calculate the difference between the two rasters
+#'---------------------------------------------
+ziphiids.nearby$difference <- ziphiids.nearby$transformed - ziphiids.nearby$untransformed
+```
+
+```{r eval=TRUE, message=FALSE, warning=FALSE, include=FALSE, echo=FALSE}
+ziphius.nearby <- list(transformed = NULL, untransformed = NULL)
+ziphius.nearby$untransformed <- raster::raster(file.path("/Users/philippebouchet/Dropbox/bouchet-extrapolation", "data", "outputs", "ziphiids_nearby_untransformed.tif"))
+ziphius.nearby$transformed <- raster::raster(file.path("/Users/philippebouchet/Dropbox/bouchet-extrapolation", "data", "outputs", "ziphiids_nearby_transformed.tif"))
+# Calculate the difference between the two rasters
+ziphius.nearby$difference <- ziphius.nearby$transformed - ziphius.nearby$untransformed
+```
+
+### Visualising extrapolation
+
+Despite trivial differences in the geographical extent of extrapolation across datasets, the maps below illustrate that the magnitude of (univariate) extrapolation is marginally greater after covariate transformation.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.cap=" "}
+map_extrapolation(map.type = "extrapolation", 
+                  extrapolation.values = ziphius.extrapolation$untransformed,
+                  covariate.names = covariates.ziphius,
+                  prediction.grid = predgrid.ziphius$untransformed, 
+                  coordinate.system = aftt_crs,
+                  base.layer = "gray")
+
+map_extrapolation(map.type = "extrapolation",
+                  extrapolation.values = ziphius.extrapolation$transformed,
+                  covariate.names = covariates.ziphius,
+                  prediction.grid = predgrid.ziphius$transformed, 
+                  coordinate.system = aftt_crs,
+                   base.layer = "gray")
+```
+
+Most influential covariates:
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.cap=" "}
+map_extrapolation(map.type = "mic",
+                  extrapolation.values = ziphius.extrapolation$untransformed,
+                  covariate.names = covariates.ziphius,
+                  prediction.grid = predgrid.ziphius$untransformed,
+                  coordinate.system = aftt_crs)
+
+map_extrapolation(map.type = "mic",
+                  extrapolation.values = ziphius.extrapolation$transformed,
+                  covariate.names = covariates.ziphius,
+                  prediction.grid = predgrid.ziphius$transformed,
+                  coordinate.system = aftt_crs)
+```
+
+Proportion of data nearby (%N):
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.cap=" "}
+map_extrapolation(map.type = "nearby",
+                  gower.values = ziphius.nearby$untransformed,
+                  covariate.names = covariates.ziphius,
+                  prediction.grid = predgrid.ziphius$untransformed, 
+                  coordinate.system = aftt_crs)
+
+map_extrapolation(map.type = "nearby",
+                  gower.values = ziphius.nearby$transformed,
+                  covariate.names = covariates.ziphius,
+                  prediction.grid = predgrid.ziphius$transformed, 
+                  coordinate.system = aftt_crs)
+```
+
+Difference between the two rasters:
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.cap=" "}
+map_extrapolation(map.type = "nearby",
+                  gower.values = ziphius.nearby$difference,
+                  covariate.names = covariates.ziphius,
+                  prediction.grid = predgrid.ziphius$transformed, 
+                  coordinate.system = aftt_crs)
+
+breakpoints <- c(-35,-0.5,0.5,10)
+plot(ziphius.nearby$difference, breaks = breakpoints, col = pals::viridis(3))
+```
+
+Patterns in the `%N` metric are broadly similar across datasets within much of the Davis Strait (to the northeast) and the Sargasso Sea (to the southeast). However, a dichotomy between extrapolation levels on and the off the continental shelf is apparent, with covariate transformations tempering extrapolation in deeper waters, at the cost of reduced confidence in extrapolations made closer to shore.
+
+## References
+

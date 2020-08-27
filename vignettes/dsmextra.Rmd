@@ -25,9 +25,9 @@ editor_options:
 
 ## Preamble
 
-This vignette illustrates the use of the `dsmextra` R package for **quantifying and visualising model extrapolation in environmental space**. The package has been built with density surface model (DSMs) in mind, as implemented in package [`dsm`](https://cran.r-project.org/web/packages/dsm/index.html) [@Miller2015dsm]. The underlying theory behind extrapolation detection is covered at length in @Mesgaran2014 and @King2007. 
+This vignette illustrates the use of the `dsmextra` R package for **quantifying and visualising model extrapolation in environmental space**. The package has its roots in density surface modelling (DSM) — as implemented in package [`dsm`](https://cran.r-project.org/web/packages/dsm/index.html) [@Miller2015dsm] — but can be easily applied to any kind of spatially-explicit ecological data. The underlying theory behind extrapolation detection is covered at length in @Mesgaran2014 and @King2007. A full description of the package is given in @Bouchet2020.
 
-`dsmextra` builds upon the functions available in the [`ecospat`](https://cran.r-project.org/web/packages/ecospat/index.html) [@Broennimann2016] and [`WhatIf`](https://cran.r-project.org/web/packages/WhatIf/index.html) [@Gandrud2017] packages to provide user-friendly tools relevant to the analysis of distance sampling data. Specifically, `dsmextra` enables an *a priori* evaluation of environmental extrapolation, when using a DSM model built in a *reference* system to make predictions in a separate *target* system (e.g. a different geographical area and/or a past/future time period) [@Sequeira2018].
+`dsmextra` builds upon the functions available in the [`ecospat`](https://cran.r-project.org/web/packages/ecospat/index.html) [@Broennimann2016] and [`WhatIf`](https://cran.r-project.org/web/packages/WhatIf/index.html) [@Gandrud2017] packages to provide user-friendly tools relevant to the analysis of ecological data, including distance sampling data. Specifically, `dsmextra` enables an *a priori* evaluation of environmental extrapolation, when using a model built in a *reference* system to make predictions in a separate *target* system (e.g., a different geographical area and/or a past/future time period) [@Sequeira2018].
 
 Here, we showcase the features of `dsmextra` with a case study on sperm whales (*Physeter macrocephalus*) in the Mid-Atlantic. The [data](http://seamap.env.duke.edu/dataset/396) come from two shipboard line transect surveys conducted by the National Oceanic and Atmospheric Administration (NOAA)'s Northeast and Southeast Fisheries Science Centers in 2004, and represent a subset of the survey effort shown in @Roberts2016 and @Mannocci2017. A basic level of familiarity with density surface modelling is assumed - for technical details, see @Miller2013.
 
@@ -35,30 +35,27 @@ Note that the vignette accompanies a detailed technical report on extrapolation 
 
 ## Installation
 
-The package can be installed from CRAN:
-
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
-install.packages("dsmextra")
-```
-
-```{r eval=TRUE, message=FALSE, warning=FALSE, include=TRUE}
-library(dsmextra)
-library(raster)
-library(magrittr)
-```
-
-Alternatively, the latest development version can be installed from GitHub (this requires the [remotes](https://cran.r-project.org/web/packages/remotes/index.html) package):
+The latest development version of `dsmextra` can be installed from GitHub (this requires the [remotes](https://cran.r-project.org/web/packages/remotes/index.html) package):
 
 ```{r eval=FALSE, include=TRUE}
 remotes::install_github("densitymodelling/dsmextra", dependencies = TRUE)
 ```
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
+The code below loads required libraries and sets some general options.
+
+```{r echo=T, results='hide'}
+#'---------------------------------------------
+# Other required libraries
+#'---------------------------------------------
+library(dsmextra)     # Extrapolation toolkit for ecological models
+library(raster)       # Geographic data analysis and modeling
+library(tidyverse)    # Packages for data science
+library(magrittr)     # Pipe operator
+
 
 #'--------------------------------------------------------------------
 # Set tibble options
 #'--------------------------------------------------------------------
-
 options(tibble.width = Inf) # All tibble columns shown
 options(pillar.neg = FALSE) # No colouring negative numbers
 options(pillar.subtle = TRUE)
@@ -67,7 +64,6 @@ options(pillar.sigfig = 4)
 #'--------------------------------------------------------------------
 # Set knitr options
 #'--------------------------------------------------------------------
-
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -82,7 +78,7 @@ This vignette covers all the steps required to undertake an extrapolation assess
 + Generate maps of extrapolation using `map_extrapolation`.
 + Run a full assessment using `extrapolation_analysis`.
 
-The data for this example are included in `dsmextra` as a list containing information about both (1) the surveyed area (i.e. here, the line transects 'chopped' into segments) and (2) the prediction area. We refer to `segs` as the **reference (or calibration) data/system/conditions**, and to `predgrid`as the **target data/system/conditions** [@Sequeira2018]. Note that `predgrid` holds the coordinates and covariate values for grid cells over which density surface model predictions are sought (although model fitting is outside the scope of this vignette).
+The data for this example are included in `dsmextra` as a list containing information about both (1) the surveyed area (i.e., here, the line transects 'chopped' into segments) and (2) the prediction area. We refer to `segs` as the **reference (or calibration) data/system/conditions**, and to `predgrid`as the **target data/system/conditions** [@Sequeira2018]. Note that `predgrid` holds the coordinates and covariate values for grid cells over which density surface model predictions are sought (although model fitting is outside the scope of this vignette).
 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -90,7 +86,6 @@ The data for this example are included in `dsmextra` as a list containing inform
 # Load and extract the data
 #'---------------------------------------------
 data("spermwhales")
-
 segs <- spermwhales$segs
 predgrid <- spermwhales$predgrid
 
@@ -107,7 +102,6 @@ A quick map is useful to assess the distribution of sperm whale sightings throug
 #'---------------------------------------------
 # Create an outline of the study area boundaries
 #'---------------------------------------------
-
 study_area <- predgrid[, c("x", "y")]
 study_area$value <- 1
 study_area <- raster::rasterFromXYZ(study_area, crs = sp::CRS("+proj=aea +lat_1=38 +lat_2=30 +lat_0=34 +lon_0=-73 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"))
@@ -118,7 +112,6 @@ study_area <- smoothr::smooth(study_area, method = "ksmooth", smoothness = 5)
 #'---------------------------------------------
 # Produce a simple plot
 #'---------------------------------------------
-
 plot(study_area, col = "lightskyblue1") # Region boundary
 plot(transects, add = TRUE, col = "skyblue3") # Survey tracks
 maps::map("world", fill = TRUE, col = "grey",
@@ -130,19 +123,17 @@ axis(1); axis(2); box()
 points(pts, pch = 16)
 ```
 
-First, we define the projected coordinate system appropriate to the study area (i.e. Albers Equal Area, `+proj=aea`). Our explanatory covariates of interest are: seabed depth (`Depth`), sea surface temperature (`SST`), primary productivity (`NPP`), distance to the nearest canyons and seamounts (`DistToCAS`), and eddy kinetic energy (`EKE`) -- see @Roberts2016 for details.
+First, we define the projected coordinate system appropriate to the study area (i.e., Albers Equal Area, `+proj=aea`). Our explanatory covariates of interest are: seabed depth (`Depth`), sea surface temperature (`SST`), primary productivity (`NPP`), distance to the nearest canyons and seamounts (`DistToCAS`), and eddy kinetic energy (`EKE`) -- see @Roberts2016 for details.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #'---------------------------------------------
 # Define projected coordinate system
 #'---------------------------------------------
-
 aftt_crs <- sp::CRS("+proj=aea +lat_1=38 +lat_2=30 +lat_0=34 +lon_0=-73 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
 
 #'---------------------------------------------
 # Define environmental covariates of interest
 #'---------------------------------------------
-
 covariates.spermwhale <- c("Depth", "SST", "NPP", "DistToCAS", "EKE")
 ```
 
@@ -166,7 +157,7 @@ spermwhale.extrapolation <- compute_extrapolation(samples = segs,
                                    coordinate.system = aftt_crs)
 ```
 
-In this example, the vast majority of prediction grid cells (n = 5,175 -- i.e. 97.92%) are characterised by environmental conditions (defined along the axes of the covariates specified above) similar (aka 'analogue') to those captured in the original sample (`segs`). A quick check reveals that those results align with our expectations from the data in `predgrid`. 
+In this example, the vast majority of prediction grid cells (n = 5,175 -- i.e., 97.92%) are characterised by environmental conditions (defined along the axes of the covariates specified above) similar (aka 'analogue') to those captured in the original sample (`segs`). A quick check reveals that those results align with our expectations from the data in `predgrid`. 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Number of cells subject to univariate extrapolation (see below for definition)
@@ -195,7 +186,7 @@ Three types of extrapolation can be identified (**Figure 2**):
 knitr::include_graphics("dsmextra_Figure2.png")
 ```
 
-`compute_extrapolation` also determines which covariate makes the largest contribution to extrapolation for any given grid cell, i.e. the **most influential covariate** (`mic`) [@Mesgaran2014]. In univariate extrapolation, this is the covariate that leads to the highest negative univariate distance from the initial covariate range. In combinatorial extrapolation, this corresponds to the covariate whose omission (while retaining all others) makes the largest reduction in the Mahalanobis distance to the centroid of the reference data. See @Mesgaran2014 for formulae and technical explanations.
+`compute_extrapolation` also determines which covariate makes the largest contribution to extrapolation for any given grid cell, i.e., the **most influential covariate** (`mic`) [@Mesgaran2014]. In univariate extrapolation, this is the covariate that leads to the highest negative univariate distance from the initial covariate range. In combinatorial extrapolation, this corresponds to the covariate whose omission (while retaining all others) makes the largest reduction in the Mahalanobis distance to the centroid of the reference data. See @Mesgaran2014 for formulae and technical explanations.
 
 `ExDet` values can be retrieved from the returned list, as below:
 
@@ -213,7 +204,7 @@ summary(spermwhale.extrapolation)
 
 ## Comparing covariates
 
-The extent and magnitude of extrapolation naturally vary with the type and number of covariates considered. It may be useful, therefore, to test different combinations of covariates to inform their selection *a priori*, i.e. before model fitting, to support model parsimony.
+The extent and magnitude of extrapolation naturally vary with the type and number of covariates considered. It may be useful, therefore, to test different combinations of covariates to inform their selection *a priori*, i.e., before model fitting, to support model parsimony.
 
 The `compare_covariates` function is available for this purpose. It is designed to assess extrapolation iteratively for all combinations of `n.covariates`, and returns an overview of those that minimise/maximise extrapolation (as measured by the number of grid cells subject to extrapolation in the prediction area).
 
@@ -248,7 +239,7 @@ The bottom graph displays the same results, summarised by covariate of interest.
 
 ## Finding nearby data
 
-While extrapolation is often seen as a binary concept (i.e. it either does or does not take place), it is reasonable to expect that predictions made at target points situated just outside the sampled environmental space may be more reliable than those made at points far outside it. The ExDet tool available through `compute_extrapolation` inherently quantifies this notion of 'distance' from the envelope (solid line) of the reference data (grey circles) (**Figure 3A**). 
+While extrapolation is often seen as a binary concept (i.e., it either does or does not take place), it is reasonable to expect that predictions made at target points situated just outside the sampled environmental space may be more reliable than those made at points far outside it. The ExDet tool available through `compute_extrapolation` inherently quantifies this notion of 'distance' from the envelope (solid line) of the reference data (grey circles) (**Figure 3A**). 
 
 However, the multivariate distribution of reference data points is often far from homogeneous. It is possible, therefore, for target points representing analogue conditions to fall within sparsely sampled regions of the reference space; or conversely, for two target points reflecting an equal degree of extrapolation to have very different amounts of reference data within their vicinity [@Mannocci2018; @Virgili2017].
 
@@ -265,7 +256,7 @@ $$G_{ij}^2=\frac{1}{K}\sum_{k=1}^{K}\frac{\left|x_{ik}-x_{jk}\right|}{\textrm{ma
 
 The `compute_nearby` function is adapted from the code given in @Mannocci2018, and allows the calculation of Gower’s distances (G^2^) as a basis for defining the neighbourhood.
 
-The `nearby` argument to this function corresponds to the radius within which neighbouhood calculations will occur. It has a default value of `1`, as per @Mannocci2018 and @Virgili2017. Increasing its value (e.g. to say, `2`) would mean doubling the size of the green circles in **Figure 3B**, and would lead to larger percentages of data nearby per target point.
+The `nearby` argument to this function corresponds to the radius within which neighbouhood calculations will occur. It has a default value of `1`, as per @Mannocci2018 and @Virgili2017. Increasing its value (e.g., to say, `2`) would mean doubling the size of the green circles in **Figure 3B**, and would lead to larger percentages of data nearby per target point.
 
 **Important:** The sperm whale dataset used here is sufficiently small that `compute_nearby` should run in a matter of seconds on most machines. However, applying the function to larger datasets may burn out memory allocation and lead to an R session failure. Additional arguments can be passed to `compute_nearby` to accommodate such 'big' data. Their use is unnecessary here, but further details can be found in the package documentation. 
 
@@ -273,7 +264,6 @@ The `nearby` argument to this function corresponds to the radius within which ne
 #'---------------------------------------------
 # Calculate Gower's distances and %N
 #'---------------------------------------------
-
 spermwhale.nearby <- compute_nearby(samples = segs, 
                                     prediction.grid = predgrid, 
                                     coordinate.system = aftt_crs,
@@ -297,7 +287,6 @@ Arguments to this function are identical to those of `compute_extrapolation`, wi
 #'---------------------------------------------
 # Rename coordinates and convert to SpatialPointsdf
 #'---------------------------------------------
-
 obs.sp <- obs %>% 
   dplyr::rename(., x = coords.x1, y = coords.x2) %>% 
   sp::SpatialPointsDataFrame(coords = cbind(.$x, .$y), data = ., proj4string = sp::CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")) %>% 
@@ -320,7 +309,6 @@ map_extrapolation(map.type = "extrapolation",
 Most influential covariates (MIC):
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, fig.cap=" "}
-
 map_extrapolation(map.type = "mic",
                   extrapolation.values = spermwhale.extrapolation,
                   covariate.names = covariates.spermwhale,
@@ -355,7 +343,6 @@ For simplicity, all the above analyses can be performed in a single step by call
 # One function to rule them all, one funtion to find them, 
 # One function to bring them all, and in the darkness bind them.
 #'---------------------------------------------
-
 spermwhale.analysis <- extrapolation_analysis(samples = segs,
                                           covariate.names = covariates.spermwhale,
                                           prediction.grid = predgrid,
@@ -372,7 +359,7 @@ spermwhale.analysis <- extrapolation_analysis(samples = segs,
                                           map.tracks = transects)
 ```
 
-Results are packaged in a `list` object with three levels, i.e. `extrapolation`, `nearby`, and `maps`, representing the outputs of each step in the analysis.
+Results are packaged in a `list` object with three levels, i.e., `extrapolation`, `nearby`, and `maps`, representing the outputs of each step in the analysis.
 
 ## Conclusion
 

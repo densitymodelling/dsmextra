@@ -5,7 +5,6 @@
 #' @param extrapolation.object Output object from a run of \link{compute_extrapolation}.
 #' @param extrapolation Logical. Whether to return a summary of univariate/combinatorial extrapolation. Defaults to TRUE.
 #' @param mic Logical. Whether to return a summary of the most influential covariates (MIC) - see \link{compute_extrapolation}. Defaults to TRUE.
-#' @inheritParams compute_extrapolation
 #' @return Prints a summary table in the R console. In addition, if assigned to an object, returns a list with the table values (.n = number of locations, .p = corresponding percentage).
 #' @author Phil J. Bouchet
 #' @seealso \code{\link{compute_extrapolation}}

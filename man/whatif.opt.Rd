@@ -10,7 +10,8 @@ whatif.opt(
   cfact,
   nearby = 1,
   miss = "list",
-  no.partitions
+  no.partitions,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ whatif.opt(
 \item{miss}{Optional string indicating the strategy for dealing with missing data.}
 
 \item{no.partitions}{Integer. Number of desired partitions of the data (default of 10).}
+
+\item{verbose}{Logical. Show or hide possible warnings and messages.}
 }
 \value{
 A list object containing extrapolation values in both data.frame and raster format.
@@ -33,7 +36,7 @@ A list object containing extrapolation values in both data.frame and raster form
 Implements the methods described in King and Zeng (2007) for evaluating counterfactuals.
 }
 \details{
-The \code{\link[WhatIf]{whatif}} function from the \href{https://CRAN.R-project.org/package=WhatIf}{Whatif} package (Gandrud et al. 2017) may not run on very large datasets. To circumvent this problem, \code{whatif.opt} sets the calculations performed by \code{\link[WhatIf]{whatif}} to run on partitions of the data instead, for greater efficiency. \code{whatif.opt} can be called internally within compute_nearby by using two additional arguments, namely:
+The \code{whatif} function from the \href{https://CRAN.R-project.org/package=WhatIf}{Whatif} package (Gandrud et al. 2017) may not run on very large datasets. To circumvent this problem, \code{whatif.opt} sets the calculations performed by \code{whatif} to run on partitions of the data instead, for greater efficiency. \code{whatif.opt} can be called internally within compute_nearby by using two additional arguments, namely:
 \tabular{ll}{
   \code{max.size} \tab Threshold above which partitioning will be triggered \cr
   \code{no.partitions} \tab Number of required partitions \cr
@@ -48,7 +51,7 @@ King G, Zeng L (2007). When can history be our guide? The pitfalls of counterfac
 Henry L, Wickham H (2019). purrr: Functional Programming Tools. R package version 0.3.2. \href{https://CRAN.R-project.org/package=purrr}{https://CRAN.R-project.org/package=purrr}.
 }
 \seealso{
-\code{\link{compute_nearby}}, \code{\link[WhatIf]{whatif}}
+\code{\link{compute_nearby}}
 }
 \author{
 Phil J. Bouchet

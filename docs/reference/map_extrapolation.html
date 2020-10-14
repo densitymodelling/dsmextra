@@ -132,14 +132,11 @@
 
     <pre class="usage"><span class='fu'>map_extrapolation</span>(
   <span class='kw'>map.type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>extrapolation.object</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>base.layer</span> <span class='kw'>=</span> <span class='st'>"ocean"</span>,
-  <span class='kw'>extrapolation.values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>gower.values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>covariate.names</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>prediction.grid</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>coordinate.system</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>sightings</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>tracks</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>tracks</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -150,28 +147,12 @@
       <td><p>Character string. Type of map to be returned. Either <code>extrapolation</code> for an extrapolation map, <code>mic</code> for a map of the most influential covariates, or <code>nearby</code> for a map of the percentage of data nearby.</p></td>
     </tr>
     <tr>
+      <th>extrapolation.object</th>
+      <td><p>List object as returned by <a href='compute_extrapolation.html'>compute_extrapolation</a> or <a href='compute_nearby.html'>compute_nearby</a>.</p></td>
+    </tr>
+    <tr>
       <th>base.layer</th>
       <td><p>Base layer used for mapping. The default is <code>ocean</code>, which uses the ESRI.OceanBasemap. Use <code>world</code> for ESRI.WorldImagery and <code>gray</code> for ESRI.WorldGrayCanvas. Available map tiles can be viewed at <a href='https://leaflet-extras.github.io/leaflet-providers/preview/'>https://leaflet-extras.github.io/leaflet-providers/preview/</a>.</p></td>
-    </tr>
-    <tr>
-      <th>extrapolation.values</th>
-      <td><p>List object as returned by <a href='compute_extrapolation.html'>compute_extrapolation</a>. Only valid when <code>map.type = extrapolation</code> or <code>map.type = mic</code>.</p></td>
-    </tr>
-    <tr>
-      <th>gower.values</th>
-      <td><p>Raster layer object as returned by <a href='compute_nearby.html'>compute_nearby</a>. Only valid when <code>map.type = nearby</code>.</p></td>
-    </tr>
-    <tr>
-      <th>covariate.names</th>
-      <td><p>Character string. Names of the covariates of interest.</p></td>
-    </tr>
-    <tr>
-      <th>prediction.grid</th>
-      <td><p>Prediction data.frame. This contains both geographic coordinates (<code>x</code>, <code>y</code>) and covariate values associated with the target locations for which predictions are desired. Typically, these locations are taken as the centroids of the grid cells in a spatial prediction grid/raster. See <code><a href='https://rdrr.io/pkg/dsm/man/predict.dsm.html'>predict.dsm</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>coordinate.system</th>
-      <td><p>Projected coordinate system relevant to the study location. Can be either a character string or an object of class <code><a href='https://rdrr.io/pkg/sp/man/CRS-class.html'>CRS</a></code>.</p></td>
     </tr>
     <tr>
       <th>sightings</th>
@@ -180,6 +161,10 @@
     <tr>
       <th>tracks</th>
       <td><p>Survey tracks (optional). Can be supplied as a <code>matrix</code> of coordinates, a <code>data.frame</code>, a <code><a href='https://rdrr.io/pkg/sp/man/SpatialLines.html'>SpatialLines</a></code> object or a <code><a href='https://rdrr.io/pkg/sp/man/SpatialLines.html'>SpatialLinesDataFrame</a></code> object. A <code>TransectID</code> field is required for matrix or data.frame inputs.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Logical. Show or hide possible warnings and messages.</p></td>
     </tr>
     </table>
 
@@ -220,21 +205,7 @@
                                <span class='kw'>covariate.names</span> <span class='kw'>=</span> <span class='no'>my_cov</span>,
                                <span class='kw'>nearby</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>Preprocessing data ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating distances ....</span></div><div class='output co'>#&gt; <span class='message'>Calculating the geometric variance...</span></div><div class='output co'>#&gt; <span class='message'>Calculating cumulative frequencies ...</span></div><div class='output co'>#&gt; <span class='message'>Finishing up ...</span></div><div class='output co'>#&gt; <span class='message'>Done!</span></div><div class='input'>
 <span class='co'># Generate maps</span>
-<span class='fu'>map_extrapolation</span>(<span class='kw'>map.type</span> <span class='kw'>=</span> <span class='st'>"extrapolation"</span>,
-                  <span class='kw'>extrapolation.values</span> <span class='kw'>=</span> <span class='no'>spermw.extrapolation</span>,
-                <span class='kw'>covariate.names</span> <span class='kw'>=</span> <span class='no'>my_cov</span>,
-                <span class='kw'>prediction.grid</span> <span class='kw'>=</span> <span class='no'>predgrid</span>,
-                <span class='kw'>coordinate.system</span> <span class='kw'>=</span> <span class='no'>my_crs</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: map_extrapolation relies on the leaflet package, which is built around a Web Mercator projection (EPSG:3857), and therefore requires rasters to be reprojected for plotting. As a result, minor discrepancies may  occur between the interactive maps shown in the viewer, and the underlying raw data. The latter can be accessed directly from the extrapolation.values or gower.values objects and visualised using alternative packages such as ggplot2.</span></div><div class='input'>
-<span class='fu'>map_extrapolation</span>(<span class='kw'>map.type</span> <span class='kw'>=</span> <span class='st'>"mic"</span>,
-                <span class='kw'>extrapolation.values</span> <span class='kw'>=</span> <span class='no'>spermw.extrapolation</span>,
-                <span class='kw'>covariate.names</span> <span class='kw'>=</span> <span class='no'>my_cov</span>,
-                <span class='kw'>prediction.grid</span> <span class='kw'>=</span> <span class='no'>predgrid</span>,
-                <span class='kw'>coordinate.system</span> <span class='kw'>=</span> <span class='no'>my_crs</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: map_extrapolation relies on the leaflet package, which is built around a Web Mercator projection (EPSG:3857), and therefore requires rasters to be reprojected for plotting. As a result, minor discrepancies may  occur between the interactive maps shown in the viewer, and the underlying raw data. The latter can be accessed directly from the extrapolation.values or gower.values objects and visualised using alternative packages such as ggplot2.</span></div><div class='input'>
-<span class='fu'>map_extrapolation</span>(<span class='kw'>map.type</span> <span class='kw'>=</span> <span class='st'>"nearby"</span>,
-                <span class='kw'>gower.values</span> <span class='kw'>=</span> <span class='no'>spermw.nearby</span>,
-                <span class='kw'>covariate.names</span> <span class='kw'>=</span> <span class='no'>my_cov</span>,
-                <span class='kw'>prediction.grid</span> <span class='kw'>=</span> <span class='no'>predgrid</span>,
-                <span class='kw'>coordinate.system</span> <span class='kw'>=</span> <span class='no'>my_crs</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: map_extrapolation relies on the leaflet package, which is built around a Web Mercator projection (EPSG:3857), and therefore requires rasters to be reprojected for plotting. As a result, minor discrepancies may  occur between the interactive maps shown in the viewer, and the underlying raw data. The latter can be accessed directly from the extrapolation.values or gower.values objects and visualised using alternative packages such as ggplot2.</span></div></pre>
+<span class='fu'>map_extrapolation</span>(<span class='kw'>map.type</span> <span class='kw'>=</span> <span class='st'>"extrapolation"</span>, <span class='kw'>extrapolation.object</span> <span class='kw'>=</span> <span class='no'>spermw.extrapolation</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: map_extrapolation relies on the leaflet package, which is built around a Web Mercator projection (EPSG:3857), and therefore requires rasters to be reprojected for plotting. As a result, minor discrepancies may  occur between the interactive maps shown in the viewer, and the underlying raw data. The latter can be accessed directly from the extrapolation.values or gower.values objects and visualised using alternative packages such as ggplot2.</span></div><div class='input'><span class='fu'>map_extrapolation</span>(<span class='kw'>map.type</span> <span class='kw'>=</span> <span class='st'>"mic"</span>, <span class='kw'>extrapolation.object</span> <span class='kw'>=</span> <span class='no'>spermw.extrapolation</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: map_extrapolation relies on the leaflet package, which is built around a Web Mercator projection (EPSG:3857), and therefore requires rasters to be reprojected for plotting. As a result, minor discrepancies may  occur between the interactive maps shown in the viewer, and the underlying raw data. The latter can be accessed directly from the extrapolation.values or gower.values objects and visualised using alternative packages such as ggplot2.</span></div><div class='input'><span class='fu'>map_extrapolation</span>(<span class='kw'>map.type</span> <span class='kw'>=</span> <span class='st'>"nearby"</span>, <span class='kw'>extrapolation.object</span> <span class='kw'>=</span> <span class='no'>spermw.nearby</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: map_extrapolation relies on the leaflet package, which is built around a Web Mercator projection (EPSG:3857), and therefore requires rasters to be reprojected for plotting. As a result, minor discrepancies may  occur between the interactive maps shown in the viewer, and the underlying raw data. The latter can be accessed directly from the extrapolation.values or gower.values objects and visualised using alternative packages such as ggplot2.</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

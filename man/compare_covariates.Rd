@@ -6,34 +6,28 @@
 \usage{
 compare_covariates(
   extrapolation.type = "both",
-  samples,
-  covariate.names,
+  extrapolation.object = NULL,
   n.covariates = NULL,
-  prediction.grid,
-  coordinate.system,
   create.plots = TRUE,
   display.percent = TRUE,
-  resolution = NULL
+  verbose = TRUE,
+  ...
 )
 }
 \arguments{
 \item{extrapolation.type}{Character string. Type of extrapolation to be assessed. Can be one of \code{univariate}, \code{combinatorial}, or \code{both} (default).}
 
-\item{samples}{Sample (reference) dataset used for model building and calibration. This corresponds to the \code{segment.data} used when building density surface models in \code{dsm}. It must contain one column for each of the covariates in \code{covariate.names}.}
-
-\item{covariate.names}{Character string. Names of the covariates of interest.}
+\item{extrapolation.object}{List object as returned by \link{compute_extrapolation}.}
 
 \item{n.covariates}{Maximum number of covariates. The function will compare all combinations of 1 to \code{n.covariates} covariates.}
-
-\item{prediction.grid}{Prediction data.frame. This contains both geographic coordinates (\code{x}, \code{y}) and covariate values associated with the target locations for which predictions are desired. Typically, these locations are taken as the centroids of the grid cells in a spatial prediction grid/raster. See \code{\link[dsm]{predict.dsm}}.}
-
-\item{coordinate.system}{Projected coordinate system relevant to the study location. Can be either a character string or an object of class \code{\link[sp]{CRS}}.}
 
 \item{create.plots}{Logical, defaults to \code{TRUE}. Whether to produce summary plots.}
 
 \item{display.percent}{Logical. If \code{TRUE} (default), scales the y-axis of the summary plots as a percentage of the total number of grid cells in \code{prediction.grid}.}
 
-\item{resolution}{Resolution of the output raster (in units relevant to \code{coordinate.system}). Only required if \code{prediction.grid} is irregular, and thus needs to be rasterised. Defaults to \code{NULL}.}
+\item{verbose}{Logical. Show or hide possible warnings and messages.}
+
+\item{...}{Additional parameters passed to \link{compute_extrapolation}. These are optional when \code{extrapolation.object} is specified, and compulsory otherwise.}
 }
 \value{
 Prints a summary table in the R console. Also generates summary boxplots if \code{create.plots} is set to \code{TRUE}.
@@ -71,6 +65,17 @@ compare_covariates(extrapolation.type = "both",
                   coordinate.system = my_crs,
                   create.plots = TRUE,
                   display.percent = TRUE)
+
+# Can also run this function directly from the
+# object returned by compute_extrapolation
+spermw.extrapolation <- compute_extrapolation(samples = segs,
+      covariate.names = my_cov,
+      prediction.grid = predgrid,
+      coordinate.system = my_crs)
+
+compare_covariates(extrapolation.type = "both",
+                   extrapolation.object = spermw.extrapolation)
+
 }
 \references{
 Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions. CREEM Technical Report 2019-01, 59 p. \href{https://research-repository.st-andrews.ac.uk/handle/10023/18509}{https://research-repository.st-andrews.ac.uk/handle/10023/18509}

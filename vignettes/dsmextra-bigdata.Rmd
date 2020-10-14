@@ -175,28 +175,20 @@ Running the code on the untransformed data:
 
 ```{r echo=TRUE, message=TRUE, warning=FALSE}
 compare_covariates(extrapolation.type = "both",
-                   covariate.names = covariates.ziphius,
+                   extrapolation.object = ziphius.extrapolation$untransformed,
                    n.covariates = NULL,
-                   samples = segments.ziphius$untransformed, 
-                   prediction.grid = predgrid.ziphius$untransformed,
-                   coordinate.system = aftt_crs,
                    create.plots = TRUE,
                    display.percent = TRUE)
-
 ```
 
 Running the code on the transformed data:
 
 ```{r echo=TRUE, message=TRUE, warning=FALSE}
 compare_covariates(extrapolation.type = "both",
-                   covariate.names = covariates.ziphius,
+                   extrapolation.object = ziphius.extrapolation$transformed,
                    n.covariates = NULL,
-                   samples = segments.ziphius$transformed, 
-                   prediction.grid = predgrid.ziphius$transformed,
-                   coordinate.system = aftt_crs,
                    create.plots = TRUE,
                    display.percent = TRUE)
-
 ```
 
 ### Finding nearby data
@@ -228,20 +220,20 @@ The below code ran in a couple of hours on a recent machine.
 #'---------------------------------------------
 # Calculate Gower's distances and %N
 #'---------------------------------------------
-ziphiids.nearby <- list(transformed = NULL, untransformed = NULL)
+ziphius.nearby <- list(transformed = NULL, untransformed = NULL)
 
-ziphiids.nearby$untransformed <- compute_nearby(samples = segments.ziphiids$untransformed, 
-                                  prediction.grid = predgrid.ziphiids$untransformed, 
+ziphius.nearby$untransformed <- compute_nearby(samples = segments.ziphius$untransformed, 
+                                  covariate.names = covariates.ziphius,
+                                  prediction.grid = predgrid.ziphius$untransformed, 
                                   coordinate.system = aftt_crs,
-                                  covariate.names = covariates.ziphiids,
                                   neighbourhood = 1,
                                   max.size = 1e7, 
                                   no.partitions = 10)
 
-ziphiids.nearby$transformed <- compute_nearby(samples = segments.ziphiids$transformed, 
-                                  prediction.grid = predgrid.ziphiids$transformed, 
+ziphius.nearby$transformed <- compute_nearby(samples = segments.ziphius$transformed, 
+                                  covariate.names = covariates.ziphius,
+                                  prediction.grid = predgrid.ziphius$transformed, 
                                   coordinate.system = aftt_crs,
-                                  covariate.names = covariates.ziphiids,
                                   neighbourhood = 1,
                                   max.size = 1e7, 
                                   no.partitions = 10)
@@ -249,15 +241,27 @@ ziphiids.nearby$transformed <- compute_nearby(samples = segments.ziphiids$transf
 #'---------------------------------------------
 # Calculate the difference between the two rasters
 #'---------------------------------------------
-ziphiids.nearby$difference <- ziphiids.nearby$transformed - ziphiids.nearby$untransformed
+ziphius.nearby$difference <- ziphius.nearby$transformed - ziphius.nearby$untransformed
 ```
 
 ```{r eval=TRUE, message=FALSE, warning=FALSE, include=FALSE, echo=FALSE}
 ziphius.nearby <- list(transformed = NULL, untransformed = NULL)
-ziphius.nearby$untransformed <- raster::raster(file.path("/Users/philippebouchet/Dropbox/bouchet-extrapolation", "data", "outputs", "ziphiids_nearby_untransformed.tif"))
-ziphius.nearby$transformed <- raster::raster(file.path("/Users/philippebouchet/Dropbox/bouchet-extrapolation", "data", "outputs", "ziphiids_nearby_transformed.tif"))
+ziphius.nearby$untransformed <- list(type = "nearby", raster = raster::raster(file.path("/Users/philippebouchet/Dropbox/bouchet-extrapolation", "data", "outputs", "ziphiids_nearby_untransformed.tif")),
+                  covariate.names = covariates.ziphius,
+                  samples = segments.ziphius$untransformed,
+                  prediction.grid = predgrid.ziphius$untransformed,
+                  coordinate.system = aftt_crs)
+ziphius.nearby$transformed <- list(type = "nearby", raster = raster::raster(file.path("/Users/philippebouchet/Dropbox/bouchet-extrapolation", "data", "outputs", "ziphiids_nearby_transformed.tif")),
+                  covariate.names = covariates.ziphius,
+                  samples = segments.ziphius$untransformed,
+                  prediction.grid = predgrid.ziphius$untransformed,
+                  coordinate.system = aftt_crs)
 # Calculate the difference between the two rasters
-ziphius.nearby$difference <- ziphius.nearby$transformed - ziphius.nearby$untransformed
+ziphius.nearby$difference <- list(type = "nearby", raster = ziphius.nearby$transformed$raster - ziphius.nearby$untransformed$raster,
+                  covariate.names = covariates.ziphius,
+                  samples = segments.ziphius$untransformed,
+                  prediction.grid = predgrid.ziphius$untransformed,
+                  coordinate.system = aftt_crs)
 ```
 
 ### Visualising extrapolation
@@ -266,63 +270,34 @@ Despite trivial differences in the geographical extent of extrapolation across d
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, fig.cap=" "}
 map_extrapolation(map.type = "extrapolation", 
-                  extrapolation.values = ziphius.extrapolation$untransformed,
-                  covariate.names = covariates.ziphius,
-                  prediction.grid = predgrid.ziphius$untransformed, 
-                  coordinate.system = aftt_crs,
+                  extrapolation.object = ziphius.extrapolation$untransformed,
                   base.layer = "gray")
 
 map_extrapolation(map.type = "extrapolation",
-                  extrapolation.values = ziphius.extrapolation$transformed,
-                  covariate.names = covariates.ziphius,
-                  prediction.grid = predgrid.ziphius$transformed, 
-                  coordinate.system = aftt_crs,
-                   base.layer = "gray")
+                  extrapolation.object = ziphius.extrapolation$transformed,
+                  base.layer = "gray")
 ```
 
 Most influential covariates:
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, fig.cap=" "}
-map_extrapolation(map.type = "mic",
-                  extrapolation.values = ziphius.extrapolation$untransformed,
-                  covariate.names = covariates.ziphius,
-                  prediction.grid = predgrid.ziphius$untransformed,
-                  coordinate.system = aftt_crs)
-
-map_extrapolation(map.type = "mic",
-                  extrapolation.values = ziphius.extrapolation$transformed,
-                  covariate.names = covariates.ziphius,
-                  prediction.grid = predgrid.ziphius$transformed,
-                  coordinate.system = aftt_crs)
+map_extrapolation(map.type = "mic", extrapolation.object = ziphius.extrapolation$untransformed)
+map_extrapolation(map.type = "mic", extrapolation.object = ziphius.extrapolation$transformed)
 ```
 
 Proportion of data nearby (%N):
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, fig.cap=" "}
-map_extrapolation(map.type = "nearby",
-                  gower.values = ziphius.nearby$untransformed,
-                  covariate.names = covariates.ziphius,
-                  prediction.grid = predgrid.ziphius$untransformed, 
-                  coordinate.system = aftt_crs)
-
-map_extrapolation(map.type = "nearby",
-                  gower.values = ziphius.nearby$transformed,
-                  covariate.names = covariates.ziphius,
-                  prediction.grid = predgrid.ziphius$transformed, 
-                  coordinate.system = aftt_crs)
+map_extrapolation(map.type = "nearby", extrapolation.object = ziphius.nearby$untransformed)
+map_extrapolation(map.type = "nearby", extrapolation.object = ziphius.nearby$transformed)
 ```
 
 Difference between the two rasters:
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, fig.cap=" "}
-map_extrapolation(map.type = "nearby",
-                  gower.values = ziphius.nearby$difference,
-                  covariate.names = covariates.ziphius,
-                  prediction.grid = predgrid.ziphius$transformed, 
-                  coordinate.system = aftt_crs)
-
+map_extrapolation(map.type = "nearby", extrapolation.object = ziphius.nearby$difference)
 breakpoints <- c(-35,-0.5,0.5,10)
-plot(ziphius.nearby$difference, breaks = breakpoints, col = pals::viridis(3))
+plot(ziphius.nearby$difference$raster, breaks = breakpoints, col = pals::viridis(3))
 ```
 
 Patterns in the `%N` metric are broadly similar across datasets within much of the Davis Strait (to the northeast) and the Sargasso Sea (to the southeast). However, a dichotomy between extrapolation levels on and the off the continental shelf is apparent, with covariate transformations tempering extrapolation in deeper waters, at the cost of reduced confidence in extrapolations made closer to shore.

@@ -39,6 +39,9 @@ Suggests:
     knitr,
     methods,
     rmarkdown,
-    testthat
+    testthat,
+    GGally,
+    sf,
+    viridisLite
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr

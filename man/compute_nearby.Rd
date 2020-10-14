@@ -12,7 +12,8 @@ compute_nearby(
   nearby,
   max.size = 1e+07,
   no.partitions = 10,
-  resolution = NULL
+  resolution = NULL,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ compute_nearby(
 \item{no.partitions}{Integer. Number of desired partitions of the data (default of 10). See the 'Details' section.}
 
 \item{resolution}{Resolution of the output raster (in units relevant to \code{coordinate.system}). Only required if \code{prediction.grid} is irregular, and thus needs to be rasterised. Defaults to NULL.}
+
+\item{verbose}{Logical. Show or hide possible warnings and messages.}
 }
 \value{
 A raster object mapping the proportion of reference data nearby each point in \code{prediction.grid}.

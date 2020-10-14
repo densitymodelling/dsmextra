@@ -24,6 +24,7 @@
 #' @param max.size Minimum size threshold for partitioning computations. Calculated as \code{\link[base]{prod}(\link[base]{nrow}(samples),\link[base]{nrow}(prediction.grid))}. Has a default value of \code{1e7}. See the 'Details' section.
 #' @param no.partitions Integer. Number of desired partitions of the data (default of 10). See the 'Details' section.
 #' @param resolution Resolution of the output raster (in units relevant to \code{coordinate.system}). Only required if \code{prediction.grid} is irregular, and thus needs to be rasterised. Defaults to NULL.
+#' @param verbose Logical. Show or hide possible warnings and messages.
 #' @return A raster object mapping the proportion of reference data nearby each point in \code{prediction.grid}.
 #' @author Phil J. Bouchet, Laura Mannocci.
 #' @references Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions. CREEM Technical Report 2019-01, 59 p. \href{https://research-repository.st-andrews.ac.uk/handle/10023/18509}{https://research-repository.st-andrews.ac.uk/handle/10023/18509}
@@ -67,7 +68,8 @@ compute_nearby <- function (samples,
                             nearby,
                             max.size = 1e7,
                             no.partitions = 10,
-                            resolution = NULL) {
+                            resolution = NULL,
+                            verbose = TRUE) {
 
   #---------------------------------------------
   # Perform function checks
@@ -151,7 +153,8 @@ compute_nearby <- function (samples,
                                              test_data = prediction.grid,
                                              covariate.names),
                               nearby = nearby,
-                              no.partitions = no.partitions)
+                              no.partitions = no.partitions,
+                              verbose = verbose)
 
   }else{
 
@@ -163,7 +166,8 @@ compute_nearby <- function (samples,
                                           test_data = prediction.grid,
                                           covariate.names),
                            nearby = nearby,
-                           choice = "distance")
+                           choice = "distance",
+                           verbose = verbose)
 
   }
 
@@ -178,6 +182,15 @@ compute_nearby <- function (samples,
   rgow <- raster::rasterFromXYZ(xyz = rgow,
                                 crs = coordinate.system)
 
-  message('Done!')
-  return(rgow)
+
+  reslist <- list(type = "nearby",
+                  raster = rgow,
+                  covariate.names = covariate.names,
+                  samples = samples,
+                  prediction.grid = prediction.grid,
+                  coordinate.system = coordinate.system)
+
+
+  if(verbose) message('Done!')
+  return(reslist)
 }

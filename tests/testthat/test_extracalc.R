@@ -27,7 +27,7 @@ testthat::test_that("Do we get the same results?",{
   suppressWarnings(spermw.extra <- compute_extrapolation(samples = segs,
                         covariate.names = my_cov,
                         prediction.grid = predgrid,
-                        coordinate.system = my_crs))
+                        coordinate.system = my_crs, verbose = FALSE))
 
   testthat::expect_equal(spermw.extra$summary$extrapolation$univariate.n, 105, tolerance = par.tol)
 
@@ -37,6 +37,6 @@ testthat::test_that("Do we get the same results?",{
                                 coordinate.system = my_crs,
                                 nearby = 1))
 
-  testthat::expect_equal(range(na.omit(raster::getValues(spermw.near))), c(0,54))
+  testthat::expect_equal(range(na.omit(raster::getValues(spermw.near$raster))), c(0,54))
 
 })

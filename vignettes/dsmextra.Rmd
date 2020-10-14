@@ -52,7 +52,6 @@ library(raster)       # Geographic data analysis and modeling
 library(tidyverse)    # Packages for data science
 library(magrittr)     # Pipe operator
 
-
 #'--------------------------------------------------------------------
 # Set tibble options
 #'--------------------------------------------------------------------
@@ -213,22 +212,23 @@ The `compare_covariates` function is available for this purpose. It is designed 
 Additional arguments include:
 
 + `extrapolation.type`: one of `'univariate'`, `'combinatorial'` or `'both'`
++ `extrapolation.object`: output list object returned by `compute_extrapolation`. 
++ `create.plots`: if `TRUE`, generates boxplots of results
++ `display.percent`: if `TRUE`, the y-axis of the boxplots is expressed as a percentage of the total number of grid cells in `prediction.grid`
+
+Optionally, one can bypass `compute_extrapolation` and run this function directly by specifying the following arguments and leaving `extrapolation.object` set as `NULL`:
+
 + `samples`: reference data
 + `covariate.names`: names of covariates of interest
 + `prediction.grid`: target data
 + `coordinate.system`: projected coordinate system relevant to study location
-+ `create.plots`: if `TRUE`, generates boxplots of results
-+ `display.percent`: if `TRUE`, the y-axis of the boxplots is expressed as a percentage of the total number of grid cells in `prediction.grid`
 
 Below is an example for both types of extrapolation (univariate and combinatorial), and the full set of five covariates.
 
 ```{r echo=TRUE, message=TRUE, warning=FALSE}
 compare_covariates(extrapolation.type = "both",
-                   covariate.names = covariates.spermwhale,
+                   extrapolation.object = spermwhale.extrapolation,
                    n.covariates = NULL,
-                   samples = segs, 
-                   prediction.grid = predgrid,
-                   coordinate.system = aftt_crs,
                    create.plots = TRUE,
                    display.percent = TRUE)
 ```
@@ -278,8 +278,7 @@ Lastly, we can use the `map_extrapolation` function to create a series of intera
 Arguments to this function are identical to those of `compute_extrapolation`, with the exception of:
 
 + `map.type`: output to be shown on the map. One of `'extrapolation'` for a map of extrapolation values, `'mic'` for a map of the most influential covariates, or `'nearby'` for a neighbourhood map (proportion of reference data near each target grid cell, a.k.a `%N`).
-+ `extrapolation.values`: output from `compute_extrapolation` (only valid for `map.type = 'extrapolation'` and `map.type = 'mic'`)
-+ `gower.values`: output from `compute_nearby` (only valid for `map.type = 'nearby'`)
++ `extrapolation.object`: output object from `compute_extrapolation` or `compute_nearby`.
 
 `sightings` and `tracks` are optional arguments, and only plotted if specified. If either is provided as a matrix, then coordinates must be labelled `x` and `y`, lest a warning be returned. Tracks can also be given as a `SpatialLinesDataFrame` object. The resulting maps can be panned, zoomed, and all layers toggled on and off independently. However, note that maps rely on the `leaflet` package [@Cheng2018], and thus require an internet connection; they will not work offline. Facilities to save map tiles locally for offline viewing are currently not implemented but may be rolled into a future version of the code. Finally, note that `prediction.grid` is only used here to set the map extent when plotting.
 
@@ -297,11 +296,8 @@ obs.sp <- obs %>%
 Here's a map of extrapolation (`ExDet`) values:
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, fig.cap=" "}
-map_extrapolation(map.type = "extrapolation",
-                  extrapolation.values = spermwhale.extrapolation,
-                  covariate.names = covariates.spermwhale,
-                  prediction.grid = predgrid, 
-                  coordinate.system = aftt_crs,
+map_extrapolation(map.type = "extrapolation", 
+                  extrapolation.object = spermwhale.extrapolation,
                   sightings = obs.sp, 
                   tracks = transects)
 ```
@@ -310,10 +306,7 @@ Most influential covariates (MIC):
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, fig.cap=" "}
 map_extrapolation(map.type = "mic",
-                  extrapolation.values = spermwhale.extrapolation,
-                  covariate.names = covariates.spermwhale,
-                  prediction.grid = predgrid, 
-                  coordinate.system = aftt_crs,
+                  extrapolation.object = spermwhale.extrapolation,
                   sightings = obs.sp, 
                   tracks = transects)
 ```
@@ -322,10 +315,7 @@ Proportion of data nearby (`%N`):
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, fig.cap=" "}
 map_extrapolation(map.type = "nearby",
-                  gower.values = spermwhale.nearby,
-                  covariate.names = covariates.spermwhale,
-                  prediction.grid = predgrid, 
-                  coordinate.system = aftt_crs,
+                  extrapolation.object = spermwhale.nearby,
                   sightings = obs.sp, 
                   tracks = transects)
 ```

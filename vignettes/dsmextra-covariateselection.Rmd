@@ -52,7 +52,6 @@ library(viridisLite)          # Default Color Maps from 'matplotlib'
 library(smoothr)              # Smooth and tidy spatial features
 library(sp)                   # Classes and methods for spatial data
 
-
 set.seed(42) # Set the random seed
 
 #'---------------------------------------------
@@ -200,37 +199,23 @@ stenella.nearby <- dsmextra::compute_nearby(samples = survey.segdata,
 
 # (1) Univariate + combinatorial extrapolation (ExDet)
 dsmextra::map_extrapolation(map.type = "extrapolation", 
-                            base.layer = "ocean", 
-                            extrapolation.values = stenella.exdet, 
-                            covariate.names = stenella.covariates, 
-                            prediction.grid = pred.grid, 
-                            coordinate.system = GulfMexico_proj)
+                            extrapolation.object = stenella.exdet)
 
 # (2) Most influential covariates (MIC)
 dsmextra::map_extrapolation(map.type = "mic", 
-                            base.layer = "gray", 
-                            extrapolation.values = stenella.exdet, 
-                            covariate.names = stenella.covariates, 
-                            prediction.grid = pred.grid, 
-                            coordinate.system = GulfMexico_proj)
+                            extrapolation.object = stenella.exdet,
+                            base.layer = "gray")
 
 # (3) Percentage of data nearby (%N)
 dsmextra::map_extrapolation(map.type = "nearby", 
-                            base.layer = "ocean", 
-                            gower.values = stenella.nearby, 
-                            covariate.names = stenella.covariates,
-                            prediction.grid = pred.grid, 
-                            coordinate.system = GulfMexico_proj)
+                            extrapolation.object = stenella.nearby)
 
 
 # Compare the extent of univariate and combinatorial extrapolation 
 # (ExDet metric) associated with different combinations of covariates
 dsmextra::compare_covariates(extrapolation.type = "both", 
-                             samples = survey.segdata,
+                             extrapolation.object = stenella.exdet,
                              n.covariates = NULL, # All possible combinations
-                             covariate.names = stenella.covariates,
-                             prediction.grid = pred.grid, 
-                             coordinate.system = GulfMexico_proj,
                              create.plots = TRUE, 
                              display.percent = TRUE)
 ```

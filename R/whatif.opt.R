@@ -2,7 +2,7 @@
 #'
 #' Implements the methods described in King and Zeng (2007) for evaluating counterfactuals.
 #'
-#' The \code{\link[WhatIf]{whatif}} function from the \href{https://CRAN.R-project.org/package=WhatIf}{Whatif} package (Gandrud et al. 2017) may not run on very large datasets. To circumvent this problem, \code{whatif.opt} sets the calculations performed by \code{\link[WhatIf]{whatif}} to run on partitions of the data instead, for greater efficiency. \code{whatif.opt} can be called internally within compute_nearby by using two additional arguments, namely:
+#' The \code{whatif} function from the \href{https://CRAN.R-project.org/package=WhatIf}{Whatif} package (Gandrud et al. 2017) may not run on very large datasets. To circumvent this problem, \code{whatif.opt} sets the calculations performed by \code{whatif} to run on partitions of the data instead, for greater efficiency. \code{whatif.opt} can be called internally within compute_nearby by using two additional arguments, namely:
 #' \tabular{ll}{
 #'   \code{max.size} \tab Threshold above which partitioning will be triggered \cr
 #'   \code{no.partitions} \tab Number of required partitions \cr
@@ -15,6 +15,7 @@
 #' @param nearby Scalar indicating which reference data points are considered to be 'nearby' (i.e. within ‘nearby’ mean geometric Gower's distance of) prediction points.
 #' @param miss Optional string indicating the strategy for dealing with missing data.
 #' @param no.partitions Integer. Number of desired partitions of the data (default of 10).
+#' @param verbose Logical. Show or hide possible warnings and messages.
 #'
 #' @importFrom stats model.frame model.matrix na.fail na.omit terms quantile update.formula
 #'
@@ -22,7 +23,7 @@
 #'
 #' @author Phil J. Bouchet
 #'
-#' @seealso \code{\link{compute_nearby}}, \code{\link[WhatIf]{whatif}}
+#' @seealso \code{\link{compute_nearby}}
 #'
 #' @references Gandrud C, King G, Stoll H, Zeng L (2017). WhatIf: Evaluate Counterfactuals. R package version 1.5-9. \href{https://CRAN.R-project.org/package=WhatIf}{https://CRAN.R-project.org/package=WhatIf}.
 #'
@@ -35,10 +36,11 @@ whatif.opt <- function (formula = NULL,
                         data, cfact,
                         nearby = 1,
                         miss = "list",
-                        no.partitions)
+                        no.partitions,
+                        verbose = TRUE)
 {
 
-  message("Preprocessing data ...")
+  if(verbose) message("Preprocessing data ...")
 
   #---------------------------------------------
   # Perform function checks
@@ -138,7 +140,7 @@ whatif.opt <- function (formula = NULL,
 
   if (!(identical(stats::complete.cases(cfact), rep(TRUE, dim(cfact)[1])))) {
     cfact <- na.omit(cfact)
-    message("Note:  counterfactuals with missing values eliminated from cfact")
+    if(verbose) message("Note:  counterfactuals with missing values eliminated from cfact")
   }
 
   if (is.data.frame(data)) {
@@ -289,13 +291,13 @@ whatif.opt <- function (formula = NULL,
   # Perform calculations
   #---------------------------------------------
 
-  message("Calculating distances ....")
+  if(verbose) message("Calculating distances ....")
 
   samp.range <- apply(data, 2, max, na.rm = TRUE) - apply(data, 2, min, na.rm = TRUE)
 
 
   if (identical(TRUE, any(samp.range == 0))) {
-    message("Note:  range of at least one variable equals zero")
+    if(verbose) message("Note:  range of at least one variable equals zero")
   }
 
   dist <- calcgd(dat = data,
@@ -305,8 +307,8 @@ whatif.opt <- function (formula = NULL,
 
   gc()
 
-  message("\n")
-  message("Calculating the geometric variance ...")
+  if(verbose) message("\n")
+  if(verbose) message("Calculating the geometric variance ...")
 
   gv.x <- geomvar(dat = data, rang = samp.range)
 
@@ -318,8 +320,8 @@ whatif.opt <- function (formula = NULL,
   # Wrap up
   #---------------------------------------------
 
-  message("\n")
-  message("Finishing up ...")
+  if(verbose) message("\n")
+  if(verbose) message("Finishing up ...")
 
   out <- list(call = match.call(), geom.var = gv.x,
               sum.stat = summary)

@@ -135,28 +135,16 @@ testthat::test_that("Wrong inputs",{
   suppressWarnings(extrapolation.calc <- compute_extrapolation(samples = segs,
                                               covariate.names = my_cov,
                                               prediction.grid = predgrid,
-                                              coordinate.system = my_crs))
+                                              coordinate.system = my_crs, verbose = FALSE))
 
-  testthat::expect_error(object = map_extrapolation(map.type = "Humpback whale",
-                                                    extrapolation.values = extrapolation.calc,
-                                                    covariate.names = my_cov,
-                                                    prediction.grid = predgrid,
-                                                    coordinate.system = my_crs),
+  testthat::expect_error(object = map_extrapolation(map.type = "Humpback whale", extrapolation.object = extrapolation.calc),
                          regexp = "Unknown map type")
 
 
-  testthat::expect_error(object = map_extrapolation(map.type = NULL,
-                                                    extrapolation.values = extrapolation.calc,
-                                                    covariate.names = my_cov,
-                                                    prediction.grid = predgrid,
-                                                    coordinate.system = my_crs),
+  testthat::expect_error(object = map_extrapolation(map.type = NULL, extrapolation.object = extrapolation.calc),
                          regexp = "Argument 'maptype' must be specified")
 
-  testthat::expect_error(object = map_extrapolation(map.type = "nearby",
-                                                    extrapolation.values = extrapolation.calc,
-                                                    covariate.names = my_cov,
-                                                    prediction.grid = predgrid,
-                                                    coordinate.system = my_crs),
-                         regexp = "Argument 'gower.values' cannot be NULL when maptype is set to 'nearby'")
+  testthat::expect_error(object = map_extrapolation(map.type = "nearby", extrapolation.object = extrapolation.calc),
+                         regexp = "Map type undefined for the input extrapolation.object")
 
 })

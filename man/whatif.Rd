@@ -17,6 +17,7 @@ whatif(
   return.inputs = FALSE,
   return.distance = FALSE,
   mc.cores = 2,
+  verbose = TRUE,
   ...
 )
 }
@@ -30,12 +31,14 @@ whatif(
 \item{nearby}{An optional scalar indicating which observed data points are considered to be nearby (i.e., withing ‘nearby’ geometric variances of) the counterfactuals. Used to calculate the summary statistic returned by the function: the fraction of the observed data nearby each counterfactual. By default, the geometric variance of the covariate data is used. For example, setting nearby to 2 will identify the proportion of data points within two geometric variances of a counterfactual. Default is \code{NULL}.}
 
 \item{choice}{An optional string indicating which analyses to undertake. The options are either "hull", only perform the convex hull membership test; "distance", do not perform the convex hull test but do everything else, such as calculating the distance between each counterfactual and data point; or "both", undertake both the convex hull test and the distance calculations (i.e., do everything). Default is "both".}
+
+\item{verbose}{Logical. Show or hide possible warnings and messages.}
 }
 \value{
 An object of class "whatif".
 }
 \description{
-Implements the methods described in King and Zeng (2007) for evaluating counterfactuals. This function is a duplicate of the \code{\link[WhatIf]{whatif}} function from the \href{https://CRAN.R-project.org/package=WhatIf}{Whatif} package (GPL >= 3 license).
+Implements the methods described in King and Zeng (2007) for evaluating counterfactuals. This function is a duplicate of the \code{whatif} function from the \href{https://CRAN.R-project.org/package=WhatIf}{Whatif} package (GPL >= 3 license).
 }
 \references{
 Gandrud C, King G, Stoll H, Zeng L (2017). WhatIf: Evaluate Counterfactuals. R package version 1.5-9. \href{https://CRAN.R-project.org/package=WhatIf}{https://CRAN.R-project.org/package=WhatIf}.
@@ -43,6 +46,6 @@ Gandrud C, King G, Stoll H, Zeng L (2017). WhatIf: Evaluate Counterfactuals. R p
 King G, Zeng L (2007). When can history be our guide? The pitfalls of counterfactual inference. International Studies Quarterly 51, 183–210. DOI: \href{https://www.jstor.org/stable/pdf/4621707.pdf?seq=1#page_scan_tab_contents}{10.1111/j.1468-2478.2007.00445.x}
 }
 \seealso{
-\code{\link{compute_nearby}}, \code{\link[WhatIf]{whatif}}
+\code{\link{compute_nearby}}
 }
 \keyword{internal}

@@ -6,34 +6,25 @@
 \usage{
 map_extrapolation(
   map.type = NULL,
+  extrapolation.object = NULL,
   base.layer = "ocean",
-  extrapolation.values = NULL,
-  gower.values = NULL,
-  covariate.names = NULL,
-  prediction.grid = NULL,
-  coordinate.system = NULL,
   sightings = NULL,
-  tracks = NULL
+  tracks = NULL,
+  verbose = TRUE
 )
 }
 \arguments{
 \item{map.type}{Character string. Type of map to be returned. Either \code{extrapolation} for an extrapolation map, \code{mic} for a map of the most influential covariates, or \code{nearby} for a map of the percentage of data nearby.}
 
+\item{extrapolation.object}{List object as returned by \link{compute_extrapolation} or \link{compute_nearby}.}
+
 \item{base.layer}{Base layer used for mapping. The default is \code{ocean}, which uses the ESRI.OceanBasemap. Use \code{world} for ESRI.WorldImagery and \code{gray} for ESRI.WorldGrayCanvas. Available map tiles can be viewed at \href{https://leaflet-extras.github.io/leaflet-providers/preview/}{https://leaflet-extras.github.io/leaflet-providers/preview/}.}
-
-\item{extrapolation.values}{List object as returned by \link{compute_extrapolation}. Only valid when \code{map.type = extrapolation} or \code{map.type = mic}.}
-
-\item{gower.values}{Raster layer object as returned by \link{compute_nearby}. Only valid when \code{map.type = nearby}.}
-
-\item{covariate.names}{Character string. Names of the covariates of interest.}
-
-\item{prediction.grid}{Prediction data.frame. This contains both geographic coordinates (\code{x}, \code{y}) and covariate values associated with the target locations for which predictions are desired. Typically, these locations are taken as the centroids of the grid cells in a spatial prediction grid/raster. See \code{\link[dsm]{predict.dsm}}.}
-
-\item{coordinate.system}{Projected coordinate system relevant to the study location. Can be either a character string or an object of class \code{\link[sp]{CRS}}.}
 
 \item{sightings}{Species observations (optional). Can be supplied as a \code{matrix} of coordinates, a \code{data.frame}, a \code{\link[sp]{SpatialPoints}} object or a \code{\link[sp]{SpatialPointsDataFrame}} object. Circle markers will be proportional to group size if the data contain a column labelled \code{size}.}
 
 \item{tracks}{Survey tracks (optional). Can be supplied as a \code{matrix} of coordinates, a \code{data.frame}, a \code{\link[sp]{SpatialLines}} object or a \code{\link[sp]{SpatialLinesDataFrame}} object. A \code{TransectID} field is required for matrix or data.frame inputs.}
+
+\item{verbose}{Logical. Show or hide possible warnings and messages.}
 }
 \value{
 An interactive html map.
@@ -72,23 +63,9 @@ spermw.nearby <- compute_nearby(samples = segs,
                                nearby = 1)
 
 # Generate maps
-map_extrapolation(map.type = "extrapolation",
-                  extrapolation.values = spermw.extrapolation,
-                covariate.names = my_cov,
-                prediction.grid = predgrid,
-                coordinate.system = my_crs)
-
-map_extrapolation(map.type = "mic",
-                extrapolation.values = spermw.extrapolation,
-                covariate.names = my_cov,
-                prediction.grid = predgrid,
-                coordinate.system = my_crs)
-
-map_extrapolation(map.type = "nearby",
-                gower.values = spermw.nearby,
-                covariate.names = my_cov,
-                prediction.grid = predgrid,
-                coordinate.system = my_crs)
+map_extrapolation(map.type = "extrapolation", extrapolation.object = spermw.extrapolation)
+map_extrapolation(map.type = "mic", extrapolation.object = spermw.extrapolation)
+map_extrapolation(map.type = "nearby", extrapolation.object = spermw.nearby)
 }
 \references{
 Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions. CREEM Technical Report 2019-01, 59 p. \href{https://research-repository.st-andrews.ac.uk/handle/10023/18509}{https://research-repository.st-andrews.ac.uk/handle/10023/18509}

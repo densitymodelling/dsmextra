@@ -10,7 +10,8 @@ compute_extrapolation(
   covariate.names,
   prediction.grid,
   coordinate.system,
-  resolution = NULL
+  resolution = NULL,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -23,9 +24,11 @@ compute_extrapolation(
 \item{coordinate.system}{Projected coordinate system relevant to the study location. Can be either a character string or an object of class \code{\link[sp]{CRS}}.}
 
 \item{resolution}{Resolution of the output raster (in units relevant to \code{coordinate.system}). Only required if \code{prediction.grid} is irregular, and thus needs to be rasterised. Defaults to \code{NULL}.}
+
+\item{verbose}{Logical. Show or hide possible warnings and messages.}
 }
 \value{
-A list object containing extrapolation values in both \code{data.frame} and \code{\link[raster]{raster}} format.
+A list object containing extrapolation values in both \code{data.frame} and \code{\link[raster]{raster}} format. Also included are a summary object of class \code{extrapolation_results_summary} and a copy of function inputs (i.e, \code{coordinate.system}, \code{covariate.names}, and \code{prediction.grid}).
 }
 \description{
 Assesses univariate (Type I) and combinatorial (Type II) extrapolation in spatial ecological models such as density surface models of line transect data. Models are built in a reference (calibration) system and projected into one or more target (prediction) system(s). The function is based on original code from the \href{https://cran.r-project.org/web/packages/ecospat/index.html}{ecospat} package (Broennimann et al. 2016). Although the required inputs mirror those of the \href{https://cran.r-project.org/web/packages/dsm/index.html}{dsm} package (Miller et al. 2015), the function is not restricted to line/strip-transect data and can be applied to other survey types and predictive modelling scenarios. See the 'Examples' section and Bouchet et al. (2019) for more information.
@@ -113,11 +116,7 @@ bioclim.ex <- compute_extrapolation(samples = ref,
                                     coordinate.system = sp::proj4string(r))
 
 # Make a map
-map_extrapolation(map.type = "extrapolation",
-                  extrapolation.values = bioclim.ex,
-                  covariate.names = bioclim.variables,
-                  coordinate.system = sp::proj4string(r),
-                  prediction.grid = target)
+map_extrapolation(map.type = "extrapolation", extrapolation.object = bioclim.ex)
 }
 \references{
 Bouchet PJ, Miller DL, Roberts JJ, Mannocci L, Harris CM and Thomas L (2019). From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions. CREEM Technical Report 2019-01, 59 p. \href{https://research-repository.st-andrews.ac.uk/handle/10023/18509}{https://research-repository.st-andrews.ac.uk/handle/10023/18509}

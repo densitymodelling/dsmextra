@@ -152,20 +152,14 @@ extrapolation_analysis <- function(samples,
   if(map.generate){
 
     m1 <- map_extrapolation(map.type = "extrapolation",
-                            extrapolation.values = ex1,
-                            covariate.names = covariate.names,
-                            prediction.grid = prediction.grid,
-                            coordinate.system = coordinate.system,
+                            extrapolation.object = ex1,
                             sightings = map.sightings,
                             tracks = map.tracks)
 
     print(m1)
 
     m2 <- map_extrapolation(map.type = "mic",
-                            extrapolation.values = ex1,
-                            covariate.names = covariate.names,
-                            prediction.grid = prediction.grid,
-                            coordinate.system = coordinate.system,
+                            extrapolation.object = ex1,
                             sightings = map.sightings,
                             tracks = map.tracks)
 
@@ -176,10 +170,7 @@ extrapolation_analysis <- function(samples,
     if(nearby.compute){
 
       m3 <- map_extrapolation(map.type = "nearby",
-                              gower.values = ex2,
-                              covariate.names = covariate.names,
-                              prediction.grid = prediction.grid,
-                              coordinate.system = coordinate.system,
+                              extrapolation.object = ex2,
                               sightings = map.sightings,
                               tracks = map.tracks)}
 
@@ -189,7 +180,7 @@ extrapolation_analysis <- function(samples,
 
   }
 
-  message("\n=== Analysis complete! ===\n")
+  message("\n=== Extrapolation assessment complete! ===\n")
   return(resl)
 
 }

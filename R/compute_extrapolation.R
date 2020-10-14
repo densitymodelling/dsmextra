@@ -36,8 +36,9 @@
 # @param print.precision Integer. Number of significant figures to be used when printing the summary. Default value of 2.
 # @param save.summary Logical, defaults to \code{FALSE}. Adds summary statistics to the output list.
 #' @param resolution Resolution of the output raster (in units relevant to \code{coordinate.system}). Only required if \code{prediction.grid} is irregular, and thus needs to be rasterised. Defaults to \code{NULL}.
+#' @param verbose Logical. Show or hide possible warnings and messages.
 #'
-#' @return A list object containing extrapolation values in both \code{data.frame} and \code{\link[raster]{raster}} format.
+#' @return A list object containing extrapolation values in both \code{data.frame} and \code{\link[raster]{raster}} format. Also included are a summary object of class \code{extrapolation_results_summary} and a copy of function inputs (i.e, \code{coordinate.system}, \code{covariate.names}, and \code{prediction.grid}).
 #'
 #' @author Phil J. Bouchet
 #'
@@ -107,19 +108,15 @@
 #'                                     coordinate.system = sp::proj4string(r))
 #'
 #' # Make a map
-#' map_extrapolation(map.type = "extrapolation",
-#'                   extrapolation.values = bioclim.ex,
-#'                   covariate.names = bioclim.variables,
-#'                   coordinate.system = sp::proj4string(r),
-#'                   prediction.grid = target)
-
+#' map_extrapolation(map.type = "extrapolation", extrapolation.object = bioclim.ex)
 
 compute_extrapolation <- function(samples,
                                   segments,
                                   covariate.names,
                                   prediction.grid,
                                   coordinate.system,
-                                  resolution = NULL){
+                                  resolution = NULL,
+                                  verbose = TRUE){
 
   #---------------------------------------------
   # Perform function checks
@@ -128,7 +125,7 @@ compute_extrapolation <- function(samples,
   calls <- names(sapply(match.call(), deparse))[-1]
 
   if(any("segments" %in% calls)) {
-    warning("The 'segments' argument is deprecated, please use 'samples' instead.")
+    if(verbose) warning("The 'segments' argument is deprecated, please use 'samples' instead.")
     samples <- segments
   }
 
@@ -163,7 +160,7 @@ compute_extrapolation <- function(samples,
 
     if(is.null(resolution)) stop('Prediction grid cells are not regularly spaced.\nA target raster resolution must be specified. See package documentation for details.')
 
-    warning('Prediction grid cells are not regularly spaced.\nData will be rasterised and covariate values averaged. See package documentation for details.')
+    if(verbose) warning('Prediction grid cells are not regularly spaced.\nData will be rasterised and covariate values averaged. See package documentation for details.')
 
     check.grid$z <- NULL
     sp::coordinates(check.grid) <- ~x+y
@@ -189,13 +186,10 @@ compute_extrapolation <- function(samples,
 
     prediction.grid <- raster::as.data.frame(ras.list, xy = TRUE, na.rm = TRUE)
 
-    # warning('New prediction grid (pred.grid) saved to global environment.')
-    # assign(x = 'pred.grid', prediction.grid, envir = .GlobalEnv)
-
 
   } # End if class(grid.regular)
 
-  message("Computing ...")
+  if(verbose) message("Computing ...")
 
   #---------------------------------------------
   # Define reference and target systems
@@ -310,54 +304,31 @@ compute_extrapolation <- function(samples,
   for(r in 1:length(reslist$rasters$mic)){
     if(!is.null(reslist$rasters$mic[[r]]))raster::projection(reslist$rasters$mic[[r]]) <- coordinate.system}
 
-  message("Done!")
-
 #  #---------------------------------------------
 #  # Print/save summary
 #  #---------------------------------------------
-#
-#  if(print.summary){
-#
-#    if(save.summary){
-#
-      sumres <- summarise_extrapolation(extrapolation.object = reslist,
-                                        covariate.names = covariate.names,
-                                        extrapolation = TRUE,
-                                        mic = TRUE)
 
-      class(sumres) <- c("extrapolation_results_summary", class(sumres))
-      reslist <- append(x = reslist, values = list(summary = sumres))
-#
-#    }else{
-#
-#      summarise_extrapolation(extrapolation.object = reslist,
-#                              covariate.names = covariate.names,
-#                              extrapolation = TRUE,
-#                              mic = TRUE,
-#                              print.precision = print.precision)
-#    }
-#
-#  }else{
-#
-#    if(save.summary){
-#
-#      sink("/dev/null")
-#      sumres <- summarise_extrapolation(extrapolation.object = reslist,
-#                                        covariate.names = covariate.names,
-#                                        extrapolation = TRUE,
-#                                        mic = TRUE,
-#                                        print.precision = print.precision)
-#      sink()
-#      reslist <- append(x = reslist, values = list(summary = sumres))
-#
-#    }else{
-#
-#    }
-#  }
+  sumres <- summarise_extrapolation(extrapolation.object = reslist,
+                                    covariate.names = covariate.names,
+                                    extrapolation = TRUE,
+                                    mic = TRUE)
 
-  # keep it classy
+  class(sumres) <- c("extrapolation_results_summary", class(sumres))
+  reslist <- append(x = reslist, values = list(summary = sumres))
+
+  # Add function inputs to obviate need to specify them in map()
+  reslist <- append(x = reslist, values = list(
+                                  covariate.names = covariate.names,
+                                  samples = samples,
+                                  prediction.grid = prediction.grid,
+                                  coordinate.system = coordinate.system))
+
+  reslist <- append(list(type = c("extrapolation", "mic")), reslist)
+
+  # Keep it classy
   class(reslist) <- c("extrapolation_results", class(reslist))
 
+  if(verbose) message("Done!")
   return(reslist)
 
 }

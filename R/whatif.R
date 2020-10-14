@@ -1,12 +1,13 @@
 #' Counterfactual evaluation
 #'
-#' Implements the methods described in King and Zeng (2007) for evaluating counterfactuals. This function is a duplicate of the \code{\link[WhatIf]{whatif}} function from the \href{https://CRAN.R-project.org/package=WhatIf}{Whatif} package (GPL >= 3 license).
+#' Implements the methods described in King and Zeng (2007) for evaluating counterfactuals. This function is a duplicate of the \code{whatif} function from the \href{https://CRAN.R-project.org/package=WhatIf}{Whatif} package (GPL >= 3 license).
 #'
 #' @param formula An optional formula without a dependent variable that is of class "formula" and that follows standard \code{R} conventions for formulas, e.g. ~ x1 + x2.  Allows you to transform or otherwise re-specify combinations of the variables in both \code{data} and \code{cfact}. To use this parameter, both \code{data} and \code{cfact} must be coercable to a \code{data.frame}; the variables of both \code{data} and \code{cfact} must be labelled; and all variables appearing in \code{formula} must also appear in both \code{data} and \code{cfact}. Otherwise, errors are returned. The intercept is automatically dropped. Default is \code{NULL}.
 #' @param data Either a model output object, or a n-by-k non-character (logical or numeric) matrix or data frame of observed covariate data with n data points or units and k covariates.
 #' @param cfact A \code{R} object or a string.  If a \code{R} object, a \eqn{m}-by-\eqn{k} non-character matrix or data frame of \emph{counterfactuals} with \eqn{m} counterfactuals and the same \eqn{k} covariates (in the same order) as in \code{data}.  However, if \code{formula} is used to select a subset of the \eqn{k} covariates, then \code{cfact} may contain either only these \eqn{j \leq k}{j <= K} covariates or the complete set of \eqn{k} covariates. An intercept should not be included as one of the covariates. Data frames will again be coerced to their internal numeric values if possible. If a string, either the complete path (including file name) of the file containing the counterfactuals or the path relative to your working directory. This file should be a white space delimited text file.
 #' @param nearby An optional scalar indicating which observed data points are considered to be nearby (i.e., withing ‘nearby’ geometric variances of) the counterfactuals. Used to calculate the summary statistic returned by the function: the fraction of the observed data nearby each counterfactual. By default, the geometric variance of the covariate data is used. For example, setting nearby to 2 will identify the proportion of data points within two geometric variances of a counterfactual. Default is \code{NULL}.
 #' @param choice An optional string indicating which analyses to undertake. The options are either "hull", only perform the convex hull membership test; "distance", do not perform the convex hull test but do everything else, such as calculating the distance between each counterfactual and data point; or "both", undertake both the convex hull test and the distance calculations (i.e., do everything). Default is "both".
+#' @param verbose Logical. Show or hide possible warnings and messages.
 #'
 #' @importFrom utils read.table setTxtProgressBar txtProgressBar
 #' @importFrom lpSolve lp
@@ -15,7 +16,7 @@
 #'
 #' @return An object of class "whatif".
 #'
-#' @seealso \code{\link{compute_nearby}}, \code{\link[WhatIf]{whatif}}
+#' @seealso \code{\link{compute_nearby}}
 #'
 #' @references Gandrud C, King G, Stoll H, Zeng L (2017). WhatIf: Evaluate Counterfactuals. R package version 1.5-9. \href{https://CRAN.R-project.org/package=WhatIf}{https://CRAN.R-project.org/package=WhatIf}.
 #'
@@ -25,13 +26,13 @@
 
 whatif <- function (formula = NULL, data, cfact, range = NULL, freq = NULL,
           nearby = 1, distance = "gower", miss = "list", choice = "both",
-          return.inputs = FALSE, return.distance = FALSE, mc.cores = 2,
+          return.inputs = FALSE, return.distance = FALSE, mc.cores = 2, verbose = TRUE,
           ...)
 {
 
   if (mc.cores <= 0)
     stop("mc.cores must be an integer greater than 0.", call. = FALSE)
-  message("Preprocessing data ...")
+  if(verbose) message("Preprocessing data ...")
 
   # if (grepl("Zelig*", class(data)) & missing(cfact))
   #   cfact <- zelig_setx_to_df(data)
@@ -128,7 +129,7 @@ whatif <- function (formula = NULL, data, cfact, range = NULL, freq = NULL,
   }
   if (!(identical(complete.cases(cfact), rep(TRUE, dim(cfact)[1])))) {
     cfact <- na.omit(cfact)
-    message("Note:  counterfactuals with missing values eliminated from cfact")
+    if(verbose) message("Note:  counterfactuals with missing values eliminated from cfact")
   }
   if (is.data.frame(data)) {
     if (is.character(as.matrix(data))) {
@@ -285,12 +286,12 @@ whatif <- function (formula = NULL, data, cfact, range = NULL, freq = NULL,
     n <- nrow(data)
   }
   if ((choice == "both") | (choice == "hull")) {
-    message("Performing convex hull test ...")
+    if(verbose) message("Performing convex hull test ...")
     test.result <- convex.hull.test(x = na.omit(data), z = cfact,
                                     mc.cores = mc.cores)
   }
   if ((choice == "both") | (choice == "distance")) {
-    message("Calculating distances ....")
+    if(verbose) message("Calculating distances ....")
     if (identical(distance, "gower")) {
       samp.range <- apply(data, 2, max, na.rm = TRUE) -
         apply(data, 2, min, na.rm = TRUE)
@@ -299,14 +300,14 @@ whatif <- function (formula = NULL, data, cfact, range = NULL, freq = NULL,
         samp.range[w] <- range[w]
       }
       if (identical(TRUE, any(samp.range == 0))) {
-        message("Note:  range of at least one variable equals zero")
+        if(verbose) message("Note:  range of at least one variable equals zero")
       }
       dist <- calc.gd(dat = data, cf = cfact, range = samp.range)
     }
     else {
       dist <- calc.ed(dat = na.omit(data), cf = cfact)
     }
-    message("Calculating the geometric variance...")
+    if(verbose) message("Calculating the geometric variance...")
     if (identical(distance, "gower")) {
       gv.x <- geom.var(dat = data, rang = samp.range)
     }
@@ -319,7 +320,7 @@ whatif <- function (formula = NULL, data, cfact, range = NULL, freq = NULL,
     else {
       summary <- colSums(dist <= nearby * gv.x) * (1/n)
     }
-    message("Calculating cumulative frequencies ...")
+    if(verbose) message("Calculating cumulative frequencies ...")
     if (is.null(freq)) {
       if (identical(distance, "gower")) {
         freqdist <- seq(0, 1, by = 0.05)
@@ -338,7 +339,7 @@ whatif <- function (formula = NULL, data, cfact, range = NULL, freq = NULL,
     dimnames(cumfreq) <- list(seq(1, nrow(cfact), by = 1),
                               freqdist)
   }
-  message("Finishing up ...")
+  if(verbose) message("Finishing up ...")
   if (return.inputs) {
     if (choice == "both") {
       if (return.distance) {

@@ -5,14 +5,12 @@
 #' @importFrom raster as.data.frame as.factor
 #' @import leaflet
 #'
-#' @inheritParams compute_extrapolation
-#'
 #' @param map.type Character string. Type of map to be returned. Either \code{extrapolation} for an extrapolation map, \code{mic} for a map of the most influential covariates, or \code{nearby} for a map of the percentage of data nearby.
+#' @param extrapolation.object List object as returned by \link{compute_extrapolation} or \link{compute_nearby}.
 #' @param base.layer Base layer used for mapping. The default is \code{ocean}, which uses the ESRI.OceanBasemap. Use \code{world} for ESRI.WorldImagery and \code{gray} for ESRI.WorldGrayCanvas. Available map tiles can be viewed at \href{https://leaflet-extras.github.io/leaflet-providers/preview/}{https://leaflet-extras.github.io/leaflet-providers/preview/}.
-#' @param extrapolation.values List object as returned by \link{compute_extrapolation}. Only valid when \code{map.type = extrapolation} or \code{map.type = mic}.
-#' @param gower.values Raster layer object as returned by \link{compute_nearby}. Only valid when \code{map.type = nearby}.
 #' @param sightings Species observations (optional). Can be supplied as a \code{matrix} of coordinates, a \code{data.frame}, a \code{\link[sp]{SpatialPoints}} object or a \code{\link[sp]{SpatialPointsDataFrame}} object. Circle markers will be proportional to group size if the data contain a column labelled \code{size}.
 #' @param tracks Survey tracks (optional). Can be supplied as a \code{matrix} of coordinates, a \code{data.frame}, a \code{\link[sp]{SpatialLines}} object or a \code{\link[sp]{SpatialLinesDataFrame}} object. A \code{TransectID} field is required for matrix or data.frame inputs.
+#' @param verbose Logical. Show or hide possible warnings and messages.
 #'
 #' @return An interactive html map.
 #'
@@ -54,52 +52,37 @@
 #'                                nearby = 1)
 #'
 #' # Generate maps
-#' map_extrapolation(map.type = "extrapolation",
-#'                   extrapolation.values = spermw.extrapolation,
-#'                 covariate.names = my_cov,
-#'                 prediction.grid = predgrid,
-#'                 coordinate.system = my_crs)
-#'
-#' map_extrapolation(map.type = "mic",
-#'                 extrapolation.values = spermw.extrapolation,
-#'                 covariate.names = my_cov,
-#'                 prediction.grid = predgrid,
-#'                 coordinate.system = my_crs)
-#'
-#' map_extrapolation(map.type = "nearby",
-#'                 gower.values = spermw.nearby,
-#'                 covariate.names = my_cov,
-#'                 prediction.grid = predgrid,
-#'                 coordinate.system = my_crs)
+#' map_extrapolation(map.type = "extrapolation", extrapolation.object = spermw.extrapolation)
+#' map_extrapolation(map.type = "mic", extrapolation.object = spermw.extrapolation)
+#' map_extrapolation(map.type = "nearby", extrapolation.object = spermw.nearby)
 
 map_extrapolation <- function(map.type = NULL,
+                              extrapolation.object = NULL,
                               base.layer = "ocean",
-                              extrapolation.values = NULL,
-                              gower.values = NULL,
-                              covariate.names = NULL,
-                              prediction.grid = NULL,
-                              coordinate.system = NULL,
                               sightings = NULL,
-                              tracks = NULL){
+                              tracks = NULL,
+                              verbose = TRUE){
 
   #---------------------------------------------
   # Perform function checks
   #---------------------------------------------
 
-  baselyr <- switch(base.layer,
-                    "ocean" = "Esri.OceanBasemap",
-                    "world" = "Esri.WorldImagery",
-                    "gray" = "Esri.WorldGrayCanvas")
+  if(is.null(map.type)) stop("Argument 'maptype' must be specified.")
+  if(!map.type%in%c("extrapolation", "nearby", "mic")) stop("Unknown map type requested.")
+  if(is.null(extrapolation.object) & map.type == "extrapolation") stop("Argument 'extrapolation.values' cannot be NULL when maptype is set to 'extrapolation'.")
+  if(is.null(extrapolation.object) & map.type == "mic") stop("Argument 'extrapolation.values' cannot be NULL when maptype is set to 'mic'.")
+  if(!map.type %in% extrapolation.object$type) stop("Map type undefined for the input extrapolation.object")
 
-  if(is.null(map.type)) stop("Argument 'maptype' must be specified")
+  #---------------------------------------------
+  # Extract data
+  #---------------------------------------------
 
-  if(!map.type%in%c("extrapolation", "nearby", "mic")) stop("Unknown map type")
+  covariate.names <- extrapolation.object$covariate.names
+  prediction.grid <- extrapolation.object$prediction.grid
+  coordinate.system <- extrapolation.object$coordinate.system
+  if(map.type == "nearby") gower.values <- extrapolation.object$raster
+  if(map.type %in% c("extrapolation", "mic")) extrapolation.values <- extrapolation.object
 
-  if(is.null(gower.values) & map.type == "nearby") stop("Argument 'gower.values' cannot be NULL when maptype is set to 'nearby'")
-
-  if(is.null(extrapolation.values) & map.type == "extrapolation") stop("Argument 'extrapolation.values' cannot be NULL when maptype is set to 'extrapolation'")
-
-  if(is.null(extrapolation.values) & map.type == "mic") stop("Argument 'extrapolation.values' cannot be NULL when maptype is set to 'mic'")
 
   if(!is.null(sightings)){
 
@@ -108,7 +91,7 @@ map_extrapolation <- function(map.type = NULL,
     if(is.data.frame(sightings) | is.matrix(sightings)){
 
       if(sum(c("x","y")%in%names(sightings))<2) {
-        message("Missing x,y coordinates: sightings not shown")
+        if(verbose) message("Missing x,y coordinates: sightings not shown")
         sightings = NULL
         latlon.sightings = NULL}
 
@@ -126,7 +109,7 @@ map_extrapolation <- function(map.type = NULL,
     if(is.data.frame(tracks) | is.matrix(tracks)){
 
       if(sum(c("x","y")%in%names(tracks))<2) {
-        message("Missing x,y coordinates: tracks not shown")
+        if(verbose) message("Missing x,y coordinates: tracks not shown")
         tracks = NULL
         latlon.tracks = NULL}
 
@@ -144,6 +127,11 @@ map_extrapolation <- function(map.type = NULL,
     }
   }
 
+  baselyr <- switch(base.layer,
+                    "ocean" = "Esri.OceanBasemap",
+                    "world" = "Esri.WorldImagery",
+                    "gray" = "Esri.WorldGrayCanvas")
+
   coordinate.system <- check_crs(coordinate.system = coordinate.system)
 
   #---------------------------------------------
@@ -160,9 +148,10 @@ map_extrapolation <- function(map.type = NULL,
   # Check which type of extrapolation occurred
   #---------------------------------------------
 
+  if(map.type %in% c("mic", "extrapolation")){
   types <- purrr::map_dbl(.x = extrapolation.values$data[2:4],
                           .f = ~nrow(.))
-  types <- c("Univariate", "Combinatorial", "Analogue")[types>0]
+  types <- c("Univariate", "Combinatorial", "Analogue")[types>0]}
 
   #---------------------------------------------
   # Defines survey extent (in lat/lon coords)
@@ -200,7 +189,7 @@ map_extrapolation <- function(map.type = NULL,
 
       }else{
 
-        message("No transect ID detected: Linking all segments")
+        if(verbose) message("No transect ID detected: Linking all segments")
 
         tracks <- tracks %>%
           dplyr::select(x, y) %>%
@@ -451,7 +440,7 @@ map_extrapolation <- function(map.type = NULL,
                                   group = "Sightings")
     }else{
 
-      message("No 'size' column detected: Group size not shown")
+      if(verbose) message("No 'size' column detected: Group size not shown")
 
       exleaf <- exleaf %>%
         leaflet::addCircleMarkers(lng = sp::coordinates(sightings)[,1],
@@ -498,7 +487,7 @@ map_extrapolation <- function(map.type = NULL,
                      overlayGroups = lyr.controls,
                      options = layersControlOptions(collapsed = FALSE))
 
-  warning('map_extrapolation relies on the leaflet package, which is built around a Web Mercator projection (EPSG:3857), and therefore requires rasters to be reprojected for plotting. As a result, minor discrepancies may  occur between the interactive maps shown in the viewer, and the underlying raw data. The latter can be accessed directly from the extrapolation.values or gower.values objects and visualised using alternative packages such as ggplot2.')
+  if(verbose) warning('map_extrapolation relies on the leaflet package, which is built around a Web Mercator projection (EPSG:3857), and therefore requires rasters to be reprojected for plotting. As a result, minor discrepancies may  occur between the interactive maps shown in the viewer, and the underlying raw data. The latter can be accessed directly from the extrapolation.values or gower.values objects and visualised using alternative packages such as ggplot2.')
 
   return(exleaf)
 }

@@ -29,16 +29,14 @@ testthat::test_that("Outputs are correct",{
   # compute_extrapolation returns a list containing data, rasters, and a summary if save.summary = TRUE
 
   testthat::expect_s3_class(spermw.extra, "extrapolation_results")
-  testthat::expect_equal(length(spermw.extra), 3)
-  testthat::expect_equal(names(spermw.extra), c("data", "rasters","summary"))
+  testthat::expect_equal(length(spermw.extra), 8)
+  testthat::expect_equal(names(spermw.extra), c("type", "data", "rasters", "summary", "covariate.names",
+                                                "samples", "prediction.grid", "coordinate.system"))
 
   # Map_extrapolation returns an html / leaflet object
 
   suppressWarnings(map1 <- map_extrapolation(map.type = "extrapolation",
-                  extrapolation.values = spermw.extra,
-                  covariate.names = my_cov,
-                  prediction.grid = predgrid,
-                  coordinate.system = my_crs))
+                  extrapolation.object = spermw.extra))
 
   testthat::expect_equal(object = class(map1), expected = c("leaflet", "htmlwidget"))
 

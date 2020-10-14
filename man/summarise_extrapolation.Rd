@@ -14,8 +14,6 @@ summarise_extrapolation(
 \arguments{
 \item{extrapolation.object}{Output object from a run of \link{compute_extrapolation}.}
 
-\item{covariate.names}{Character string. Names of the covariates of interest.}
-
 \item{extrapolation}{Logical. Whether to return a summary of univariate/combinatorial extrapolation. Defaults to TRUE.}
 
 \item{mic}{Logical. Whether to return a summary of the most influential covariates (MIC) - see \link{compute_extrapolation}. Defaults to TRUE.}

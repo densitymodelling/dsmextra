@@ -5,11 +5,12 @@
 #' The extent and magnitude of extrapolation naturally vary with the type and number of covariates considered. It may be useful, therefore, to test different combinations of covariates to inform their selection \emph{a priori}, i.e. before model fitting, thereby supporting model parsimony.
 #' @import ggplot2
 #' @param extrapolation.type Character string. Type of extrapolation to be assessed. Can be one of \code{univariate}, \code{combinatorial}, or \code{both} (default).
+#' @param extrapolation.object List object as returned by \link{compute_extrapolation}.
 #' @param n.covariates Maximum number of covariates. The function will compare all combinations of 1 to \code{n.covariates} covariates.
 #' @param create.plots Logical, defaults to \code{TRUE}. Whether to produce summary plots.
 #' @param display.percent Logical. If \code{TRUE} (default), scales the y-axis of the summary plots as a percentage of the total number of grid cells in \code{prediction.grid}.
-#'
-#' @inheritParams compute_extrapolation
+#' @param verbose Logical. Show or hide possible warnings and messages.
+#' @param ... Additional parameters passed to \link{compute_extrapolation}. These are optional when \code{extrapolation.object} is specified, and compulsory otherwise.
 #'
 #' @return Prints a summary table in the R console. Also generates summary boxplots if \code{create.plots} is set to \code{TRUE}.
 #'
@@ -47,38 +48,69 @@
 #'                   coordinate.system = my_crs,
 #'                   create.plots = TRUE,
 #'                   display.percent = TRUE)
+#'
+#' # Can also run this function directly from the
+#' # object returned by compute_extrapolation
+#' spermw.extrapolation <- compute_extrapolation(samples = segs,
+#'       covariate.names = my_cov,
+#'       prediction.grid = predgrid,
+#'       coordinate.system = my_crs)
+#'
+#' compare_covariates(extrapolation.type = "both",
+#'                    extrapolation.object = spermw.extrapolation)
+#'
 #' @author Phil J. Bouchet
+
 compare_covariates <- function(extrapolation.type = "both",
-                               samples,
-                               covariate.names,
+                               extrapolation.object = NULL,
                                n.covariates = NULL,
-                               prediction.grid,
-                               coordinate.system,
                                create.plots = TRUE,
                                display.percent = TRUE,
-                               resolution = NULL){
+                               verbose = TRUE,
+                               ...){
+
+  #---------------------------------------------
+  # Check inputs
+  #---------------------------------------------
+
+  if(is.null(extrapolation.object)){
+    extrapolation.object <- list(...)
+    required.args <- c("samples", "covariate.names", "prediction.grid", "coordinate.system")
+    if(!all(required.args %in% names(extrapolation.object))) {
+      missing.args <- required.args[which(!required.args %in% names(extrapolation.object))]
+      stop(paste0("Missing input arguments: ", paste0(missing.args, collapse = ", ")))}
+  }
+
+  samples <- extrapolation.object$samples
+  covariate.names <- extrapolation.object$covariate.names
+  prediction.grid <- extrapolation.object$prediction.grid
+  coordinate.system <- extrapolation.object$coordinate.system
+
+  #---------------------------------------------
+  # Additional function checks
+  #---------------------------------------------
+
+  if(!extrapolation.type%in%c("both", "univariate", "combinatorial"))
+    stop("Unknown extrapolation type.")
+
+  if(!is.null(n.covariates)){
+    if(max(n.covariates) > length(covariate.names))
+      stop("n.covariates exceeds the number of covariates available.")}
+
+  #---------------------------------------------
+  # Check CRS
+  #---------------------------------------------
+
+  coordinate.system <- check_crs(coordinate.system = coordinate.system)
+
+  samples <- na.omit(samples)
+  prediction.grid <- na.omit(prediction.grid)
 
   #---------------------------------------------
   # Total number of prediction grid cells
   #---------------------------------------------
 
   ntot <- nrow(prediction.grid)
-
-  #---------------------------------------------
-  # Perform function checks
-  #---------------------------------------------
-
-  if(!extrapolation.type%in%c("both", "univariate", "combinatorial"))
-    stop("Unknown extrapolation type")
-
-  if(!is.null(n.covariates)){
-    if(max(n.covariates) > length(covariate.names))
-      stop("n.covariates exceeds the number of covariates available")}
-
-  coordinate.system <- check_crs(coordinate.system = coordinate.system)
-
-  samples <- na.omit(samples)
-  prediction.grid <- na.omit(prediction.grid)
 
   #---------------------------------------------
   # Determine all possible combinations of covariates
@@ -108,7 +140,7 @@ compare_covariates <- function(extrapolation.type = "both",
       purrr::flatten(.)
   }
 
-  message("Preparing the data ...")
+  if(verbose) message("Preparing the data ...")
 
   #---------------------------------------------
   # Check if prediction grid is regular
@@ -128,35 +160,27 @@ compare_covariates <- function(extrapolation.type = "both",
 
     if(is.null(resolution)) stop('Prediction grid cells are not regularly spaced.\nA target raster resolution must be specified.')
 
-    warning('Prediction grid cells are not regularly spaced.\nData will be rasterised and covariate values averaged.')
+    if(verbose) warning('Prediction grid cells are not regularly spaced.\nData will be rasterised and covariate values averaged.')
 
     check.grid$z <- NULL
     sp::coordinates(check.grid) <- ~x+y
     sp::proj4string(check.grid) <- coordinate.system
 
     # Create empty raster with desired resolution
-
     ras <- raster::raster(raster::extent(check.grid), res = resolution)
     raster::crs(ras) <- coordinate.system
 
     # Create individual rasters for each covariate
-
     ras.list <- purrr::map(.x = covariate.names,
                            .f = ~raster::rasterize(as.data.frame(check.grid), ras,
                                                    prediction.grid[,.x], fun = mean_ras)) %>%
       purrr::set_names(., covariate.names)
 
     # Combine all rasters
-
     ras.list <- raster::stack(ras.list)
 
     # Update prediction grid
-
     prediction.grid <- raster::as.data.frame(ras.list, xy = TRUE, na.rm = TRUE)
-
-    # warning('New prediction grid (pred.grid) saved to global environment.')
-    # assign(x = 'pred.grid', prediction.grid, envir = .GlobalEnv)
-
 
   } # End if class(grid.regular)
 
@@ -164,7 +188,7 @@ compare_covariates <- function(extrapolation.type = "both",
   # Carry out extrapolation analysis for each combination of covariates
   #---------------------------------------------
 
-  message("Computing ...")
+  if(verbose) message("Computing ...")
 
   pb <- dplyr::progress_estimated(length(combs))
 
@@ -221,8 +245,9 @@ compare_covariates <- function(extrapolation.type = "both",
   # Build text string of variables
   #---------------------------------------------
 
-  message("\n")
-  message("Creating summaries ...")
+  if(verbose){
+    message("\n")
+    message("Creating summaries ...")}
 
   if(extrapolation.type=="both"){
 
@@ -549,8 +574,7 @@ compare_covariates <- function(extrapolation.type = "both",
     print(p3)
   }
 
-  message("Done!")
-
+  if(verbose) message("Done!")
   print(knitr::kable(restxt, format = "pandoc"))
 
 }

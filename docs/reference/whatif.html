@@ -143,6 +143,7 @@
   <span class='kw'>return.inputs</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>return.distance</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>mc.cores</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='no'>...</span>
 )</pre>
 
@@ -169,6 +170,10 @@
       <th>choice</th>
       <td><p>An optional string indicating which analyses to undertake. The options are either "hull", only perform the convex hull membership test; "distance", do not perform the convex hull test but do everything else, such as calculating the distance between each counterfactual and data point; or "both", undertake both the convex hull test and the distance calculations (i.e., do everything). Default is "both".</p></td>
     </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Logical. Show or hide possible warnings and messages.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -180,7 +185,7 @@
 <p>King G, Zeng L (2007). When can history be our guide? The pitfalls of counterfactual inference. International Studies Quarterly 51, 183–210. DOI: <a href='https://www.jstor.org/stable/pdf/4621707.pdf?seq=1#page_scan_tab_contents'>10.1111/j.1468-2478.2007.00445.x</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='compute_nearby.html'>compute_nearby</a></code>, <code>whatif</code></p></div>
+    <div class='dont-index'><p><code><a href='compute_nearby.html'>compute_nearby</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

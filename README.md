@@ -17,7 +17,7 @@ The idea behind `dsmextra` is to aid ecologists, practitioners, and model end-us
 
 ### Getting started 
 
-If you are just getting started with `dsmextra`, we recommend reading the tutorial [vignette](https://densitymodelling.github.io/dsmextra/articles/dsmextra.html), which provides a quick introduction to the package. You may also find the below paper and technical report useful:
+If you are just getting started with `dsmextra`, we recommend reading the introductory ('Get started') tutorial [vignette](https://densitymodelling.github.io/dsmextra/articles/dsmextra.html), which provides a quick introduction to the package. You may also find the below paper and technical report useful:
 
 * Bouchet et al. (2020). dsmextra: Extrapolation assessment tools for density surface models. Methods in Ecology and Evolution. DOI: [10.1111/2041-210X.13469](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13469)
 

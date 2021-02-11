@@ -152,15 +152,30 @@ compute_extrapolation <- function(samples,
 
   grid.regular <- try(raster::rasterFromXYZ(check.grid), silent = TRUE)
 
+  # grid.regular <- try(raster::rasterFromXYZ(check.grid,
+  #                     res = ifelse(is.null(resolution), c(NA,NA), resolution)),
+  #                     silent = TRUE)
+
   #---------------------------------------------
   # If grid is irregular, rasterise prediction.grid based on specified resolution
   #---------------------------------------------
 
-  if(class(grid.regular)=="try-error"){
+  if (class(grid.regular) == "try-error") {
+    if (is.null(resolution)) stop("Prediction grid cells are not regularly spaced.\nA target raster resolution must be specified. See package documentation for details.")
 
-    if(is.null(resolution)) stop('Prediction grid cells are not regularly spaced.\nA target raster resolution must be specified. See package documentation for details.')
+    if (verbose) warning("Prediction grid cells are not regularly spaced.\nData will be rasterised and covariate values averaged. See package documentation for details.")
 
-    if(verbose) warning('Prediction grid cells are not regularly spaced.\nData will be rasterised and covariate values averaged. See package documentation for details.')
+    RasteriseGrid <- TRUE
+  } else if (class(grid.regular) == "RasterLayer" & !is.null(resolution)) {
+    if (verbose) warning("New resolution specified.\nData will be rasterised and covariate values averaged. See package documentation for details.")
+
+    RasteriseGrid <- TRUE
+
+  } else {
+    RasteriseGrid <- FALSE
+  }
+
+  if(RasteriseGrid){
 
     check.grid$z <- NULL
     sp::coordinates(check.grid) <- ~x+y
@@ -187,7 +202,7 @@ compute_extrapolation <- function(samples,
     prediction.grid <- raster::as.data.frame(ras.list, xy = TRUE, na.rm = TRUE)
 
 
-  } # End if class(grid.regular)
+  } # End if
 
   if(verbose) message("Computing ...")
 

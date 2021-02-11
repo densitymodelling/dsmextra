@@ -19,7 +19,7 @@ The idea behind `dsmextra` is to aid ecologists, practitioners, and model end-us
 
 If you are just getting started with `dsmextra`, we recommend reading the introductory ('Get started') tutorial [vignette](https://densitymodelling.github.io/dsmextra/articles/dsmextra.html), which provides a quick introduction to the package. You may also find the below paper and technical report useful:
 
-* Bouchet et al. (2020). dsmextra: Extrapolation assessment tools for density surface models. Methods in Ecology and Evolution. DOI: [10.1111/2041-210X.13469](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13469)
+* Bouchet et al. (2020). dsmextra: Extrapolation assessment tools for density surface models. Methods in Ecology and Evolution, 11(11): 1464-1469. DOI: [10.1111/2041-210X.13469](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13469)
 
 * Bouchet et al. (2020). [From here and now to there and then: Practical recommendations for extrapolating cetacean density surface models to novel conditions](https://research-repository.st-andrews.ac.uk/bitstream/handle/10023/18509/Denmod_ExtrapolationReport_final_Aug2019.pdf?sequence=1&isAllowed=y). CREEM technical report 2019-01 v2.0, Centre for Research into Ecological & Environmental Modelling (CREEM), University of St Andrews, 59 p.
 

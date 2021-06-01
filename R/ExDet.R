@@ -45,11 +45,6 @@ ExDet <- function(ref, tg, xp){
                                             rep(0, nrow(tg) * ncol(tg))),
                                    dim = c(dim(tg), 3)),
                              c(1, 2), min)/(maxref - minref))
-
-  #---------------------------------------------
-  # Rename columns
-  #---------------------------------------------
-
   names(nt1.df) <- xp
 
   #---------------------------------------------
@@ -69,7 +64,6 @@ ExDet <- function(ref, tg, xp){
   #---------------------------------------------
 
   # Zero indicates within univariate range
-
   univ.rge <- which(nt1 == 0)
   mic_nt1[univ.rge] <- NA
 
@@ -127,7 +121,7 @@ ExDet <- function(ref, tg, xp){
     cov.aa <- cov.combs %>% purrr::map(., ~apply(as.matrix(ref[,.]), 2, mean))
     cov.bb <- cov.combs %>% purrr::map(., ~var(as.matrix(ref[,.])))
 
-  }else{
+  } else {
 
     cov.aa <- cov.combs %>% purrr::map(., ~apply(as.matrix(ref[,.]), 2, mean, na.rm = TRUE))
     cov.bb <- cov.combs %>% purrr::map(., ~var(as.matrix(ref[,.]), na.rm = TRUE))
@@ -138,17 +132,34 @@ ExDet <- function(ref, tg, xp){
   # Calculate Mahalanobis distance for each combination of covariates
   #---------------------------------------------
 
-  if(length(xp) == 1){
-    mah_nt2 <- purrr::pmap(list(cov.combs, cov.aa, cov.bb),
-                           function(a, b, c) stats::mahalanobis(x = as.matrix(tg.univ[,a]),
-                                                                center = b,
-                                                                cov = c))
+  # Need min of two analogue observations to calculate Mahalanobis distance
+  if(nrow(tg.univ) < 2){
 
-  }else{mah_nt2 <- purrr::pmap(list(cov.combs, cov.aa, cov.bb),
-                               function(a, b, c) stats::mahalanobis(x = as.matrix(tg.univ[,a]),
-                                                                    center = b,
-                                                                    cov = c))
+    warning("Only one prediction point within analogue conditions. Mahalanobis distances cannot be calculated.")
+    mah_nt2 <- vector(mode = "list", length = length(cov.combs))
+
+  } else {
+
+    mah_nt2 <- purrr::pmap(.l = list(cov.combs, cov.aa, cov.bb),
+                           .f = function(a, b, c) stats::mahalanobis(x = as.matrix(tg.univ[,a]),
+                                                                     center = b,
+                                                                     cov = c))
   }
+
+  # if(length(xp) == 1){
+  #
+  #   mah_nt2 <- purrr::pmap(list(cov.combs, cov.aa, cov.bb),
+  #                          function(a, b, c) stats::mahalanobis(x = as.matrix(tg.univ[,a]),
+  #                                                               center = b,
+  #                                                               cov = c))
+  #
+  # } else {
+  #
+  #   mah_nt2 <- purrr::pmap(list(cov.combs, cov.aa, cov.bb),
+  #                          function(a, b, c) stats::mahalanobis(x = as.matrix(tg.univ[,a]),
+  #                                                               center = b,
+  #                                                               cov = c))
+  # }
 
 
   #---------------------------------------------
@@ -180,7 +191,7 @@ ExDet <- function(ref, tg, xp){
   #---------------------------------------------
 
   results <- tibble::tibble(ExDet = nt1, mic_univariate = mic_nt1, mic_combinatorial = NA)
-  results$mic_combinatorial[univ.rge] <- mic_nt2
+  if(nrow(tg.univ) > 1)  results$mic_combinatorial[univ.rge] <- mic_nt2
 
   # Analog conditions have no MIC
 

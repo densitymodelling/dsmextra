@@ -138,11 +138,11 @@ map_extrapolation <- function(map.type = NULL,
   # Define coordinate systems
   #---------------------------------------------
 
-  crs.ll <- sp::CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
+  suppressWarnings(crs.ll <- sp::CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
 
   # EPSG:3857 (Web Mercator) is needed by leaflet for plotting
 
-  crs.webmerc <- sp::CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs")
+  suppressWarnings(crs.webmerc <- sp::CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs"))
 
   #---------------------------------------------
   # Check which type of extrapolation occurred
@@ -254,7 +254,7 @@ map_extrapolation <- function(map.type = NULL,
 
       pal.univariate <- leaflet::colorNumeric(c("#7f2704", "#fd8d3c", "#fee6ce"),
                                               raster::getValues(projr$univariate),na.color = "transparent")
-
+suppressWarnings(
       exleaf <- exleaf %>%
         leaflet::addRasterImage(map = .,
                                 x = projr$univariate,
@@ -273,7 +273,8 @@ map_extrapolation <- function(map.type = NULL,
                              r.values = raster::getValues(projr$univariate),
                              decreasing = TRUE,
                              group = "Univariate",
-                             title = "Univariate")}
+                             title = "Univariate")
+      )}
 
     if("combinatorial"%in%names(projr)){
 
@@ -285,6 +286,7 @@ map_extrapolation <- function(map.type = NULL,
         pal.combinatorial <- leaflet::colorNumeric(c("#deebf7", "#6baed6", "#08519c"),
                                                    raster::getValues(projr$combinatorial), na.color = "transparent")}
 
+      suppressWarnings(
       exleaf <- exleaf %>%
         leaflet::addRasterImage(map = .,
                                 x = projr$combinatorial,
@@ -303,7 +305,8 @@ map_extrapolation <- function(map.type = NULL,
                              decreasing = TRUE,
                              group="Combinatorial",
                              r.values = raster::getValues(projr$combinatorial),
-                             title = "Combinatorial")}
+                             title = "Combinatorial")
+      )}
 
     if("analogue"%in%names(projr)){
 
@@ -311,6 +314,7 @@ map_extrapolation <- function(map.type = NULL,
                                             raster::getValues(projr$analogue),
                                             na.color = "transparent")
 
+      suppressWarnings(
       exleaf <- exleaf %>%
         leaflet::addRasterImage(map = .,
                                 x = projr$analogue,
@@ -329,7 +333,8 @@ map_extrapolation <- function(map.type = NULL,
                              decreasing = TRUE,
                              group="Analogue",
                              r.values = raster::getValues(projr$analogue),
-                             title = "Analogue")}
+                             title = "Analogue")
+      )}
 
   }else if(map.type == "mic"){
 
@@ -348,6 +353,7 @@ map_extrapolation <- function(map.type = NULL,
 
     mapvars <- dplyr::left_join(x = micvars, y = allvars, by = c("mic" = "ID"))
 
+    suppressWarnings(
     exleaf <- exleaf %>% leaflet::addRasterImage(map = .,
                                                  x = raster::as.factor(extrapolation.values$rasters$mic$all),
                                                  colors = pal,
@@ -367,7 +373,7 @@ map_extrapolation <- function(map.type = NULL,
                            decreasing = TRUE,
                            group = "MIC",
                            r.values = raster::getValues(extrapolation.values$rasters$mic$all),
-                           title = "MIC")
+                           title = "MIC"))
 
 
   }else if(map.type == "nearby"){
@@ -379,7 +385,7 @@ map_extrapolation <- function(map.type = NULL,
     pal.near <- leaflet::colorNumeric(pals::parula(100),
                                       raster::getValues(gower.values),
                                       na.color = "transparent")
-
+    suppressWarnings(
     exleaf <- exleaf %>%
       leaflet::addRasterImage(map = .,
                               colors = pal.near,
@@ -397,7 +403,7 @@ map_extrapolation <- function(map.type = NULL,
                            decreasing = TRUE,
                            group ="% nearby",
                            r.values = raster::getValues(gower.values),
-                           title = "% nearby")
+                           title = "% nearby"))
 
 
   }
@@ -487,7 +493,7 @@ map_extrapolation <- function(map.type = NULL,
                      overlayGroups = lyr.controls,
                      options = layersControlOptions(collapsed = FALSE))
 
-  if(verbose) warning('map_extrapolation relies on the leaflet package, which is built around a Web Mercator projection (EPSG:3857), and therefore requires rasters to be reprojected for plotting. As a result, minor discrepancies may  occur between the interactive maps shown in the viewer, and the underlying raw data. The latter can be accessed directly from the extrapolation.values or gower.values objects and visualised using alternative packages such as ggplot2.')
+  if(verbose) warning('map_extrapolation relies on the leaflet package, which is built around a Web Mercator projection (EPSG:3857), and therefore requires rasters to be reprojected for plotting. As a result, minor discrepancies may  occur between the interactive maps shown in the viewer, and the underlying raw data. The latter can be accessed directly from extrapolation object returned by <compute_extrapolation> and visualised using alternative packages such as ggplot2.')
 
   return(exleaf)
 }

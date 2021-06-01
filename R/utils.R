@@ -175,8 +175,8 @@ rescale_cov <- function (ynew, y) { return ((ynew - mean(y, na.rm = TRUE)) / (st
 make_X <- function (calibration_data,
                     test_data,
                     var_name){
-  X <- sapply(var_name, function (k) { rescale_cov (ynew = test_data[, k],
-                                                 y = calibration_data[, k])})
+  # Changed from: rescale_cov(ynew = test_data[, k], y = calibration_data[, k]) -- June 1st, 2021
+  X <- sapply(var_name, function (k) {rescale_cov(ynew = test_data[[k]], y = calibration_data[[k]])})
   X <- as.data.frame (X)
   names (X) <- var_name
   return (X)}
@@ -187,7 +187,7 @@ make_X <- function (calibration_data,
 
 proj_rasters <- function(ll, coordinate.system){
 
-  crs.webmerc <- sp::CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs")
+  suppressWarnings(crs.webmerc <- sp::CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs"))
 
   llr <- ll # Copy list
 
@@ -215,6 +215,7 @@ proj_rasters <- function(ll, coordinate.system){
   llr$all <- NULL
   llr <- purrr::discard(.x = llr, is.null)
 
+  suppressWarnings(
   llr <- purrr::map(.x = llr, # Same extent as the full raster, allows correct alignment
                     .f = ~raster::projectRaster(from = .x,
                                                 to = ll$all,
@@ -222,15 +223,18 @@ proj_rasters <- function(ll, coordinate.system){
     purrr::map(.x = ., # CRS used by leaflet
                .f = ~raster::projectRaster(from = .,
                                            crs = crs.webmerc,
-                                           method = 'ngb'))
+                                           method = 'ngb')))
 
   llr.univariate.ind <- raster::cellFromXY(object = llr$univariate,
                                            xy = sp::coordinates(univariate.xy))
 
   llr$univariate[llr.univariate.ind[which(is.na(llr$univariate[llr.univariate.ind]))]] <-    univariate.values[which(is.na(llr$univariate[llr.univariate.ind]))]
 
-  duplicate.cells <- rbind(raster::as.data.frame(llr$univariate, xy = TRUE),
-                           raster::as.data.frame(llr$analogue, xy = TRUE)) %>%
+  r1 <- raster::as.data.frame(llr$univariate, xy = TRUE)
+  r2 <- raster::as.data.frame(llr$analogue, xy = TRUE)
+  names(r1) <- names(r2) <- c("x", "y", "ExDet")
+
+  duplicate.cells <- rbind(r1, r2) %>%
     stats::na.omit(.) %>%
     dplyr::select(., x, y) %>%
     .[duplicated(.),]
@@ -256,7 +260,7 @@ if(!class(coordinate.system)=="CRS"){
                         error = function(e) return(NA))
 
   if(is.na(coord.err)){stop('Unrecognised coordinate system')
-  }else{coordinate.system <- sp::CRS(coordinate.system)}
+  }else{supressWarnings(coordinate.system <- sp::CRS(coordinate.system))}
 }
 
   return(coordinate.system)

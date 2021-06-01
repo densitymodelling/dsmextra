@@ -49,7 +49,6 @@ summarise_extrapolation <- function(extrapolation.object,
 
   res <- res[zeroes.names]
 
-
   #---------------------------------------------
   # Most influential covariates - by extrapolation type
   #---------------------------------------------

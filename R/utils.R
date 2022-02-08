@@ -260,7 +260,7 @@ if(!class(coordinate.system)=="CRS"){
                         error = function(e) return(NA))
 
   if(is.na(coord.err)){stop('Unrecognised coordinate system')
-  }else{supressWarnings(coordinate.system <- sp::CRS(coordinate.system))}
+  }else{suppressWarnings(coordinate.system <- sp::CRS(coordinate.system))}
 }
 
   return(coordinate.system)

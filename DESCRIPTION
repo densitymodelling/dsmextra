@@ -28,7 +28,6 @@ Imports:
     utils,
     tools,
     sp,
-    rgdal,
     Distance,
     dsm,
     lpSolve,

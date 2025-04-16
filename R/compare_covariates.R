@@ -4,6 +4,7 @@
 #'
 #' The extent and magnitude of extrapolation naturally vary with the type and number of covariates considered. It may be useful, therefore, to test different combinations of covariates to inform their selection \emph{a priori}, i.e. before model fitting, thereby supporting model parsimony.
 #' @import ggplot2
+#' @importFrom progress progress_bar
 #' @param extrapolation.type Character string. Type of extrapolation to be assessed. Can be one of \code{univariate}, \code{combinatorial}, or \code{both} (default).
 #' @param extrapolation.object List object as returned by \link{compute_extrapolation}.
 #' @param n.covariates Maximum number of covariates. The function will compare all combinations of 1 to \code{n.covariates} covariates.
@@ -188,18 +189,23 @@ compare_covariates <- function(extrapolation.type = "both",
   # Carry out extrapolation analysis for each combination of covariates
   #---------------------------------------------
 
-  if(verbose) message("Computing ...")
-
-  pb <- dplyr::progress_estimated(length(combs))
+  if (verbose) {
+    pb <- progress::progress_bar$new(
+      format = "  Computing [:bar] :percent in :elapsed",
+      total = length(combs),
+      clear = FALSE,
+      width = 60
+    )
+  }
 
   extrap <- suppressMessages(purrr::map(.x = combs,
                                         .f = ~{
-                                          pb$tick()$print()
+                                          if (verbose) pb$tick()
                                           compute_extrapolation(samples = samples,
                                                                 covariate.names = .x,
                                                                 prediction.grid = prediction.grid,
-                                                                coordinate.system = coordinate.system)},
-                                        .pb = pb))
+                                                                coordinate.system = coordinate.system)
+                                        }))
 
   #---------------------------------------------
   # Summarise extrapolation results for each combination

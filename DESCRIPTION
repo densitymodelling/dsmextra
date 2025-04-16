@@ -15,6 +15,7 @@ Imports:
     magrittr,
     plyr,
     dplyr,
+    progress,
     ggplot2,
     purrr,
     tibble,

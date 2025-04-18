@@ -9,7 +9,8 @@
 #' For help with distance sampling, there is a Google Group \href{https://groups.google.com/forum/#!forum/distance-sampling}{https://groups.google.com/forum/#!forum/distance-sampling}.
 #'
 #' @author Phil J. Bouchet, Laura Mannocci, David Miller
-#' @docType package
+#' @keywords internal
+"_PACKAGE"
 #' @name dsmextra
 #' @importFrom dplyr %>%
 #' @importFrom purrr %||%
